@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">ForeignLanguageTrainingAndroid</string>
+    <!-- Базовый адрес REST API серверной составляющей приложения -->
+    <!-- Вариант 1. Симулятор Genymotion с QEMU
+     Сначала нужно запустить виртуальное устройство,
+     открыть командную оболочку ОС и выполнить команды:
+     cd C:\Users\Yuriy\AppData\Local\Android\Sdk\platform-tools
+     adb reverse tcp:8090 tcp:8090 -->
+    <string name="network_base_server_url">http://127.0.0.1:8090/lang-trainer/api</string>
+    <!-- Вариант 2. Симулятор Genymotion с VirtualBox -->
+    <!-- <string name="network_base_server_url">http://10.0.3.2:8090/lang-trainer/api</string> -->
+    <!-- Вариант 3. Стандартный эмулятор виртуальных устройств Android - AVD -->
+    <!-- <string name="network_base_server_url">http://10.0.2.2:8090/lang-trainer/api</string> -->
+    <!-- REST API серверной составляющей приложения: URI конечной точки "Роли" -->
+    <string name="network_roles_uri">auth/admin/roles</string>
+    <string name="message_error_http_request_failed">Ошибка запроса к серверу</string>
+    <string name="message_error_http_connection_failed">"Ошибка подключения к серверу: "</string>
+    <string name="message_error_http_reponse_fail_code">"Запрос к серверу не был успешен: "</string>
+    <string name="message_error_http_response_nodata">Ошибка чтения данных ответа сервера: данные отсутствуют</string>
+    <string name="message_error_http_response_data_read_failed">"Ошибка чтения данных ответа сервера: "</string>
+    <string name="http_mediatype_json">application/json</string>
 </resources>
