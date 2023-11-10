@@ -33,6 +33,13 @@ public class RoleRepository implements IRoleRepository {
                 new IResultHandler<>() {
                     @Override
                     public void onSuccess(String result) {
+                        // имитация длительного ожидания отклика сервера для проверки поведения
+                        // представления в этой ситуации
+                        /* try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        } */
                         handler.onSuccess(JsonParser.parseList(result, RoleModel.class));
                     }
 
