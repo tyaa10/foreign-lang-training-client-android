@@ -85,6 +85,8 @@ public class HttpActions implements IHttpActions {
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (!response.isSuccessful()) {
                     handler.onFailure(App.getContext().getString(R.string.message_error_http_reponse_fail_code) + response.code() + " " + response.message());
+                } else if(response.code() == 401) {
+                    handler.onSuccess("Unauthorized");
                 } else {
                     try {
                         ResponseBody responseBody = response.body();
