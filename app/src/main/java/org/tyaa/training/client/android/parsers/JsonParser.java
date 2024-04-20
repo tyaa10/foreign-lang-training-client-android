@@ -12,6 +12,10 @@ public class JsonParser {
 
     private static final Gson gson = new Gson();
 
+    public static <T> T parseObject (String jsonString, Class<T> objectType) {
+        return gson.fromJson(jsonString, objectType);
+    }
+
     /**
      * Преобразовать json-строку, содержащую массив значений, в java-объект список,
      * каждым элементом которого будет java-объект типа, заданного параметром {@code T}

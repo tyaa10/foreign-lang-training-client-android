@@ -1,16 +1,21 @@
-package org.tyaa.training.client.android.repositories.interfaces;
+package org.tyaa.training.client.android.services.interfaces;
 
 import org.tyaa.training.client.android.handlers.IResultHandler;
 import org.tyaa.training.client.android.models.RoleModel;
+import org.tyaa.training.client.android.models.UserModel;
 
 import java.util.List;
 
 /**
- * Абстракция репозитория ролей
+ * Абстракция службы безопасности
  * */
-public interface IRoleRepository {
+public interface IAuthService {
     /**
      * Получить описание всех вариантов ролей пользователей в виде строки сырых данных
      * */
     void getRoles(IResultHandler<List<RoleModel>> handler);
+    /**
+     * Узнать, аутентифицирован ли пользователь
+     * */
+    void checkUser(IResultHandler<UserModel> handler);
 }
