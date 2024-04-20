@@ -6,11 +6,11 @@
      открыть командную оболочку ОС и выполнить команды:
      cd C:\Users\Yuriy\AppData\Local\Android\Sdk\platform-tools
      adb reverse tcp:8090 tcp:8090 -->
-    <string name="network_base_server_url">http://127.0.0.1:8090/lang-trainer/api</string>
+    <!-- <string name="network_base_server_url">http://127.0.0.1:8090/lang-trainer/api</string> -->
     <!-- Вариант 2. Симулятор Genymotion с VirtualBox -->
     <!-- <string name="network_base_server_url">http://10.0.3.2:8090/lang-trainer/api</string> -->
     <!-- Вариант 3. Стандартный эмулятор виртуальных устройств Android - AVD -->
-    <!-- <string name="network_base_server_url">http://10.0.2.2:8090/lang-trainer/api</string> -->
+    <string name="network_base_server_url">http://10.0.2.2:8090/lang-trainer/api</string>
     <string name="message_error_http_request_failed">Ошибка запроса к серверу</string>
     <string name="message_error_http_connection_failed">"Ошибка подключения к серверу: "</string>
     <string name="message_error_http_reponse_fail_code">"Запрос к серверу не был успешен: "</string>
