@@ -1,12 +1,15 @@
 package org.tyaa.training.client.android.activities;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.tyaa.training.client.android.R;
 import org.tyaa.training.client.android.adapters.RoleAdapter;
+import org.tyaa.training.client.android.handlers.IResponseHandler;
 import org.tyaa.training.client.android.handlers.IResultHandler;
 import org.tyaa.training.client.android.models.RoleModel;
 import org.tyaa.training.client.android.services.HttpAuthService;
@@ -18,20 +21,44 @@ import java.util.List;
 
 /**
  * Логика главного экрана приложения
+ * (хост для фрагментов основной функциональности приложения)
  * */
 public class MainActivity extends ListActivity {
-    private final IAuthService authService = new HttpAuthService();
+    private final IAuthService mAuthService = new HttpAuthService();
+    private Button mSignOutButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // подключение представления главного экрана приложения
         setContentView(R.layout.activity_main);
+        // инициализация объектов доступа к постоянным элементам представления
+        mSignOutButton = findViewById(R.id.activityMain_signOut_Button);
+        // установка обработчиков событий для постоянных элементов представления
+        mSignOutButton.setOnClickListener(v -> {
+            mAuthService.signOut(new IResponseHandler() {
+                @Override
+                public void onSuccess() {
+                    // после успешного выхода из учётной записи
+                    // перейти на Activity с формой входа в учётную запись
+                    Intent intent =
+                            new Intent(MainActivity.this, SignInActivity.class);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    Log.println(Log.ERROR, getString(R.string.message_error), errorMessage);
+                    UIActionsRunner.run(() -> Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show());
+                }
+            });
+        });
+        // соединение списочного элемента на представлении со списком моделей ролей через адаптер
         final List<RoleModel> roles = new ArrayList<>();
         final RoleAdapter roleAdapter = new RoleAdapter(this, R.layout.activity_main_list_item, roles);
         this.setListAdapter(roleAdapter);
         // вызов метода получения всех возможных ролей пользователей
         // с дальнейшим их выводом на экран в виде списка
-        authService.getRoles(new IResultHandler<>() {
+        mAuthService.getRoles(new IResultHandler<>() {
             @Override
             public void onSuccess(List<RoleModel> result) {
                 if(roles.size() > 0) {
@@ -43,7 +70,7 @@ public class MainActivity extends ListActivity {
 
             @Override
             public void onFailure(String errorMessage) {
-                Log.println(Log.ERROR, "Ошибка", errorMessage);
+                Log.println(Log.ERROR, getString(R.string.message_error), errorMessage);
                 UIActionsRunner.run(() -> Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show());
             }
         });

@@ -37,4 +37,13 @@ public interface IHttpActions {
      * @param handler обработчик полученных данных
      * */
     void doRequestForResult(String url, String data, IResultHandler<String> handler);
+
+    /**
+     * Выполнить запрос, содержащий данные, но не предполагающий получение данных
+     * @param url адрес
+     * @param login имя учётной записи пользователя
+     * @param password пароль учётной записи пользователя
+     * @param handler обработчик отклика
+     * */
+    void doSimpleSpringSecurityLoginRequest(String url, String login, String password, IResultHandler<String> handler);
 }

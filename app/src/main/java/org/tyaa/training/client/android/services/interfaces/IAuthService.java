@@ -1,5 +1,6 @@
 package org.tyaa.training.client.android.services.interfaces;
 
+import org.tyaa.training.client.android.handlers.IResponseHandler;
 import org.tyaa.training.client.android.handlers.IResultHandler;
 import org.tyaa.training.client.android.models.RoleModel;
 import org.tyaa.training.client.android.models.UserModel;
@@ -18,4 +19,12 @@ public interface IAuthService {
      * Узнать, аутентифицирован ли пользователь
      * */
     void checkUser(IResultHandler<UserModel> handler);
+    /**
+     * Войти в учётную запись по логину и паролю
+     * */
+    void signIn(String login, String password, IResponseHandler handler);
+    /**
+     * Выйти из учётной записи
+     * */
+    void signOut(IResponseHandler handler);
 }

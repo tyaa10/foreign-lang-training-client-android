@@ -1,5 +1,7 @@
 package org.tyaa.training.client.android.actions;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import org.tyaa.training.client.android.App;
@@ -9,26 +11,33 @@ import org.tyaa.training.client.android.handlers.IResponseHandler;
 import org.tyaa.training.client.android.handlers.IResultHandler;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * Действия по протоколу Http
  * */
 public class HttpActions implements IHttpActions {
 
-    private final OkHttpClient client;
+    // Клиент для выполнения любых запросов по протоколу HTTP
+    private final OkHttpClient mClient;
+    // Настройка вывода сведений об HTTP-запросах и ответах в стандартный поток вывода Android - Logcat
+    private final HttpLoggingInterceptor mLogger;
 
     public HttpActions() {
-        this.client = new OkHttpClient();
+        mLogger = new HttpLoggingInterceptor(s -> Log.d("HTTP LOG", s)).setLevel(HttpLoggingInterceptor.Level.BODY);
+        mClient = new OkHttpClient.Builder().addInterceptor(mLogger).build();
     }
 
     @Override
@@ -36,7 +45,7 @@ public class HttpActions implements IHttpActions {
         final Request.Builder builder = new Request.Builder();
         attachJSessionIdIfExists(builder);
         builder.url(url);
-        client.newCall(builder.build()).enqueue(new Callback() {
+        mClient.newCall(builder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e);
@@ -60,7 +69,7 @@ public class HttpActions implements IHttpActions {
         attachJSessionIdIfExists(builder);
         builder.url(url);
         builder.post(RequestBody.create(MediaType.parse(App.getContext().getString(R.string.http_mediatype_json)), data));
-        client.newCall(builder.build()).enqueue(new Callback() {
+        mClient.newCall(builder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e);
@@ -83,7 +92,7 @@ public class HttpActions implements IHttpActions {
         final Request.Builder builder = new Request.Builder();
         attachJSessionIdIfExists(builder);
         builder.url(url);
-        client.newCall(builder.build()).enqueue(new Callback() {
+        mClient.newCall(builder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e);
@@ -92,20 +101,18 @@ public class HttpActions implements IHttpActions {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (!response.isSuccessful()) {
-                    if(response.code() == 401) {
-                        handler.onSuccess("Unauthorized");
+                    if(response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                        handler.onSuccess(String.valueOf(HttpURLConnection.HTTP_UNAUTHORIZED));
+                    } else if(response.code() == HttpURLConnection.HTTP_FORBIDDEN) {
+                        handler.onSuccess(String.valueOf(HttpURLConnection.HTTP_FORBIDDEN));
                     } else {
                         handler.onFailure(App.getContext().getString(R.string.message_error_http_reponse_fail_code) + response.code() + " " + response.message());
                     }
                 } else {
                     try {
                         ResponseBody responseBody = response.body();
-                        if (responseBody != null) {
-                            saveJSessionIdIfFetched(response);
-                            handler.onSuccess(responseBody.string());
-                        } else {
-                            handler.onFailure(App.getContext().getString(R.string.message_error_http_response_nodata));
-                        }
+                        saveJSessionIdIfFetched(response);
+                        handler.onSuccess(responseBody.string());
                     } catch (IOException e) {
                         handler.onFailure(App.getContext().getString(R.string.message_error_http_response_data_read_failed) + e);
                     }
@@ -120,7 +127,7 @@ public class HttpActions implements IHttpActions {
         attachJSessionIdIfExists(builder);
         builder.url(url);
         builder.post(RequestBody.create(MediaType.parse(App.getContext().getString(R.string.http_mediatype_json)), data));
-        client.newCall(builder.build()).enqueue(new Callback() {
+        mClient.newCall(builder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e);
@@ -133,12 +140,8 @@ public class HttpActions implements IHttpActions {
                 } else {
                     try {
                         ResponseBody responseBody = response.body();
-                        if (responseBody != null) {
-                            saveJSessionIdIfFetched(response);
-                            handler.onSuccess(responseBody.string());
-                        } else {
-                            handler.onFailure(App.getContext().getString(R.string.message_error_http_response_nodata));
-                        }
+                        saveJSessionIdIfFetched(response);
+                        handler.onSuccess(responseBody.string());
                     } catch (IOException e) {
                         handler.onFailure(App.getContext().getString(R.string.message_error_http_response_data_read_failed) + e);
                     }
@@ -146,6 +149,36 @@ public class HttpActions implements IHttpActions {
             }
         });
     }
+
+    @Override
+    public void doSimpleSpringSecurityLoginRequest(String url, String login, String password, IResultHandler<String> handler) {
+        final RequestBody formBody = new FormBody.Builder()
+                .add("username", login)
+                .add("password", password).build();
+        final Request.Builder builder = new Request.Builder();
+        builder.url(url).post(formBody);
+        mClient.newCall(builder.build()).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (!response.isSuccessful()) {
+                    if(response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                        handler.onSuccess(String.valueOf(HttpURLConnection.HTTP_UNAUTHORIZED));
+                    } else {
+                        handler.onFailure(App.getContext().getString(R.string.message_error_http_reponse_fail_code) + response.code() + " " + response.message());
+                    }
+                } else {
+                    saveJSessionIdIfFetched(response);
+                    handler.onSuccess(App.getContext().getString(R.string.message_info_sign_in_success));
+                }
+            }
+        });
+    }
+
     /**
      * Если объект отклика сервера содержит установку сессионного cookie -
      * сохранить значение JSESSIONID в словарь предпочтений приложения
@@ -177,7 +210,14 @@ public class HttpActions implements IHttpActions {
         // если значение под ключом JSESSIONID присутствует в словаре предпочтений приложения
         if (App.getPreferences().contains(App.Preference.JSESSIONID)) {
             // добавить к объекту-строителю http-запроса заголовок - cookie JSESSIONID
-            builder.addHeader(App.Preference.JSESSIONID, App.getPreferences().getString(App.Preference.JSESSIONID, ""));
+            builder.addHeader(
+                    "Cookie",
+                    String.format(
+                            "%s=%s",
+                            App.Preference.JSESSIONID,
+                            App.getPreferences().getString(App.Preference.JSESSIONID, "")
+                    )
+            );
         }
     }
 }

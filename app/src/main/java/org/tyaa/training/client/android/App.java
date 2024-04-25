@@ -16,15 +16,16 @@ import java.security.GeneralSecurityException;
  * */
 public class App extends Application {
     @SuppressLint("StaticFieldLeak")
-    private static Context context;
-    private static SharedPreferences preferences;
+    private static Context mContext;
+    private static SharedPreferences mPreferences;
     @Override
     public void onCreate() {
         super.onCreate();
-        context = getApplicationContext();
+        // Настройка системы хранения предпочтений приложения в зашифрованном виде в ОС Android
+        mContext = getApplicationContext();
         try {
             String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
-            preferences = EncryptedSharedPreferences.create(
+            mPreferences = EncryptedSharedPreferences.create(
                     "FLT_ANDROID_ENCRYPTED_PREFS",
                     masterKeyAlias,
                     App.getContext(),
@@ -39,14 +40,17 @@ public class App extends Application {
      * Получение контекста приложения
      * */
     public static Context getContext() {
-        return context;
+        return mContext;
     }
     /**
      * Получение объекта доступа к словарю предпочтений приложения
      * */
     public static SharedPreferences getPreferences() {
-        return preferences;
+        return mPreferences;
     }
+    /**
+     * Названия ключей предпочтений приложения
+     * */
     public static class Preference {
         public static final String JSESSIONID = "JSESSIONID";
     }

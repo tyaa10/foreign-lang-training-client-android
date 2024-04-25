@@ -8,13 +8,13 @@ import android.os.Looper;
  * */
 public class UIActionsRunner {
 
-    private static final Handler handler = new Handler(Looper.getMainLooper());
+    private static final Handler mHandler = new Handler(Looper.getMainLooper());
 
     /**
      * Запустить действие, не возвращающее результат
      * @param action реализация стандартного интерфейса Runnable с действиями в UI приложения
      * */
     public static void run(Runnable action) {
-        handler.post(action);
+        mHandler.post(action);
     }
 }
