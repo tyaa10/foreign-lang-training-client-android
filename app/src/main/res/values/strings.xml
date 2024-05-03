@@ -14,18 +14,25 @@
     <!-- Тексты ошибок -->
     <string name="message_error">Ошибка</string>
     <string name="message_error_http_request_failed">Ошибка запроса к серверу</string>
+    <string name="message_error_http_action_failed">Ответ сервера: действие не выполнено</string>
     <string name="message_error_http_connection_failed">"Ошибка подключения к серверу: "</string>
     <string name="message_error_http_reponse_fail_code">"Запрос к серверу не был успешен: "</string>
     <string name="message_error_http_response_nodata">Ошибка чтения данных ответа сервера: данные отсутствуют</string>
     <string name="message_error_http_response_data_read_failed">"Ошибка чтения данных ответа сервера: "</string>
     <string name="message_error_validation_login">Заполните поле \'логин\'</string>
     <string name="message_error_validation_password">Заполните поле \'пароль\'</string>
-    <string name="message_error_http_reponse_unauthorized">"Ошибка аутентификации"</string>
-    <string name="message_error_http_reponse_unauthorized_full">"Вы не аутентифицированы. Сначала войдите в учётную запись"</string>
-    <string name="message_error_http_reponse_forbidden">"Ошибка авторизациии"</string>
-    <string name="message_error_http_reponse_forbidden_full">"Вы не авторизованы для данного действия"</string>
-    <string name="message_error_http_reponse_auth_wrong_credentials">"Неверный логин или пароль"</string>
+    <string name="message_error_validation_confirm_password">Заполните поле \'подтверждение пароля\'</string>
+    <string name="message_error_validation_confirm_password_matching">Пароли не совпадают</string>
+    <string name="message_error_validation_errors">"Ошибки валидации"</string>
+    <string name="message_error_validation_error">"Ошибка валидации"</string>
+    <string name="message_error_http_response_unauthorized">"Ошибка аутентификации"</string>
+    <string name="message_error_http_response_unauthorized_full">"Вы не аутентифицированы. Сначала войдите в учётную запись"</string>
+    <string name="message_error_http_response_forbidden">"Ошибка авторизации"</string>
+    <string name="message_error_http_response_forbidden_full">"Вы не авторизованы для данного действия"</string>
+    <string name="message_error_http_response_auth_wrong_credentials">"Неверный логин или пароль"</string>
+    <string name="message_error_http_response_conflict">"Такие данные уже существуют"</string>
     <string name="message_error_deserialization">"Ошибка десериализации"</string>
+    <string name="message_error_serialization">"Ошибка сериализации"</string>
     <!-- Тексты информационных сообщений -->
     <string name="message_info_sign_in_success">Вход выполнен успешно</string>
     <!-- Стандартное название типа содержимого тела HTTP-запроса или ответа - json -->
@@ -33,6 +40,8 @@
     <!-- REST API серверной составляющей приложения -->
     <!-- URI конечной точки "Роли" -->
     <string name="network_roles_uri">auth/admin/roles</string>
+    <!-- URI конечной точки "Пользователи" -->
+    <string name="network_users_uri">auth/users</string>
     <!-- URI конечной точки "Пользователи - Проверить" -->
     <string name="network_users_check_uri">auth/users/check</string>
     <!-- URI стандартной конечной точки простой аутентификации SpringSecurity -->

@@ -24,6 +24,10 @@ public interface IAuthService {
      * */
     void signIn(String login, String password, IResponseHandler handler);
     /**
+     * Зарегистрировать новую учётную запись
+     * */
+    void signUp(String login, String password, IResponseHandler handler);
+    /**
      * Выйти из учётной записи
      * */
     void signOut(IResponseHandler handler);

@@ -14,6 +14,7 @@ import org.tyaa.training.client.android.handlers.IResultHandler;
 import org.tyaa.training.client.android.models.RoleModel;
 import org.tyaa.training.client.android.services.HttpAuthService;
 import org.tyaa.training.client.android.services.interfaces.IAuthService;
+import org.tyaa.training.client.android.utils.UIActions;
 import org.tyaa.training.client.android.utils.UIActionsRunner;
 
 import java.util.ArrayList;
@@ -47,8 +48,7 @@ public class MainActivity extends ListActivity {
 
                 @Override
                 public void onFailure(String errorMessage) {
-                    Log.println(Log.ERROR, getString(R.string.message_error), errorMessage);
-                    UIActionsRunner.run(() -> Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show());
+                    UIActions.showError(MainActivity.this, errorMessage);
                 }
             });
         });
@@ -70,8 +70,7 @@ public class MainActivity extends ListActivity {
 
             @Override
             public void onFailure(String errorMessage) {
-                Log.println(Log.ERROR, getString(R.string.message_error), errorMessage);
-                UIActionsRunner.run(() -> Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show());
+                UIActions.showError(MainActivity.this, errorMessage);
             }
         });
     }

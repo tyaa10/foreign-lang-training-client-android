@@ -46,7 +46,8 @@ public class HttpAuthService implements IAuthService {
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         } */
-                        if (result.equals(String.valueOf(HttpURLConnection.HTTP_UNAUTHORIZED))) {
+
+                        /* if (result.equals(String.valueOf(HttpURLConnection.HTTP_UNAUTHORIZED))) {
                             Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_http_reponse_unauthorized), App.getContext().getString(R.string.message_error_http_reponse_unauthorized_full));
                             handler.onFailure(App.getContext().getString(R.string.message_error_http_reponse_unauthorized_full));
                         } else if (result.equals(String.valueOf(HttpURLConnection.HTTP_FORBIDDEN))) {
@@ -61,13 +62,20 @@ public class HttpAuthService implements IAuthService {
                                 Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
                                 handler.onFailure(App.getContext().getString(R.string.message_error_deserialization));
                             }
+                        } */
+                        ResponseModel<List<RoleModel>> responseModel;
+                        try {
+                            responseModel = JsonSerde.parseWithListContent(result, ResponseModel.class, RoleModel.class);
+                            handler.onSuccess(responseModel.getData());
+                        } catch (Exception ex) {
+                            Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
+                            handler.onFailure(App.getContext().getString(R.string.message_error_deserialization));
                         }
                     }
 
                     @Override
                     public void onFailure(String errorMessage) {
-                        Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_http_request_failed), errorMessage);
-                        handler.onFailure(App.getContext().getString(R.string.message_error_http_request_failed));
+                        mActions.onHttpFailure(handler, errorMessage);
                     }
                 }
         );
@@ -97,8 +105,7 @@ public class HttpAuthService implements IAuthService {
 
                     @Override
                     public void onFailure(String errorMessage) {
-                        Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_http_request_failed), errorMessage);
-                        handler.onFailure(App.getContext().getString(R.string.message_error_http_request_failed));
+                        mActions.onHttpFailure(handler, errorMessage);
                     }
                 }
         );
@@ -111,33 +118,71 @@ public class HttpAuthService implements IAuthService {
                         .replace("api", App.getContext().getString(R.string.network_simple_spring_security_login_uri)),
                 login,
                 password,
-                new IResultHandler<>() {
+                new IResponseHandler() {
                     @Override
-                    public void onSuccess(String result) {
-                        if (result.equals(String.valueOf(HttpURLConnection.HTTP_UNAUTHORIZED))) {
-                            handler.onFailure(App.getContext().getString(R.string.message_error_http_reponse_auth_wrong_credentials));
-                        } else {
-                            handler.onSuccess();
-                        }
+                    public void onSuccess() {
+                        handler.onSuccess();
                     }
 
                     @Override
                     public void onFailure(String errorMessage) {
-                        Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_http_request_failed), errorMessage);
-                        handler.onFailure(App.getContext().getString(R.string.message_error_http_request_failed));
+                        // если текст сообщения об ошибке - отсутствие аутентификации
+                        if (errorMessage.equals(
+                                App.getContext().getString(R.string.message_error_http_response_unauthorized_full))
+                        ) {
+                            // вызвать следующий обработчик с текстом сообщения о неправильном имени и/или пароле
+                            mActions.onHttpFailure(handler, App.getContext().getString(R.string.message_error_http_response_auth_wrong_credentials));
+                        } else {
+                            // иначе - с полученным текстом сообщения об ошибке
+                            mActions.onHttpFailure(handler, errorMessage);
+                        }
                     }
                 }
         );
     }
 
     @Override
+    public void signUp(String login, String password, IResponseHandler handler) {
+        try {
+                final String userModelJsonString =
+                    JsonSerde.serialize(UserModel.builder().name(login).password(password).build());
+                mActions.doRequest(
+                        String.format("%s/%s",
+                                App.getContext().getString(R.string.network_base_server_url),
+                                App.getContext().getString(R.string.network_users_uri)
+                        ),
+                        userModelJsonString,
+                        new IResponseHandler() {
+                            @Override
+                            public void onSuccess() {
+                                handler.onSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+                                mActions.onHttpFailure(handler, errorMessage);
+                            }
+
+                            @Override
+                            public void onValidationErrors(List<String> validationErrors) {
+                                IResponseHandler.super.onValidationErrors(validationErrors);
+                                handler.onValidationErrors(validationErrors);
+                            }
+                        }
+                );
+        } catch (JsonProcessingException e) {
+            handler.onFailure(App.getContext().getString(R.string.message_error_serialization));
+        }
+    }
+
+    @Override
     public void signOut(IResponseHandler handler) {
-        mActions.doRequestForResult(
+        mActions.doRequest(
                 App.getContext().getString(R.string.network_base_server_url)
                         .replace("api", App.getContext().getString(R.string.network_simple_spring_security_logout_uri)),
-                new IResultHandler<>() {
+                new IResponseHandler() {
                     @Override
-                    public void onSuccess(String result) {
+                    public void onSuccess() {
                         // если значение под ключом JSESSIONID присутствует в словаре предпочтений приложения
                         if (App.getPreferences().contains(App.Preference.JSESSIONID)) {
                             // удалить код сеанса JSESSIONID из словаря предпочтений приложения
@@ -148,8 +193,7 @@ public class HttpAuthService implements IAuthService {
 
                     @Override
                     public void onFailure(String errorMessage) {
-                        Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_http_request_failed), errorMessage);
-                        handler.onFailure(App.getContext().getString(R.string.message_error_http_request_failed));
+                        mActions.onHttpFailure(handler, errorMessage);
                     }
                 }
         );

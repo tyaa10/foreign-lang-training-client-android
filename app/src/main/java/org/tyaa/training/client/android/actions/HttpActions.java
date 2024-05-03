@@ -7,12 +7,17 @@ import androidx.annotation.NonNull;
 import org.tyaa.training.client.android.App;
 import org.tyaa.training.client.android.R;
 import org.tyaa.training.client.android.actions.interfaces.IHttpActions;
+import org.tyaa.training.client.android.handlers.IBaseActionConsequencesHandler;
 import org.tyaa.training.client.android.handlers.IResponseHandler;
 import org.tyaa.training.client.android.handlers.IResultHandler;
+import org.tyaa.training.client.android.models.ResponseModel;
+import org.tyaa.training.client.android.models.RoleModel;
+import org.tyaa.training.client.android.serde.JsonSerde;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -48,13 +53,13 @@ public class HttpActions implements IHttpActions {
         mClient.newCall(builder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e);
+                handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e.getMessage());
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (!response.isSuccessful()) {
-                    handler.onFailure(App.getContext().getString(R.string.message_error_http_reponse_fail_code) + response.code() + " " + response.message());
+                    handler.onFailure(HttpActions.this.httpErrorCodeToMessage(response.code()));
                 } else {
                     saveJSessionIdIfFetched(response);
                     handler.onSuccess();
@@ -72,13 +77,14 @@ public class HttpActions implements IHttpActions {
         mClient.newCall(builder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e);
+                handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e.getMessage());
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (!response.isSuccessful()) {
-                    handler.onFailure(App.getContext().getString(R.string.message_error_http_reponse_fail_code) + response.code() + " " + response.message());
+                    handler.onFailure(HttpActions.this.httpErrorCodeToMessage(response.code()));
+                    handleValidationErrorsIfExists(response, handler);
                 } else {
                     saveJSessionIdIfFetched(response);
                     handler.onSuccess();
@@ -95,26 +101,20 @@ public class HttpActions implements IHttpActions {
         mClient.newCall(builder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e);
+                handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e.getMessage());
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (!response.isSuccessful()) {
-                    if(response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                        handler.onSuccess(String.valueOf(HttpURLConnection.HTTP_UNAUTHORIZED));
-                    } else if(response.code() == HttpURLConnection.HTTP_FORBIDDEN) {
-                        handler.onSuccess(String.valueOf(HttpURLConnection.HTTP_FORBIDDEN));
-                    } else {
-                        handler.onFailure(App.getContext().getString(R.string.message_error_http_reponse_fail_code) + response.code() + " " + response.message());
-                    }
+                    handler.onFailure(HttpActions.this.httpErrorCodeToMessage(response.code()));
                 } else {
                     try {
                         ResponseBody responseBody = response.body();
                         saveJSessionIdIfFetched(response);
                         handler.onSuccess(responseBody.string());
                     } catch (IOException e) {
-                        handler.onFailure(App.getContext().getString(R.string.message_error_http_response_data_read_failed) + e);
+                        handler.onFailure(App.getContext().getString(R.string.message_error_http_response_data_read_failed) + e.getMessage());
                     }
                 }
             }
@@ -130,20 +130,21 @@ public class HttpActions implements IHttpActions {
         mClient.newCall(builder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e);
+                handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e.getMessage());
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (!response.isSuccessful()) {
-                    handler.onFailure(App.getContext().getString(R.string.message_error_http_reponse_fail_code) + response.code() + " " + response.message());
+                    handler.onFailure(HttpActions.this.httpErrorCodeToMessage(response.code()));
+                    handleValidationErrorsIfExists(response, handler);
                 } else {
                     try {
                         ResponseBody responseBody = response.body();
                         saveJSessionIdIfFetched(response);
                         handler.onSuccess(responseBody.string());
                     } catch (IOException e) {
-                        handler.onFailure(App.getContext().getString(R.string.message_error_http_response_data_read_failed) + e);
+                        handler.onFailure(App.getContext().getString(R.string.message_error_http_response_data_read_failed) + e.getMessage());
                     }
                 }
             }
@@ -151,7 +152,7 @@ public class HttpActions implements IHttpActions {
     }
 
     @Override
-    public void doSimpleSpringSecurityLoginRequest(String url, String login, String password, IResultHandler<String> handler) {
+    public void doSimpleSpringSecurityLoginRequest(String url, String login, String password, IResponseHandler handler) {
         final RequestBody formBody = new FormBody.Builder()
                 .add("username", login)
                 .add("password", password).build();
@@ -160,20 +161,16 @@ public class HttpActions implements IHttpActions {
         mClient.newCall(builder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e);
+                handler.onFailure(App.getContext().getString(R.string.message_error_http_connection_failed) + e.getMessage());
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (!response.isSuccessful()) {
-                    if(response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                        handler.onSuccess(String.valueOf(HttpURLConnection.HTTP_UNAUTHORIZED));
-                    } else {
-                        handler.onFailure(App.getContext().getString(R.string.message_error_http_reponse_fail_code) + response.code() + " " + response.message());
-                    }
+                    handler.onFailure(HttpActions.this.httpErrorCodeToMessage(response.code()));
                 } else {
                     saveJSessionIdIfFetched(response);
-                    handler.onSuccess(App.getContext().getString(R.string.message_info_sign_in_success));
+                    handler.onSuccess();
                 }
             }
         });
@@ -218,6 +215,21 @@ public class HttpActions implements IHttpActions {
                             App.getPreferences().getString(App.Preference.JSESSIONID, "")
                     )
             );
+        }
+    }
+    /**
+     * Обработать ошибки серверной валидации, если они присутствуют в ответе сервера
+     * */
+    private void handleValidationErrorsIfExists(Response response, IBaseActionConsequencesHandler actionConsequencesHandler) {
+        if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST) {
+            ResponseModel<List<String>> responseModel;
+            try {
+                responseModel = JsonSerde.parseWithListContent(response.body().string(), ResponseModel.class, String.class);
+                actionConsequencesHandler.onValidationErrors(responseModel.getData());
+            } catch (Exception ex) {
+                Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
+                actionConsequencesHandler.onFailure(App.getContext().getString(R.string.message_error_deserialization));
+            }
         }
     }
 }

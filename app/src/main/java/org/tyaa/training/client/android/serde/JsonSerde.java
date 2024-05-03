@@ -41,6 +41,14 @@ public class JsonSerde {
         );
     }
 
+    /**
+     * Получение JSON-строки из объекта типа T
+     * @param object объект для сериализации
+     * */
+    public static <T> String serialize(T object) throws JsonProcessingException {
+        return mObjectMapper.writeValueAsString(object);
+    }
+
     // private static final Gson gson = new Gson();
 
     /* public static <T> T parseObject (String jsonString, Class<T> objectType) {

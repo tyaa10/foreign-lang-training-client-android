@@ -1,5 +1,7 @@
 package org.tyaa.training.client.android.activities;
 
+import static org.tyaa.training.client.android.utils.UIDataExtractor.*;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,12 +17,14 @@ import org.tyaa.training.client.android.R;
 import org.tyaa.training.client.android.handlers.IResponseHandler;
 import org.tyaa.training.client.android.services.HttpAuthService;
 import org.tyaa.training.client.android.services.interfaces.IAuthService;
+import org.tyaa.training.client.android.utils.UIActions;
 import org.tyaa.training.client.android.utils.UIActionsRunner;
+import org.tyaa.training.client.android.utils.UIDataExtractor;
 
 import java.util.Objects;
 
 /**
- * Логика формы входа в учётную запись
+ * Логика экрана формы входа в учётную запись
  * или перехода к форме регистрации
  * */
 public class SignInActivity extends AppCompatActivity {
@@ -28,20 +32,25 @@ public class SignInActivity extends AppCompatActivity {
     private TextInputEditText mLoginTextInputEditText;
     private TextInputEditText mPasswordTextInputEditText;
     private Button mSignInButton;
+    private Button mGoToSignUpButton;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // подключение представления входа в учётную запись
         setContentView(R.layout.activity_sign_in);
-        mSignInButton = findViewById(R.id.activitySignIn_signIn_Button);
+        // инициализация объектов доступа к постоянным элементам представления
         mLoginTextInputEditText =
                 SignInActivity.this.findViewById(R.id.activitySignIn_login_TextInputEditText);
         mPasswordTextInputEditText =
                 SignInActivity.this.findViewById(R.id.activitySignIn_password_TextInputEditText);
+        mSignInButton = findViewById(R.id.activitySignIn_signIn_Button);
+        mGoToSignUpButton = findViewById(R.id.activitySignIn_goToSignUp_Button);
+        // установка обработчиков событий для постоянных элементов представления
         mSignInButton.setOnClickListener(v -> {
             if (validateInputs(mLoginTextInputEditText, mPasswordTextInputEditText)) {
                 mAuthService.signIn(
-                        Objects.requireNonNull(mLoginTextInputEditText.getText()).toString(),
-                        Objects.requireNonNull(mPasswordTextInputEditText.getText()).toString(),
+                        getEditTextString(mLoginTextInputEditText),
+                        getEditTextString(mPasswordTextInputEditText),
                         new IResponseHandler() {
                             @Override
                             public void onSuccess() {
@@ -52,13 +61,16 @@ public class SignInActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(String errorMessage) {
-                                Log.println(Log.ERROR, getString(R.string.message_error), errorMessage);
-                                UIActionsRunner.run(() -> Toast.makeText(SignInActivity.this, errorMessage, Toast.LENGTH_LONG).show());
+                                UIActions.showError(SignInActivity.this, errorMessage);
                             }
                         }
                 );
             }
-
+        });
+        mGoToSignUpButton.setOnClickListener(v -> {
+            // перейти на Activity регистрации
+            Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
+            startActivity(intent);
         });
     }
     private boolean validateInputs(TextInputEditText loginInput, TextInputEditText passwordInput) {
