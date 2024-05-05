@@ -83,7 +83,9 @@ public class HttpActions implements IHttpActions {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (!response.isSuccessful()) {
-                    handler.onFailure(HttpActions.this.httpErrorCodeToMessage(response.code()));
+                    if (response.code() != HttpURLConnection.HTTP_BAD_REQUEST) {
+                        handler.onFailure(HttpActions.this.httpErrorCodeToMessage(response.code()));
+                    }
                     handleValidationErrorsIfExists(response, handler);
                 } else {
                     saveJSessionIdIfFetched(response);

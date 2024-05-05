@@ -10,12 +10,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Foreign Language Training"
+            android:text="@string/splash_screen_title_line1"
             android:textSize="24sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Android"
+            android:text="@string/splash_screen_title_line2"
             android:textSize="20sp"/>
     </LinearLayout>
 </FrameLayout>

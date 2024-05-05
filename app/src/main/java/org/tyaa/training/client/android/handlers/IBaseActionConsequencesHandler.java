@@ -21,7 +21,9 @@ public interface IBaseActionConsequencesHandler {
      * @param validationErrors список ошибок валидации
      * */
     default void onValidationErrors(List<String> validationErrors) {
-        Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_validation_errors), ": ");
+        if(validationErrors.size() > 0) {
+            Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_validation_errors), ": ");
+        }
         for (String validationError : validationErrors) {
             Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_validation_error), validationError);
         }

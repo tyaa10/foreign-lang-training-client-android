@@ -90,22 +90,22 @@ public class HttpAuthService implements IAuthService {
                 new IResultHandler<>() {
                     @Override
                     public void onSuccess(String result) {
-                        if (result.equals(String.valueOf(HttpURLConnection.HTTP_UNAUTHORIZED))) {
-                            handler.onSuccess(null);
-                        } else {
-                            try {
-                                ResponseModel<UserModel> responseModel = JsonSerde.parseWithSingleContent(result, ResponseModel.class, UserModel.class);
-                                handler.onSuccess(responseModel.getData());
-                            } catch (JsonProcessingException ex) {
-                                Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
-                                handler.onFailure(App.getContext().getString(R.string.message_error_deserialization));
-                            }
+                        try {
+                            ResponseModel<UserModel> responseModel = JsonSerde.parseWithSingleContent(result, ResponseModel.class, UserModel.class);
+                            handler.onSuccess(responseModel.getData());
+                        } catch (JsonProcessingException ex) {
+                            Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
+                            handler.onFailure(App.getContext().getString(R.string.message_error_deserialization));
                         }
                     }
 
                     @Override
                     public void onFailure(String errorMessage) {
-                        mActions.onHttpFailure(handler, errorMessage);
+                        if (errorMessage.equals(App.getContext().getString(R.string.message_error_http_response_unauthorized_full))) {
+                            handler.onSuccess(null);
+                        } else {
+                            mActions.onHttpFailure(handler, errorMessage);
+                        }
                     }
                 }
         );
@@ -165,7 +165,6 @@ public class HttpAuthService implements IAuthService {
 
                             @Override
                             public void onValidationErrors(List<String> validationErrors) {
-                                IResponseHandler.super.onValidationErrors(validationErrors);
                                 handler.onValidationErrors(validationErrors);
                             }
                         }
