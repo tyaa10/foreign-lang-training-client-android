@@ -83,7 +83,8 @@ public class HttpActions implements IHttpActions {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (!response.isSuccessful()) {
-                    if (response.code() != HttpURLConnection.HTTP_BAD_REQUEST) {
+                    if (response.code() != HttpURLConnection.HTTP_BAD_REQUEST
+                        && response.code() != HttpURLConnection.HTTP_CONFLICT) {
                         handler.onFailure(HttpActions.this.httpErrorCodeToMessage(response.code()));
                     }
                     handleValidationErrorsIfExists(response, handler);
@@ -223,14 +224,19 @@ public class HttpActions implements IHttpActions {
      * Обработать ошибки серверной валидации, если они присутствуют в ответе сервера
      * */
     private void handleValidationErrorsIfExists(Response response, IBaseActionConsequencesHandler actionConsequencesHandler) {
-        if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST) {
-            ResponseModel<List<String>> responseModel;
+        if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST
+            || response.code() == HttpURLConnection.HTTP_CONFLICT) {
+            ResponseModel<List<String>> responseModel = null;
             try {
                 responseModel = JsonSerde.parseWithListContent(response.body().string(), ResponseModel.class, String.class);
-                actionConsequencesHandler.onValidationErrors(responseModel.getData());
             } catch (Exception ex) {
-                Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
+                Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_deserialization), ex.getMessage());
                 actionConsequencesHandler.onFailure(App.getContext().getString(R.string.message_error_deserialization));
+            }
+            if (responseModel != null) {
+                actionConsequencesHandler.onValidationErrors(responseModel.getData());
+            } else {
+
             }
         }
     }
