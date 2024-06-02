@@ -103,8 +103,10 @@ public class SignUpActivity extends AppCompatActivity {
             confirmPasswordInputErrors.append(getString(R.string.message_error_validation_confirm_password));
         }
         if (!getEditTextString(passwordInput).equals(getEditTextString(confirmPasswordInput))) {
+            if (confirmPasswordInputErrors.length() > 0) {
+                confirmPasswordInputErrors.append(". ");
+            }
             confirmPasswordInputErrors
-                    .append(". ")
                     .append(getString(R.string.message_error_validation_confirm_password_matching));
         }
         if (confirmPasswordInputErrors.length() > 0) {
@@ -123,7 +125,8 @@ public class SignUpActivity extends AppCompatActivity {
         final StringBuilder passwordErrors = new StringBuilder();
 
         for (String validationError : validationErrors) {
-            if (validationError.toLowerCase(Locale.ROOT).contains("username")) {
+            if (validationError.toLowerCase(Locale.ROOT).contains("username")
+            || validationError.toLowerCase(Locale.ROOT).contains("name is already taken")) {
                 loginErrors.append(validationError).append(" ");
             }
             if (validationError.toLowerCase(Locale.ROOT).contains("password")) {
