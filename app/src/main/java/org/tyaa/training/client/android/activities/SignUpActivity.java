@@ -57,7 +57,10 @@ public class SignUpActivity extends AppCompatActivity {
                         new IResponseHandler() {
                             @Override
                             public void onSuccess() {
-                                UIActions.showInfo(SignUpActivity.this, "A new user registered");
+                                // UIActions.showInfo(SignUpActivity.this, "A new user registered");
+                                // перейти на Activity входа
+                                Intent intent = new Intent(SignUpActivity.this, ProfileCreatingActivity.class);
+                                startActivity(intent);
                             }
 
                             @Override
@@ -79,7 +82,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
         mGoToSignInButton.setOnClickListener(v -> {
             // перейти на Activity входа
-            Intent intent = new Intent(SignUpActivity.this, SignUpActivity.class);
+            Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
             startActivity(intent);
         });
     }

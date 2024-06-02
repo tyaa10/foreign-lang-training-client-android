@@ -40,9 +40,9 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
         // инициализация объектов доступа к постоянным элементам представления
         mLoginTextInputEditText =
-                SignInActivity.this.findViewById(R.id.activitySignIn_login_TextInputEditText);
+                findViewById(R.id.activitySignIn_login_TextInputEditText);
         mPasswordTextInputEditText =
-                SignInActivity.this.findViewById(R.id.activitySignIn_password_TextInputEditText);
+                findViewById(R.id.activitySignIn_password_TextInputEditText);
         mSignInButton = findViewById(R.id.activitySignIn_signIn_Button);
         mGoToSignUpButton = findViewById(R.id.activitySignIn_goToSignUp_Button);
         // установка обработчиков событий для постоянных элементов представления

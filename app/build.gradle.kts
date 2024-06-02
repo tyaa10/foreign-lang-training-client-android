@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "org.tyaa.training.client.android"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "org.tyaa.training.client.android"
         minSdk = 23
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -41,6 +41,7 @@ dependencies {
     /* implementation("com.google.code.gson:gson:2.10.1") */
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
     implementation("androidx.security:security-crypto:1.0.0")
+    implementation ("androidx.fragment:fragment:1.7.1")
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     testImplementation("junit:junit:4.13.2")
