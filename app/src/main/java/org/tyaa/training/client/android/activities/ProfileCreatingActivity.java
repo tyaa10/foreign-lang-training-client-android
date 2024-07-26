@@ -12,13 +12,17 @@ import androidx.fragment.app.FragmentTransaction;
 import org.tyaa.training.client.android.R;
 import org.tyaa.training.client.android.fragments.profilecreating.LanguagesStepFragment;
 import org.tyaa.training.client.android.fragments.profilecreating.LevelStepFragment;
+import org.tyaa.training.client.android.models.UserProfileModel;
 
 public class ProfileCreatingActivity extends AppCompatActivity {
 
     private TextView mStepNumberTextView;
 
+    private final UserProfileModel mProfileModel;
+
     public ProfileCreatingActivity () {
         super(R.layout.activity_profile_creating);
+        mProfileModel = new UserProfileModel();
     }
 
     @Override
@@ -39,5 +43,9 @@ public class ProfileCreatingActivity extends AppCompatActivity {
                 .setReorderingAllowed(true)
                 .replace(R.id.activityProfileCreating_step_fragment, fragment)
                 .commit();
+    }
+
+    public UserProfileModel getProfileModel() {
+        return mProfileModel;
     }
 }

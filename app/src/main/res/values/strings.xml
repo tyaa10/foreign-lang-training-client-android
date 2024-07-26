@@ -48,6 +48,12 @@
     <string name="network_simple_spring_security_login_uri">login</string>
     <!-- URI стандартной конечной точки простой выхода из учётной записи SpringSecurity -->
     <string name="network_simple_spring_security_logout_uri">logout</string>
+    <!-- URI конечной точки "Администратор - Профили" -->
+    <string name="network_admin_profiles_uri">admin/profiles</string>
+    <!-- URI конечной точки "Профили" -->
+    <string name="network_profiles_uri">profiles</string>
+    <!-- URI конечной точки "Языки" -->
+    <string name="network_languages_uri">languages</string>
     <!-- Текстовое содержимое представлений -->
     <string name="splash_screen_title_line1">Foreign Language Training</string>
     <string name="splash_screen_title_line2">Android</string>

@@ -23,7 +23,9 @@ import java.util.Objects;
  * Реализация репозитория ролей, использующего сетевой источник данных, доступный по протоколу HTTP
  * */
 public class HttpAuthService implements IAuthService {
+
     private final HttpActions mActions;
+
     public HttpAuthService() {
         mActions = new HttpActions();
     }
@@ -155,6 +157,19 @@ public class HttpAuthService implements IAuthService {
                         new IResponseHandler() {
                             @Override
                             public void onSuccess() {
+                                // автоматический вход в учётную запись после получения
+                                // от сервера ответа о её успешном создании
+                                signIn(login, password, new IResponseHandler() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(String errorMessage) {
+
+                                    }
+                                });
                                 handler.onSuccess();
                             }
 
