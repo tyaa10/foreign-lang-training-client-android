@@ -31,6 +31,7 @@
     <string name="message_error_http_response_forbidden_full">"Вы не авторизованы для данного действия"</string>
     <string name="message_error_http_response_auth_wrong_credentials">"Неверный логин или пароль"</string>
     <string name="message_error_http_response_conflict">"Такие данные уже существуют"</string>
+    <string name="message_error_http_response_not_found">"Данные не найдены"</string>
     <string name="message_error_deserialization">"Ошибка десериализации"</string>
     <string name="message_error_serialization">"Ошибка сериализации"</string>
     <!-- Тексты информационных сообщений -->
@@ -52,8 +53,12 @@
     <string name="network_admin_profiles_uri">admin/profiles</string>
     <!-- URI конечной точки "Профили" -->
     <string name="network_profiles_uri">profiles</string>
+    <!-- URI конечной точки "Профили - Текущий" -->
+    <string name="network_profiles_current_uri">profiles/current</string>
     <!-- URI конечной точки "Языки" -->
     <string name="network_languages_uri">languages</string>
+    <!-- URI конечной точки "комбинации 'родной язык - изучаемый язык - уровень владения языком'" -->
+    <string name="network_language_levels_uri">language-levels</string>
     <!-- Текстовое содержимое представлений -->
     <string name="splash_screen_title_line1">Foreign Language Training</string>
     <string name="splash_screen_title_line2">Android</string>

@@ -3,10 +3,7 @@ package org.tyaa.training.client.android.fragments.profilecreating;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
@@ -18,12 +15,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import org.tyaa.training.client.android.R;
-import org.tyaa.training.client.android.adapters.RoleAdapter;
+import org.tyaa.training.client.android.activities.ProfileCreatingActivity;
 import org.tyaa.training.client.android.handlers.IResultHandler;
+import org.tyaa.training.client.android.models.LanguageLevelModel;
 import org.tyaa.training.client.android.models.LanguageModel;
-import org.tyaa.training.client.android.models.RoleModel;
-import org.tyaa.training.client.android.services.HttpLanguageService;
-import org.tyaa.training.client.android.services.interfaces.ILanguageService;
+import org.tyaa.training.client.android.services.HttpLanguageLevelService;
+import org.tyaa.training.client.android.services.interfaces.ILanguageLevelService;
 import org.tyaa.training.client.android.utils.UIActions;
 import org.tyaa.training.client.android.utils.UIActionsRunner;
 
@@ -35,23 +32,33 @@ public class LanguagesStepFragment extends BaseStepFragment {
     private TextView mTitleTextView;
     private AutoCompleteTextView mNativeLanguageAutoCompleteTextView;
     private AutoCompleteTextView mLearningLanguageAutoCompleteTextView;
-    private Button mBackButton;
+    // private Button mBackButton;
     private Button mNextButton;
 
-    private final ILanguageService mLanguageService;
+    private final ILanguageLevelService mLanguageLevelService;
+
+    private final List<LanguageModel> mNativeLanguages;
+    private final List<LanguageModel> mLearningLanguages;
+    private final List<LanguageModel> mFilteredNativeLanguages;
+    private final List<LanguageModel> mFilteredLearningLanguages;
 
     public LanguagesStepFragment() {
         super(R.layout.fragment_languages);
-        mLanguageService = new HttpLanguageService();
+        mLanguageLevelService = new HttpLanguageLevelService();
+        // создание пустых списков моделей языков - источников данных
+        mNativeLanguages = new ArrayList<>();
+        mLearningLanguages = new ArrayList<>();
+        mFilteredNativeLanguages = new ArrayList<>();
+        mFilteredLearningLanguages = new ArrayList<>();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // установка заголовка экрана
+        /* установка заголовка экрана */
         mTitleTextView = view.findViewById(R.id.profile_creating_fragmentLanguages_title_TextView);
         mTitleTextView.setText(mTitleParam);
-        // обработчик клика для перехода на следующий экран
+        /* обработчик клика для перехода на следующий экран */
         mNextButton = view.findViewById(R.id.profile_creating_fragmentLanguages_next_Button);
         mNextButton.setOnClickListener(v -> {
             FragmentManager fragmentManager =
@@ -63,24 +70,43 @@ public class LanguagesStepFragment extends BaseStepFragment {
                     .replace(R.id.activityProfileCreating_step_fragment, fragment)
                     .commit();
         });
-        // подключение данных к выпадающим спискам выбора языков
+        /* подключение данных к выпадающим спискам выбора языков */
+        // 1. получение объектов доступа к выпадающим спискам выбора языков
         mNativeLanguageAutoCompleteTextView =
                 view.findViewById(R.id.fragmentProfileCreating_nativeLanguage_autoCompleteTextView);
         mLearningLanguageAutoCompleteTextView =
                 view.findViewById(R.id.fragmentProfileCreating_learningLanguage_autoCompleteTextView);
-        final List<LanguageModel> languages = new ArrayList<>();
-        final ArrayAdapter languageAdapter =
-                new ArrayAdapter(LanguagesStepFragment.this.getActivity(), android.R.layout.simple_list_item_1, languages);
-        mNativeLanguageAutoCompleteTextView.setAdapter(languageAdapter);
-        mLearningLanguageAutoCompleteTextView.setAdapter(languageAdapter);
-        mLanguageService.getLanguages(new IResultHandler<List<LanguageModel>>() {
+        // 2. создание переходников для подключения списков моделей данных к элементам управления UI
+        final ArrayAdapter nativeLanguageAdapter =
+                new ArrayAdapter(
+                        LanguagesStepFragment.this.getActivity(),
+                        android.R.layout.simple_list_item_1,
+                        mFilteredNativeLanguages
+                );
+        final ArrayAdapter learningLanguageAdapter =
+                new ArrayAdapter(
+                        LanguagesStepFragment.this.getActivity(),
+                        android.R.layout.simple_list_item_1,
+                        mFilteredLearningLanguages
+                );
+        // 3. подключение списков моделей языков к выпадающим спискам выбора языков через переходники
+        mNativeLanguageAutoCompleteTextView.setAdapter(nativeLanguageAdapter);
+        mLearningLanguageAutoCompleteTextView.setAdapter(learningLanguageAdapter);
+        // 4. получение списка комбинаций языков и уровней с сервера и заполнение списков языков
+        // полученными данными
+        mLanguageLevelService.getLanguageLevels(new IResultHandler<List<LanguageLevelModel>>() {
             @Override
-            public void onSuccess(List<LanguageModel> result) {
-                if(languages.size() > 0) {
-                    languages.clear();
-                }
-                languages.addAll(result);
-                UIActionsRunner.run(languageAdapter::notifyDataSetChanged);
+            public void onSuccess(List<LanguageLevelModel> languageLevels) {
+                // заполнить полные списки-источники данных моделями языков
+                fillLanguageLists(languageLevels, mNativeLanguages, mLearningLanguages);
+                // скопировать ссылки на все модели из полных списков в фильтрованные,
+                // которые через переходники подключены к выпадающим спискам выбора
+                mFilteredNativeLanguages.addAll(mNativeLanguages);
+                mFilteredLearningLanguages.addAll(mLearningLanguages);
+                // через переходники уведомить выпадающие списки выбора языков о том,
+                // что наборы данных в списках-источниках изменились
+                UIActionsRunner.run(nativeLanguageAdapter::notifyDataSetChanged);
+                UIActionsRunner.run(learningLanguageAdapter::notifyDataSetChanged);
             }
 
             @Override
@@ -88,7 +114,7 @@ public class LanguagesStepFragment extends BaseStepFragment {
                 UIActions.showError(getActivity(), errorMessage);
             }
         });
-        // обработчики заполнения полей ввода
+        /* обработчики событий выбора языков в выпадающих списках */
         mNativeLanguageAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -102,7 +128,93 @@ public class LanguagesStepFragment extends BaseStepFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // TODO исключать выбранный пункт из второго выпадающего списка
+                // получить текст выбранного родного языка
+                String selectedLangugeName = s.toString();
+                // установить текст выбранного родного языка в модель профиля
+                ((ProfileCreatingActivity) getActivity())
+                        .getProfileModel().setNativeLanguageName(selectedLangugeName);
+                // исключить выбранный пункт из фильтруемого списка изучаемых языков
+                excludeSelectedLanguage(mLearningLanguages, mFilteredLearningLanguages, selectedLangugeName);
+                // через переходник уведомить выпадающий список изучаемых языков,
+                // что данные в источнике изменились, и требуется перерисовка
+                UIActionsRunner.run(learningLanguageAdapter::notifyDataSetChanged);
+            }
+        });
+        mLearningLanguageAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // получить текст выбранного родного языка
+                String selectedLangugeName = s.toString();
+                // установить текст выбранного родного языка в модель профиля
+                ((ProfileCreatingActivity) getActivity())
+                        .getProfileModel().setLearningLanguageName(selectedLangugeName);
+                // исключить выбранный пункт из фильтруемого списка изучаемых языков
+                excludeSelectedLanguage(mNativeLanguages, mFilteredNativeLanguages, selectedLangugeName);
+                // через переходник уведомить выпадающий список выбора родного языка,
+                // что данные в источнике изменились, и требуется перерисовка
+                UIActionsRunner.run(nativeLanguageAdapter::notifyDataSetChanged);
+            }
+        });
+    }
+
+    /**
+     * Заполнение полных списков выбора языков данными из списка комбинаций языков и уровней изучения
+     * @param languageLevelModels список доступных комбинаций языков и уровней изучения
+     * @param nativeLanguages заполняемый полный список для выбора родного языка
+     * @param learningLanguages заполняемый полный список для выбора изучаемого языка
+     * */
+    private static void fillLanguageLists(
+            List<LanguageLevelModel> languageLevelModels,
+            List<LanguageModel> nativeLanguages,
+            List<LanguageModel> learningLanguages
+    ) {
+        // последовательно перебрать все доступные комбинации языков и уровней изучения
+        languageLevelModels.forEach(languageLevelModel -> {
+            // очистить списки моделей, если они не пусты
+            if(nativeLanguages.size() > 0) {
+                nativeLanguages.clear();
+            }
+            if(learningLanguages.size() > 0) {
+                learningLanguages.clear();
+            }
+            // заполнить список выбора родного языка всеми языками, входящими в комбинации
+            // в качестве родного языка
+            nativeLanguages.add(languageLevelModel.getNativeLanguage());
+            // заполнить список выбора изучаемого языка всеми языками, входящими в комбинации
+            // в качестве изучаемого языка
+            learningLanguages.add(languageLevelModel.getLearningLanguage());
+        });
+    }
+
+    /**
+     * Исключение из фильтруемого списка одной модели
+     * @param languages полный список
+     * @param filteredLanguages фильтруемый список
+     * @param excludedLanguageName название исключаемого языка
+     * */
+    private static void excludeSelectedLanguage(
+            List<LanguageModel> languages,
+            List<LanguageModel> filteredLanguages,
+            String excludedLanguageName
+    ) {
+        // очистка фильтруемого списка от всех ссылок
+        filteredLanguages.clear();
+        // перебор полного списка моделей языков
+        languages.forEach(language -> {
+            // если текущая модель не содержит названия исключаемого языка
+            if (!language.getName().equals(excludedLanguageName)) {
+                // ссылка на модель копируется из полного списка в фильтруемый
+                filteredLanguages.add(language);
             }
         });
     }

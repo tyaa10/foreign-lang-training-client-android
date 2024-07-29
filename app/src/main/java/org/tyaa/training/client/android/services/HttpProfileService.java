@@ -25,8 +25,8 @@ public class HttpProfileService implements IProfileService {
 
     private final HttpActions mActions;
 
-    public HttpProfileService(HttpActions mActions) {
-        this.mActions = mActions;
+    public HttpProfileService() {
+        this.mActions = new HttpActions();
     }
 
     @Override
@@ -87,5 +87,37 @@ public class HttpProfileService implements IProfileService {
         } catch (JsonProcessingException e) {
             handler.onFailure(App.getContext().getString(R.string.message_error_serialization));
         }
+    }
+
+    @Override
+    public void getCurrentUserProfile(IResultHandler<UserProfileModel> handler) {
+        mActions.doRequestForResult(
+                String.format("%s/%s",
+                        App.getContext().getString(R.string.network_base_server_url),
+                        App.getContext().getString(R.string.network_profiles_current_uri)
+                ),
+                new IResultHandler<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        ResponseModel<UserProfileModel> responseModel;
+                        try {
+                            responseModel = JsonSerde.parseWithSingleContent(result, ResponseModel.class, UserProfileModel.class);
+                            handler.onSuccess(responseModel.getData());
+                        } catch (Exception ex) {
+                            Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
+                            handler.onFailure(App.getContext().getString(R.string.message_error_deserialization));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String errorMessage) {
+                        if (errorMessage.equals(App.getContext().getString(R.string.message_error_http_response_not_found))) {
+                            handler.onSuccess(null);
+                        } else {
+                            mActions.onHttpFailure(handler, errorMessage);
+                        }
+                    }
+                }
+        );
     }
 }

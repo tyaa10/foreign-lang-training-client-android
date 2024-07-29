@@ -19,18 +19,19 @@ import org.tyaa.training.client.android.utils.UIActionsRunner;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * Логика экрана формы регистрации
  * */
 public class SignUpActivity extends AppCompatActivity {
+
     private final IAuthService mAuthService = new HttpAuthService();
     private TextInputEditText mLoginTextInputEditText;
     private TextInputEditText mPasswordTextInputEditText;
     private TextInputEditText mConfirmPasswordTextInputEditText;
     private Button mSignUpButton;
     private Button mGoToSignInButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +59,7 @@ public class SignUpActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess() {
                                 // UIActions.showInfo(SignUpActivity.this, "A new user registered");
-                                // перейти на Activity входа
+                                // перейти на Activity начального заполнения профиля
                                 Intent intent = new Intent(SignUpActivity.this, ProfileCreatingActivity.class);
                                 startActivity(intent);
                             }
@@ -86,10 +87,15 @@ public class SignUpActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
+
+    /**
+     * Проверить данные, введенные пользователем в поля ввода, на соответствие правилам
+     * */
     private boolean validateInputs(
             TextInputEditText loginInput,
             TextInputEditText passwordInput,
             TextInputEditText confirmPasswordInput) {
+
         if (loginInput.length() == 0) {
             loginInput.setError(getString(R.string.message_error_validation_login));
             return false;
@@ -116,6 +122,9 @@ public class SignUpActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * При наличии текстов ошибок валидации отобразить их в соответствующих полях ввода
+     * */
     private void processValidationErrors(
             TextInputEditText loginInput,
             TextInputEditText passwordInput,
