@@ -19,6 +19,7 @@ import org.tyaa.training.client.android.activities.ProfileCreatingActivity;
 import org.tyaa.training.client.android.handlers.IResultHandler;
 import org.tyaa.training.client.android.models.LanguageLevelModel;
 import org.tyaa.training.client.android.models.LanguageModel;
+import org.tyaa.training.client.android.models.UserProfileModel;
 import org.tyaa.training.client.android.services.HttpLanguageLevelService;
 import org.tyaa.training.client.android.services.interfaces.ILanguageLevelService;
 import org.tyaa.training.client.android.utils.UIActions;
@@ -61,14 +62,20 @@ public class LanguagesStepFragment extends BaseStepFragment {
         /* обработчик клика для перехода на следующий экран */
         mNextButton = view.findViewById(R.id.profile_creating_fragmentLanguages_next_Button);
         mNextButton.setOnClickListener(v -> {
+            // получение объекта управления фрагментами у текущей Activity
             FragmentManager fragmentManager =
                     LanguagesStepFragment.this.getActivity().getSupportFragmentManager();
+            // создание экземпляра фрагмента выбра уровня изучения языка для профиля
+            // с передачей ему заголовка для отображения - "Level"
             Fragment fragment =
                     LevelStepFragment.getInstance(LevelStepFragment.class, "Level");
+            // замена текущего фрагмента следующим
             fragmentManager.beginTransaction()
                     .setReorderingAllowed(true)
                     .replace(R.id.activityProfileCreating_step_fragment, fragment)
                     .commit();
+            // увеличение номера шага заполнения профиля на единицу
+            ((ProfileCreatingActivity) getActivity()).increaseStepNumber();
         });
         /* подключение данных к выпадающим спискам выбора языков */
         // 1. получение объектов доступа к выпадающим спискам выбора языков
@@ -116,6 +123,7 @@ public class LanguagesStepFragment extends BaseStepFragment {
         });
         /* обработчики событий выбора языков в выпадающих списках */
         mNativeLanguageAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -138,9 +146,13 @@ public class LanguagesStepFragment extends BaseStepFragment {
                 // через переходник уведомить выпадающий список изучаемых языков,
                 // что данные в источнике изменились, и требуется перерисовка
                 UIActionsRunner.run(learningLanguageAdapter::notifyDataSetChanged);
+                // пересмотреть состояние кнопки перехода на следующий экран
+                // (сделать активной или нет)
+                reconsiderNextButtonState();
             }
         });
         mLearningLanguageAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -163,6 +175,9 @@ public class LanguagesStepFragment extends BaseStepFragment {
                 // через переходник уведомить выпадающий список выбора родного языка,
                 // что данные в источнике изменились, и требуется перерисовка
                 UIActionsRunner.run(nativeLanguageAdapter::notifyDataSetChanged);
+                // пересмотреть состояние кнопки перехода на следующий экран
+                // (сделать активной или нет)
+                reconsiderNextButtonState();
             }
         });
     }
@@ -217,5 +232,19 @@ public class LanguagesStepFragment extends BaseStepFragment {
                 filteredLanguages.add(language);
             }
         });
+    }
+
+    /**
+     * Пересмотр состояния кнопки перехода на следующий экран (сделать активной или нет)
+     * */
+    private void reconsiderNextButtonState() {
+        // получение ссылки на заполняемую модель профиля
+        UserProfileModel profileModel =
+            ((ProfileCreatingActivity) getActivity()).getProfileModel();
+        // если заполнены поля родного и изучаемого языков
+        if (profileModel.getNativeLanguageName() != null && profileModel.getLearningLanguageName() != null) {
+            // сделать кнопку перехода на следующий экран активной
+            mNextButton.setEnabled(true);
+        }
     }
 }

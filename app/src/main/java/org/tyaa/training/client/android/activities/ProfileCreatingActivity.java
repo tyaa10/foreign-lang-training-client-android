@@ -48,4 +48,8 @@ public class ProfileCreatingActivity extends AppCompatActivity {
     public UserProfileModel getProfileModel() {
         return mProfileModel;
     }
+
+    public void increaseStepNumber() {
+        mStepNumberTextView.setText(String.valueOf(Integer.valueOf(mStepNumberTextView.getText().toString()) + 1));
+    }
 }
