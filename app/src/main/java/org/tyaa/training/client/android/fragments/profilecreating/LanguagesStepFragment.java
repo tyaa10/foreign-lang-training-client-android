@@ -33,7 +33,6 @@ public class LanguagesStepFragment extends BaseStepFragment {
     private TextView mTitleTextView;
     private AutoCompleteTextView mNativeLanguageAutoCompleteTextView;
     private AutoCompleteTextView mLearningLanguageAutoCompleteTextView;
-    // private Button mBackButton;
     private Button mNextButton;
 
     private final ILanguageLevelService mLanguageLevelService;
@@ -102,6 +101,7 @@ public class LanguagesStepFragment extends BaseStepFragment {
         // 4. получение списка комбинаций языков и уровней с сервера и заполнение списков языков
         // полученными данными
         mLanguageLevelService.getLanguageLevels(new IResultHandler<List<LanguageLevelModel>>() {
+
             @Override
             public void onSuccess(List<LanguageLevelModel> languageLevels) {
                 // заполнить полные списки-источники данных моделями языков
@@ -193,15 +193,15 @@ public class LanguagesStepFragment extends BaseStepFragment {
             List<LanguageModel> nativeLanguages,
             List<LanguageModel> learningLanguages
     ) {
+        // очистить списки моделей, если они не пусты
+        if(nativeLanguages.size() > 0) {
+            nativeLanguages.clear();
+        }
+        if(learningLanguages.size() > 0) {
+            learningLanguages.clear();
+        }
         // последовательно перебрать все доступные комбинации языков и уровней изучения
         languageLevelModels.forEach(languageLevelModel -> {
-            // очистить списки моделей, если они не пусты
-            if(nativeLanguages.size() > 0) {
-                nativeLanguages.clear();
-            }
-            if(learningLanguages.size() > 0) {
-                learningLanguages.clear();
-            }
             // заполнить список выбора родного языка всеми языками, входящими в комбинации
             // в качестве родного языка
             nativeLanguages.add(languageLevelModel.getNativeLanguage());

@@ -42,7 +42,9 @@ public class HttpLanguageLevelService implements ILanguageLevelService {
                             responseModel = JsonSerde.parseWithListContent(result, ResponseModel.class, LanguageLevelModel.class);
                             handler.onSuccess(responseModel.getData());
                         } catch (Exception ex) {
-                            Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
+                            if (ex.getMessage() != null)
+                                Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_deserialization), ex.getMessage());
+                            Log.println(Log.ERROR, "StackTrace", Log.getStackTraceString(ex));
                             handler.onFailure(App.getContext().getString(R.string.message_error_deserialization));
                         }
                     }

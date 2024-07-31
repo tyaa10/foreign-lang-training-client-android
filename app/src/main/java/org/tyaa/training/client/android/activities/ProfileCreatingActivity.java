@@ -5,13 +5,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import org.tyaa.training.client.android.R;
 import org.tyaa.training.client.android.fragments.profilecreating.LanguagesStepFragment;
-import org.tyaa.training.client.android.fragments.profilecreating.LevelStepFragment;
 import org.tyaa.training.client.android.models.UserProfileModel;
 
 public class ProfileCreatingActivity extends AppCompatActivity {
@@ -35,10 +32,17 @@ public class ProfileCreatingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Создание и подключение фрагмента первого экрана из последовательности заполнения профиля
+     * */
     private void setInitialFragment() {
+        // получение объекта управления фрагментами у текущей Activity
         FragmentManager fragmentManager = getSupportFragmentManager();
+        // создание экземпляра фрагмента выбра родного и изучаемого языков для профиля
+        // с передачей ему заголовка для отображения - "Languages"
         Fragment fragment =
                 LanguagesStepFragment.getInstance(LanguagesStepFragment.class, "Languages");
+        // замена фрагмента-заглушки первым фрагментом последовательности заполнения профиля
         fragmentManager.beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.activityProfileCreating_step_fragment, fragment)
