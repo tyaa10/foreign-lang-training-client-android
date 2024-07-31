@@ -72,6 +72,7 @@ public class LanguagesStepFragment extends BaseStepFragment {
             fragmentManager.beginTransaction()
                     .setReorderingAllowed(true)
                     .replace(R.id.activityProfileCreating_step_fragment, fragment)
+                    .addToBackStack(null)
                     .commit();
             // увеличение номера шага заполнения профиля на единицу
             ((ProfileCreatingActivity) getActivity()).increaseStepNumber();
