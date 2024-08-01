@@ -1,28 +1,28 @@
 package org.tyaa.training.client.android.fragments.profilecreating;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.tyaa.training.client.android.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NameAndAvatarStepFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class NameAndAvatarStepFragment extends BaseStepFragment {
 
+    private TextView mTitleTextView;
+
     public NameAndAvatarStepFragment() {
+        super(R.layout.fragment_name_and_avatar);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_languages, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        super.onViewCreated(view, savedInstanceState);
+        /* Установка заголовка экрана */
+        mTitleTextView = view.findViewById(R.id.profile_creating_fragmentNameAndAvatar_title_TextView);
+        mTitleTextView.setText(mTitleParam);
     }
 }

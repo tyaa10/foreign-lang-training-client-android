@@ -85,6 +85,9 @@ public interface IHttpActions {
             case HttpURLConnection.HTTP_BAD_REQUEST:
                 errorMessage = App.getContext().getString(R.string.message_error_validation_errors);
                 break;
+            case HttpURLConnection.HTTP_NOT_FOUND:
+                errorMessage = App.getContext().getString(R.string.message_error_http_response_not_found);
+                break;
             default:
                 errorMessage = App.getContext().getString(R.string.message_error_http_action_failed);
         }

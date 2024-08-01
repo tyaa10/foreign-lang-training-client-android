@@ -25,8 +25,10 @@ import java.util.List;
  * (хост для фрагментов основной функциональности приложения)
  * */
 public class MainActivity extends ListActivity {
+
     private final IAuthService mAuthService = new HttpAuthService();
     private Button mSignOutButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

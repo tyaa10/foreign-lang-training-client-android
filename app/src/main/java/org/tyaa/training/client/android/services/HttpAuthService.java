@@ -162,7 +162,10 @@ public class HttpAuthService implements IAuthService {
                                 signIn(login, password, new IResponseHandler() {
                                     @Override
                                     public void onSuccess() {
-
+                                        // вызов обработчика успешной регистрации только
+                                        // после получения положительного отклика сервера
+                                        // на первый вход в созданную учётную запись
+                                        handler.onSuccess();
                                     }
 
                                     @Override
@@ -170,7 +173,6 @@ public class HttpAuthService implements IAuthService {
 
                                     }
                                 });
-                                handler.onSuccess();
                             }
 
                             @Override

@@ -9,7 +9,7 @@
     tools:context=".fragments.profilecreating.BaseStepFragment">
 
     <TextView
-        android:id="@+id/profile_creating_fragmentLevel_title_TextView"
+        android:id="@+id/profile_creating_fragmentNameAndAvatar_title_TextView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -17,36 +17,13 @@
         android:textSize="20sp"
         android:text="Title Stub" />
 
-    <!--<TextView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="7"
         android:gravity="center"
         android:textSize="20sp"
-        android:text="Levels Main Content Stub" />-->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="7"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <AutoCompleteTextView
-                android:id="@+id/fragmentProfileCreating_targetLevel_autoCompleteTextView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:inputType="none"
-                android:text="Target level"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+        android:text="Name and Avatar Main Content Stub" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,7 +43,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:enabled="false"
             android:text="Next"/>
     </LinearLayout>
 </LinearLayout>
