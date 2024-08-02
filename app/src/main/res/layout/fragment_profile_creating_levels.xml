@@ -9,7 +9,7 @@
     tools:context=".fragments.profilecreating.BaseStepFragment">
 
     <TextView
-        android:id="@+id/profile_creating_fragmentLevel_title_TextView"
+        android:id="@+id/activityProfileCreating_fragmentLevel_title_TextView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content">
 
             <AutoCompleteTextView
-                android:id="@+id/fragmentProfileCreating_targetLevel_autoCompleteTextView"
+                android:id="@+id/activityProfileCreating_fragmentLevel_level_autoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -55,14 +55,14 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/profile_creating_fragmentLevel_back_Button"
+            android:id="@+id/activityProfileCreating_fragmentLevel_back_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:text="Back"/>
 
         <Button
-            android:id="@+id/profile_creating_fragmentLevel_next_Button"
+            android:id="@+id/activityProfileCreating_fragmentLevel_next_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"

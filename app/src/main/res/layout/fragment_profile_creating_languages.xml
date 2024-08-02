@@ -9,7 +9,7 @@
     tools:context=".fragments.profilecreating.BaseStepFragment">
 
     <TextView
-        android:id="@+id/profile_creating_fragmentLanguages_title_TextView"
+        android:id="@+id/activityProfileCreating_fragmentLanguages_title_TextView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content">
 
             <AutoCompleteTextView
-                android:id="@+id/fragmentProfileCreating_nativeLanguage_autoCompleteTextView"
+                android:id="@+id/activityProfileCreating_fragmentLanguages_nativeLanguage_autoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content">
 
             <AutoCompleteTextView
-                android:id="@+id/fragmentProfileCreating_learningLanguage_autoCompleteTextView"
+                android:id="@+id/activityProfileCreating_fragmentLanguages_learningLanguage_autoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -70,7 +70,7 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/profile_creating_fragmentLanguages_next_Button"
+            android:id="@+id/activityProfileCreating_fragmentLanguages_next_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"

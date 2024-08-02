@@ -43,7 +43,7 @@ public class LanguagesStepFragment extends BaseStepFragment {
     private final List<LanguageModel> mFilteredLearningLanguages;
 
     public LanguagesStepFragment() {
-        super(R.layout.fragment_languages);
+        super(R.layout.fragment_profile_creating_languages);
         mLanguageLevelService = new HttpLanguageLevelService();
         // создание пустых списков моделей языков - источников данных
         mNativeLanguages = new ArrayList<>();
@@ -56,10 +56,10 @@ public class LanguagesStepFragment extends BaseStepFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         /* установка заголовка экрана */
-        mTitleTextView = view.findViewById(R.id.profile_creating_fragmentLanguages_title_TextView);
+        mTitleTextView = view.findViewById(R.id.activityProfileCreating_fragmentLanguages_title_TextView);
         mTitleTextView.setText(mTitleParam);
         /* обработчик клика для перехода на следующий экран */
-        mNextButton = view.findViewById(R.id.profile_creating_fragmentLanguages_next_Button);
+        mNextButton = view.findViewById(R.id.activityProfileCreating_fragmentLanguages_next_Button);
         mNextButton.setOnClickListener(v -> {
             // получение объекта управления фрагментами у текущей Activity
             FragmentManager fragmentManager =
@@ -80,9 +80,9 @@ public class LanguagesStepFragment extends BaseStepFragment {
         /* подключение данных к выпадающим спискам выбора языков */
         // 1. получение объектов доступа к выпадающим спискам выбора языков
         mNativeLanguageAutoCompleteTextView =
-                view.findViewById(R.id.fragmentProfileCreating_nativeLanguage_autoCompleteTextView);
+                view.findViewById(R.id.activityProfileCreating_fragmentLanguages_nativeLanguage_autoCompleteTextView);
         mLearningLanguageAutoCompleteTextView =
-                view.findViewById(R.id.fragmentProfileCreating_learningLanguage_autoCompleteTextView);
+                view.findViewById(R.id.activityProfileCreating_fragmentLanguages_learningLanguage_autoCompleteTextView);
         // 2. создание переходников для подключения списков моделей данных к элементам управления UI
         final ArrayAdapter nativeLanguageAdapter =
                 new ArrayAdapter(

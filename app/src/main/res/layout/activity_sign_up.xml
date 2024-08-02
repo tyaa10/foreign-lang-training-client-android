@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10"
     android:padding="15dp"
@@ -14,8 +14,8 @@
         android:layout_weight="9"
         android:orientation="vertical"
         android:layout_gravity="center"
-        android:weightSum="10"
-        >
+        android:weightSum="10">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -23,6 +23,7 @@
             android:text="Register"
             android:textSize="48sp"
             android:gravity="center_vertical|bottom"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -30,41 +31,48 @@
             android:text="Create your new account"
             android:textSize="28sp"
             android:gravity="center_vertical|top"/>
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             app:hintEnabled="true"
             android:hint="login">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/activitySignUp_login_TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             app:hintEnabled="true"
             android:hint="password">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/activitySignUp_password_TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             app:hintEnabled="true"
             android:hint="confirm password">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/activitySignUp_confirmPassword_TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
+
         <Button
             android:id="@+id/activitySignUp_signUp_Button"
             android:layout_width="match_parent"
@@ -72,6 +80,7 @@
             android:layout_weight="1"
             android:text="Sign Up"/>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -80,11 +89,13 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:gravity="center_vertical|center_horizontal|center">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Already have an account?"
             android:textSize="22sp"/>
+
         <Button
             android:id="@+id/activitySignUp_goToSignIn_Button"
             android:layout_width="wrap_content"

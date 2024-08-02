@@ -26,7 +26,6 @@ import org.tyaa.training.client.android.utils.UIActions;
 import org.tyaa.training.client.android.utils.UIActionsRunner;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class LevelStepFragment extends BaseStepFragment {
@@ -41,7 +40,7 @@ public class LevelStepFragment extends BaseStepFragment {
     private final List<LevelModel> mFilteredLevels;
 
     public LevelStepFragment() {
-        super(R.layout.fragment_levels);
+        super(R.layout.fragment_profile_creating_levels);
         mLanguageLevelService = new HttpLanguageLevelService();
         mFilteredLevels = new ArrayList<>();
     }
@@ -51,10 +50,10 @@ public class LevelStepFragment extends BaseStepFragment {
 
         super.onViewCreated(view, savedInstanceState);
         /* Установка заголовка экрана */
-        mTitleTextView = view.findViewById(R.id.profile_creating_fragmentLevel_title_TextView);
+        mTitleTextView = view.findViewById(R.id.activityProfileCreating_fragmentLevel_title_TextView);
         mTitleTextView.setText(mTitleParam);
         /* Обработчик клика для перехода на предыдущий экран */
-        mBackButton = view.findViewById(R.id.profile_creating_fragmentLevel_back_Button);
+        mBackButton = view.findViewById(R.id.activityProfileCreating_fragmentLevel_back_Button);
         mBackButton.setOnClickListener(v -> {
             // получение объекта управления фрагментами у текущей Activity
             FragmentManager fragmentManager =
@@ -64,7 +63,7 @@ public class LevelStepFragment extends BaseStepFragment {
             fragmentManager.popBackStackImmediate();
         });
         /* Обработчик клика для перехода на следующий экран */
-        mNextButton = view.findViewById(R.id.profile_creating_fragmentLevel_next_Button);
+        mNextButton = view.findViewById(R.id.activityProfileCreating_fragmentLevel_next_Button);
         mNextButton.setOnClickListener(v -> {
             // получение объекта управления фрагментами у текущей Activity
             FragmentManager fragmentManager =
@@ -77,13 +76,14 @@ public class LevelStepFragment extends BaseStepFragment {
             fragmentManager.beginTransaction()
                     .setReorderingAllowed(true)
                     .replace(R.id.activityProfileCreating_step_fragment, fragment)
+                    .addToBackStack(null)
                     .commit();
             // увеличение номера шага заполнения профиля на единицу
             ((ProfileCreatingActivity) getActivity()).increaseStepNumber();
         });
         /* Подключение фильтруемого источника данных к выпадающему списку выбора уровня */
         mTargerLevelAutoCompleteTextView =
-                view.findViewById(R.id.fragmentProfileCreating_targetLevel_autoCompleteTextView);
+                view.findViewById(R.id.activityProfileCreating_fragmentLevel_level_autoCompleteTextView);
         final ArrayAdapter levelAdapter =
                 new ArrayAdapter(
                         LevelStepFragment.this.getActivity(),

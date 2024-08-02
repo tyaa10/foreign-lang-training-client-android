@@ -23,7 +23,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class NameAndAvatarStepFragment extends BaseStepFragment implements ImagePickerResultListener {
+public class FinalStepFragment extends BaseStepFragment implements ImagePickerResultListener {
 
     private TextView mTitleTextView;
     private CircleImageView mAvatarCircleImageView;
@@ -32,7 +32,7 @@ public class NameAndAvatarStepFragment extends BaseStepFragment implements Image
 
     private ImagePicker mAvatarImagePicker;
 
-    public NameAndAvatarStepFragment() {
+    public FinalStepFragment() {
         super(R.layout.fragment_profile_creating_name_and_avatar);
     }
 
@@ -48,7 +48,7 @@ public class NameAndAvatarStepFragment extends BaseStepFragment implements Image
         mBackButton.setOnClickListener(v -> {
             // получение объекта управления фрагментами у текущей Activity
             FragmentManager fragmentManager =
-                    NameAndAvatarStepFragment.this.getActivity().getSupportFragmentManager();
+                    FinalStepFragment.this.getActivity().getSupportFragmentManager();
             // немедленно заменить экземпляр текущего фрагмента экземпляром предыдущего
             // (вернуться на предыдущий экран)
             fragmentManager.popBackStackImmediate();
@@ -58,23 +58,21 @@ public class NameAndAvatarStepFragment extends BaseStepFragment implements Image
         mNextButton.setOnClickListener(v -> {
             // получение объекта управления фрагментами у текущей Activity
             FragmentManager fragmentManager =
-                    NameAndAvatarStepFragment.this.getActivity().getSupportFragmentManager();
-            // создание экземпляра фрагмента завершения первоначального заполнения профиля
-            // с передачей ему заголовка для отображения - "Your profile info"
+                    FinalStepFragment.this.getActivity().getSupportFragmentManager();
+            // создание экземпляра фрагмента необязательного задания имени и аватара для профиля
+            // с передачей ему заголовка для отображения - "Name and Avatar"
             Fragment fragment =
-                    FinalStepFragment.getInstance(FinalStepFragment.class, "Your profile info");
+                    LevelStepFragment.getInstance(FinalStepFragment.class, "Name and Avatar");
             // замена текущего фрагмента следующим
             fragmentManager.beginTransaction()
                     .setReorderingAllowed(true)
                     .replace(R.id.activityProfileCreating_step_fragment, fragment)
-                    .addToBackStack(null)
                     .commit();
             // увеличение номера шага заполнения профиля на единицу
             ((ProfileCreatingActivity) getActivity()).increaseStepNumber();
         });
         /*  */
-        mAvatarImagePicker =
-                ImagePicker.Companion.registerImagePicker(this, this);
+
         mAvatarCircleImageView = view.findViewById(R.id.activityProfileCreating_fragmentNameAndAvatar_avatar_CircleImageView);
         mAvatarCircleImageView.setOnClickListener(v -> {
             mAvatarImagePicker
