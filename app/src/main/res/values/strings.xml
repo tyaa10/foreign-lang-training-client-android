@@ -23,6 +23,7 @@
     <string name="message_error_validation_password">Заполните поле \'пароль\'</string>
     <string name="message_error_validation_confirm_password">Заполните поле \'подтверждение пароля\'</string>
     <string name="message_error_validation_confirm_password_matching">Пароли не совпадают</string>
+    <string name="message_error_validation_name">Поле \'имя\' должно оставаться пустым или содержать не более 100 любых символов</string>
     <string name="message_error_validation_errors">"Ошибки валидации"</string>
     <string name="message_error_validation_error">"Ошибка валидации"</string>
     <string name="message_error_http_response_unauthorized">"Ошибка аутентификации"</string>

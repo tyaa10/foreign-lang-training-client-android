@@ -56,4 +56,8 @@ public class ProfileCreatingActivity extends AppCompatActivity {
     public void increaseStepNumber() {
         mStepNumberTextView.setText(String.valueOf(Integer.valueOf(mStepNumberTextView.getText().toString()) + 1));
     }
+
+    public void decreaseStepNumber() {
+        mStepNumberTextView.setText(String.valueOf(Integer.valueOf(mStepNumberTextView.getText().toString()) - 1));
+    }
 }

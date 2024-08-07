@@ -26,7 +26,8 @@ public class UserProfileModel {
      * */
     public String name;
     /**
-     * Аватар пользователя в виде строки в формате base64, полученной из файла изображения в формате png
+     * Аватар пользователя в виде строки в формате base64,
+     * полученной из файла изображения в формате png
      * */
     public String avatar;
     /**
@@ -41,4 +42,5 @@ public class UserProfileModel {
      * Название уровня владения языком, на который обучается пользователь
      * */
     public String levelName;
+
 }

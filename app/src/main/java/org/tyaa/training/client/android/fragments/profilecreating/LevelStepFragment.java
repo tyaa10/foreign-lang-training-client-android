@@ -49,12 +49,16 @@ public class LevelStepFragment extends BaseStepFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
+
         /* Установка заголовка экрана */
         mTitleTextView = view.findViewById(R.id.activityProfileCreating_fragmentLevel_title_TextView);
         mTitleTextView.setText(mTitleParam);
+
         /* Обработчик клика для перехода на предыдущий экран */
         mBackButton = view.findViewById(R.id.activityProfileCreating_fragmentLevel_back_Button);
         mBackButton.setOnClickListener(v -> {
+            // уменьшение номера шага заполнения профиля на единицу
+            ((ProfileCreatingActivity) getActivity()).decreaseStepNumber();
             // получение объекта управления фрагментами у текущей Activity
             FragmentManager fragmentManager =
                     LevelStepFragment.this.getActivity().getSupportFragmentManager();
@@ -62,6 +66,7 @@ public class LevelStepFragment extends BaseStepFragment {
             // (вернуться на предыдущий экран)
             fragmentManager.popBackStackImmediate();
         });
+
         /* Обработчик клика для перехода на следующий экран */
         mNextButton = view.findViewById(R.id.activityProfileCreating_fragmentLevel_next_Button);
         mNextButton.setOnClickListener(v -> {
@@ -81,6 +86,7 @@ public class LevelStepFragment extends BaseStepFragment {
             // увеличение номера шага заполнения профиля на единицу
             ((ProfileCreatingActivity) getActivity()).increaseStepNumber();
         });
+
         /* Подключение фильтруемого источника данных к выпадающему списку выбора уровня */
         mTargerLevelAutoCompleteTextView =
                 view.findViewById(R.id.activityProfileCreating_fragmentLevel_level_autoCompleteTextView);
@@ -113,6 +119,7 @@ public class LevelStepFragment extends BaseStepFragment {
                 );
             }
         });
+
         /* Обработчик события выбора уровня в выпадающем списке */
         mTargerLevelAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
 
@@ -129,10 +136,10 @@ public class LevelStepFragment extends BaseStepFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 // получить текст выбранного уровня
-                String selectedLangugeName = s.toString();
+                String selectedLevelName = s.toString();
                 // установить текст выбранного родного языка в модель профиля
                 ((ProfileCreatingActivity) getActivity())
-                        .getProfileModel().setNativeLanguageName(selectedLangugeName);
+                        .getProfileModel().setLevelName(selectedLevelName);
                 // через переходник уведомить выпадающий список уровней,
                 // что данные в источнике изменились, и требуется перерисовка
                 UIActionsRunner.run(levelAdapter::notifyDataSetChanged);

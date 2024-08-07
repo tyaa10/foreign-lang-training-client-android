@@ -15,11 +15,14 @@ import java.security.GeneralSecurityException;
  * Главный класс приложения
  * */
 public class App extends Application {
+
     @SuppressLint("StaticFieldLeak")
     private static Context mContext;
     private static SharedPreferences mPreferences;
+
     @Override
     public void onCreate() {
+
         super.onCreate();
         // Настройка системы хранения предпочтений приложения в зашифрованном виде в ОС Android
         mContext = getApplicationContext();
@@ -36,18 +39,21 @@ public class App extends Application {
             throw new RuntimeException(e);
         }
     }
+
     /**
      * Получение контекста приложения
      * */
     public static Context getContext() {
         return mContext;
     }
+
     /**
      * Получение объекта доступа к словарю предпочтений приложения
      * */
     public static SharedPreferences getPreferences() {
         return mPreferences;
     }
+
     /**
      * Названия ключей предпочтений приложения
      * */

@@ -14,6 +14,8 @@ import org.tyaa.training.client.android.handlers.IResultHandler;
 import org.tyaa.training.client.android.models.RoleModel;
 import org.tyaa.training.client.android.services.HttpAuthService;
 import org.tyaa.training.client.android.services.interfaces.IAuthService;
+import org.tyaa.training.client.android.state.InMemoryLocalState;
+import org.tyaa.training.client.android.state.interfaces.IState;
 import org.tyaa.training.client.android.utils.UIActions;
 import org.tyaa.training.client.android.utils.UIActionsRunner;
 
@@ -27,15 +29,22 @@ import java.util.List;
 public class MainActivity extends ListActivity {
 
     private final IAuthService mAuthService = new HttpAuthService();
+
+    private final IState mState = new InMemoryLocalState();
+
     private Button mSignOutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         // подключение представления главного экрана приложения
         setContentView(R.layout.activity_main);
+
         // инициализация объектов доступа к постоянным элементам представления
         mSignOutButton = findViewById(R.id.activityMain_signOut_Button);
+
         // установка обработчиков событий для постоянных элементов представления
         mSignOutButton.setOnClickListener(v -> {
             mAuthService.signOut(new IResponseHandler() {
@@ -54,8 +63,13 @@ public class MainActivity extends ListActivity {
                 }
             });
         });
+
+        // Отладочный вывод в консоль данных текущего состояния приложения
+        Log.d(MainActivity.class.getName(), mState.toString());
+
+        /* Демонстрационное получение списка ролей и их вывод в списочный элемент на экране */
         // соединение списочного элемента на представлении со списком моделей ролей через адаптер
-        final List<RoleModel> roles = new ArrayList<>();
+        /* final List<RoleModel> roles = new ArrayList<>();
         final RoleAdapter roleAdapter = new RoleAdapter(this, R.layout.activity_main_list_item, roles);
         this.setListAdapter(roleAdapter);
         // вызов метода получения всех возможных ролей пользователей
@@ -74,6 +88,6 @@ public class MainActivity extends ListActivity {
             public void onFailure(String errorMessage) {
                 UIActions.showError(MainActivity.this, errorMessage);
             }
-        });
+        }); */
     }
 }

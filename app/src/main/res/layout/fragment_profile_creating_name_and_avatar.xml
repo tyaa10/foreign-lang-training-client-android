@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center|bottom"
+        android:gravity="center"
         android:textSize="20sp"
         android:text="Title Stub" />
 
@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:hintEnabled="true"
-            android:hint="name (optional)"
+            android:hint="display name (optional)"
             android:padding="15dp">
 
             <com.google.android.material.textfield.TextInputEditText

@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center|bottom"
+        android:gravity="center"
         android:textSize="20sp"
         android:text="Title Stub" />
 
@@ -37,6 +37,7 @@
             android:layout_gravity="center"/>
 
         <TextView
+            android:id="@+id/activityProfileCreating_fragmentFinal_name_TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Name Stub"
@@ -48,30 +49,87 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:gravity="center"
+        android:weightSum="2"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Learning Language:"
-            android:padding="15dp"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Learning Language Stub"
-            android:padding="15dp"
-            android:gravity="left"
-            android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Native language:"
+                    android:textStyle="bold"
+                    android:padding="15dp"
+                    android:gravity="left"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Learning language:"
+                    android:textStyle="bold"
+                    android:padding="15dp"
+                    android:gravity="left"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Level:"
+                    android:textStyle="bold"
+                    android:padding="15dp"
+                    android:gravity="left"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/activityProfileCreating_fragmentFinal_nativeLanguage_TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Native Language Stub"
+                    android:padding="15dp"
+                    android:gravity="left"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/activityProfileCreating_fragmentFinal_learningLanguage_TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Learning Language Stub"
+                    android:padding="15dp"
+                    android:gravity="left"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/activityProfileCreating_fragmentFinal_level_TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Level Stub"
+                    android:padding="15dp"
+                    android:gravity="left"
+                    android:layout_gravity="center"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
-        android:gravity="center">
+        android:layout_weight="3"
+        android:gravity="center | bottom">
 
         <Button
             android:id="@+id/activityProfileCreating_fragmentFinal_back_Button"
@@ -81,7 +139,7 @@
             android:text="Back"/>
 
         <Button
-            android:id="@+id/activityProfileCreating_fragmentFinal_create_Button"
+            android:id="@+id/activityProfileCreating_fragmentFinal_save_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"

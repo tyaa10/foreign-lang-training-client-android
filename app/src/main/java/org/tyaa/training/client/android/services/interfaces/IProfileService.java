@@ -19,8 +19,10 @@ public interface IProfileService {
     void getProfiles(IResultHandler<List<UserProfileModel>> handler);
     /**
      * Создать профиль для текущего пользователя
+     * и получить обратно данные профиля текущего пользователя,
+     * дополненные сервером (добавлен идентификатор)
      * */
-    void createProfile(UserProfileModel profileModel, IResponseHandler handler);
+    void createProfile(UserProfileModel profileModel, IResultHandler<UserProfileModel> handler);
     /**
      * Получить данные профиля текущего пользователя
      * (доступно только аутентифицированным)

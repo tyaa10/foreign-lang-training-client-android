@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.tyaa.training.client.android.App;
 import org.tyaa.training.client.android.R;
 import org.tyaa.training.client.android.actions.HttpActions;
-import org.tyaa.training.client.android.handlers.IResponseHandler;
 import org.tyaa.training.client.android.handlers.IResultHandler;
 import org.tyaa.training.client.android.models.ResponseModel;
 import org.tyaa.training.client.android.models.UserProfileModel;
@@ -58,19 +57,29 @@ public class HttpProfileService implements IProfileService {
     }
 
     @Override
-    public void createProfile(UserProfileModel profileModel, IResponseHandler handler) {
+    public void createProfile(UserProfileModel profileModel, IResultHandler handler) {
         try {
             final String profileModelJsonString = JsonSerde.serialize(profileModel);
-            mActions.doRequest(
+            mActions.doRequestForResult(
                     String.format("%s/%s",
                             App.getContext().getString(R.string.network_base_server_url),
                             App.getContext().getString(R.string.network_profiles_uri)
                     ),
                     profileModelJsonString,
-                    new IResponseHandler() {
+                    new IResultHandler<String>() {
+
                         @Override
-                        public void onSuccess() {
-                            handler.onSuccess();
+                        public void onSuccess(String result) {
+                            // десериализация и передача обработчику положительного результата
+                            // объекта модели профиля, дополненного сервером (добавлен идентификатор)
+                            ResponseModel<UserProfileModel> responseModel;
+                            try {
+                                responseModel = JsonSerde.parseWithSingleContent(result, ResponseModel.class, UserProfileModel.class);
+                                handler.onSuccess(responseModel.getData());
+                            } catch (Exception ex) {
+                                Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
+                                handler.onFailure(App.getContext().getString(R.string.message_error_deserialization));
+                            }
                         }
 
                         @Override

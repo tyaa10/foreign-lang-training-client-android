@@ -19,6 +19,8 @@ import org.tyaa.training.client.android.services.HttpAuthService;
 import org.tyaa.training.client.android.services.HttpProfileService;
 import org.tyaa.training.client.android.services.interfaces.IAuthService;
 import org.tyaa.training.client.android.services.interfaces.IProfileService;
+import org.tyaa.training.client.android.state.InMemoryLocalState;
+import org.tyaa.training.client.android.state.interfaces.IState;
 import org.tyaa.training.client.android.utils.UIActions;
 
 /**
@@ -29,6 +31,9 @@ public class SignInActivity extends AppCompatActivity {
 
     private final IAuthService mAuthService = new HttpAuthService();
     private final IProfileService mProfileService = new HttpProfileService();
+
+    private final IState mState = new InMemoryLocalState();
+
     private TextInputEditText mLoginTextInputEditText;
     private TextInputEditText mPasswordTextInputEditText;
     private Button mSignInButton;
@@ -67,7 +72,10 @@ public class SignInActivity extends AppCompatActivity {
                                     public void onSuccess(UserProfileModel profile) {
                                         Intent intent = null;
                                         if (profile != null) {
-                                            // если данные профиля получены - подготовить переход на главную Activity
+                                            // Если данные профиля получены -
+                                            // 1. установить объект модели профиля в объект текущего состояния приложения
+                                            mState.setProfile(profile);
+                                            // 2. подготовить переход на главную Activity
                                             intent = new Intent(SignInActivity.this, MainActivity.class);
                                         } else {
                                             // иначе - подготовить переход на Activity начального заполнения профиля
