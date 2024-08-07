@@ -1,8 +1,12 @@
 package org.tyaa.training.client.android.activities;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -18,6 +22,7 @@ import org.tyaa.training.client.android.services.interfaces.IAuthService;
 import org.tyaa.training.client.android.services.interfaces.IProfileService;
 import org.tyaa.training.client.android.utils.UIActions;
 import org.tyaa.training.client.android.utils.UIActionsRunner;
+
 /**
  * Логика экрана дополнительной заставки приложения,
  * во время отображения которой на сервер отправляется http-запрос
@@ -28,11 +33,38 @@ public class SplashScreenActivity extends AppCompatActivity {
     private final IAuthService mAuthService = new HttpAuthService();
     private final IProfileService mProfileService = new HttpProfileService();
 
+    private Button mReloadButton;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        // подключение представления экрана дополнительной заставки приложения
         setContentView(R.layout.activity_splash_screen);
+
+        // получение объекта управления кнопкой вызова повторной попытки загрузки приложения
+        mReloadButton = findViewById(R.id.activitySplashScreen_reload_Button);
+
+        // установка обработчика клика по кнопке вызова повторной попытки загрузки приложения
+        mReloadButton.setOnClickListener(v -> {
+            // сделать кнопку снова невидимой (это её состояние по умолчанию)
+            mReloadButton.setVisibility(INVISIBLE);
+            // принудительный повторный вызов проверки наличия входа в учётную запись пользователя
+            checkAuth();
+        });
+
+        // безусловный первый вызов проверки наличия входа в учётную запись пользователя
+        checkAuth();
+    }
+
+    /**
+     * Проверка наличия входа в учётную запись пользователя
+     * */
+    private void checkAuth() {
+        // Запрос к серверу: выполнен ли вход в учётную запись?
         mAuthService.checkUser(new IResultHandler<>() {
+            // если запрос к конечной точке "проверить пользователя" на сервере успешно выполнен
             @Override
             public void onSuccess(UserModel result) {
                 // если получено описание пользователя,
@@ -67,10 +99,15 @@ public class SplashScreenActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             }
-
+            // если запрос к конечной точке "проверить пользователя" на сервере не смог выполниться,
+            // или выполнился, но был получен ответ об ошибке
             @Override
             public void onFailure(String errorMessage) {
+                // сделать видимой кнопку попытки принудительной повторной проверки пользователя
+                UIActionsRunner.run(() -> mReloadButton.setVisibility(VISIBLE));
+                // вывести сообщение об ошибке в отладочную консоль
                 Log.println(Log.ERROR, getString(R.string.message_error), errorMessage);
+                // отобразить сообщение об ошибке во всплывающем окне
                 UIActionsRunner.run(() -> Toast.makeText(SplashScreenActivity.this, errorMessage, Toast.LENGTH_LONG).show());
             }
         });

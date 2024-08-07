@@ -5,7 +5,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.tyaa.training.client.android.R;
-import org.tyaa.training.client.android.activities.SignInActivity;
 
 public class UIActions {
     public static void showError(Context context, String errorMessage) {
