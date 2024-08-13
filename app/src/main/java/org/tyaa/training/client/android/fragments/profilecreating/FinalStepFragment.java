@@ -13,8 +13,6 @@ import androidx.fragment.app.FragmentManager;
 import org.tyaa.training.client.android.R;
 import org.tyaa.training.client.android.activities.MainActivity;
 import org.tyaa.training.client.android.activities.ProfileCreatingActivity;
-import org.tyaa.training.client.android.activities.SignUpActivity;
-import org.tyaa.training.client.android.handlers.IResponseHandler;
 import org.tyaa.training.client.android.handlers.IResultHandler;
 import org.tyaa.training.client.android.models.UserProfileModel;
 import org.tyaa.training.client.android.services.HttpProfileService;

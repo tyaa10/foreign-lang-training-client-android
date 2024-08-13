@@ -1,21 +1,22 @@
 package org.tyaa.training.client.android.activities;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.tyaa.training.client.android.R;
-import org.tyaa.training.client.android.adapters.RoleAdapter;
+import org.tyaa.training.client.android.adapters.LessonAdapter;
 import org.tyaa.training.client.android.handlers.IResponseHandler;
 import org.tyaa.training.client.android.handlers.IResultHandler;
-import org.tyaa.training.client.android.models.RoleModel;
+import org.tyaa.training.client.android.models.LessonListItemModel;
 import org.tyaa.training.client.android.services.HttpAuthService;
+import org.tyaa.training.client.android.services.HttpLessonService;
 import org.tyaa.training.client.android.services.interfaces.IAuthService;
-import org.tyaa.training.client.android.state.InMemoryLocalState;
-import org.tyaa.training.client.android.state.interfaces.IState;
+import org.tyaa.training.client.android.services.interfaces.ILessonService;
 import org.tyaa.training.client.android.utils.UIActions;
 import org.tyaa.training.client.android.utils.UIActionsRunner;
 
@@ -26,13 +27,15 @@ import java.util.List;
  * Логика главного экрана приложения
  * (хост для фрагментов основной функциональности приложения)
  * */
-public class MainActivity extends ListActivity {
+public class MainActivity extends AppCompatActivity {
 
     private final IAuthService mAuthService = new HttpAuthService();
+    private final ILessonService mLessonService = new HttpLessonService();
 
-    private final IState mState = new InMemoryLocalState();
+    // private final IState mState = new InMemoryLocalState();
 
     private Button mSignOutButton;
+    private RecyclerView mLessonListRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class MainActivity extends ListActivity {
 
         // инициализация объектов доступа к постоянным элементам представления
         mSignOutButton = findViewById(R.id.activityMain_signOut_Button);
+        mLessonListRecyclerView = findViewById(R.id.activityMain_lessonList_RecyclerView);
 
         // установка обработчиков событий для постоянных элементов представления
         mSignOutButton.setOnClickListener(v -> {
@@ -64,8 +68,33 @@ public class MainActivity extends ListActivity {
             });
         });
 
+        /*  */
+        final List<LessonListItemModel> lessonListItems = new ArrayList<>();
+        final LessonAdapter lessonAdapter = new LessonAdapter(MainActivity.this, lessonListItems);
+        mLessonListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mLessonListRecyclerView.setAdapter(lessonAdapter);
+        mLessonService.getLessonListItems(
+                new IResultHandler<>() {
+
+                    @Override
+                    public void onSuccess(List<LessonListItemModel> result) {
+
+                        if(lessonListItems.size() > 0) {
+                            lessonListItems.clear();
+                        }
+                        lessonListItems.addAll(result);
+                        UIActionsRunner.run(lessonAdapter::notifyDataSetChanged);
+                    }
+
+                    @Override
+                    public void onFailure(String errorMessage) {
+                        UIActions.showError(MainActivity.this, errorMessage);
+                    }
+                }
+        );
+
         // Отладочный вывод в консоль данных текущего состояния приложения
-        Log.d(MainActivity.class.getName(), mState.toString());
+        // Log.d(MainActivity.class.getName(), mState.toString());
 
         /* Демонстрационное получение списка ролей и их вывод в списочный элемент на экране */
         // соединение списочного элемента на представлении со списком моделей ролей через адаптер
