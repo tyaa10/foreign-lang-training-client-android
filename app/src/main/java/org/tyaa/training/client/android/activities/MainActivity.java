@@ -30,12 +30,10 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private final IAuthService mAuthService = new HttpAuthService();
-    private final ILessonService mLessonService = new HttpLessonService();
 
     // private final IState mState = new InMemoryLocalState();
 
     private Button mSignOutButton;
-    private RecyclerView mLessonListRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
         // инициализация объектов доступа к постоянным элементам представления
         mSignOutButton = findViewById(R.id.activityMain_signOut_Button);
-        mLessonListRecyclerView = findViewById(R.id.activityMain_lessonList_RecyclerView);
 
         // установка обработчиков событий для постоянных элементов представления
         mSignOutButton.setOnClickListener(v -> {
@@ -67,31 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         });
-
-        /*  */
-        final List<LessonListItemModel> lessonListItems = new ArrayList<>();
-        final LessonAdapter lessonAdapter = new LessonAdapter(MainActivity.this, lessonListItems);
-        mLessonListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mLessonListRecyclerView.setAdapter(lessonAdapter);
-        mLessonService.getLessonListItems(
-                new IResultHandler<>() {
-
-                    @Override
-                    public void onSuccess(List<LessonListItemModel> result) {
-
-                        if(lessonListItems.size() > 0) {
-                            lessonListItems.clear();
-                        }
-                        lessonListItems.addAll(result);
-                        UIActionsRunner.run(lessonAdapter::notifyDataSetChanged);
-                    }
-
-                    @Override
-                    public void onFailure(String errorMessage) {
-                        UIActions.showError(MainActivity.this, errorMessage);
-                    }
-                }
-        );
 
         // Отладочный вывод в консоль данных текущего состояния приложения
         // Log.d(MainActivity.class.getName(), mState.toString());

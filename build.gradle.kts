@@ -2,3 +2,10 @@
 plugins {
     id("com.android.application") version "8.5.1" apply false
 }
+
+buildscript {
+    dependencies {
+        val nav_version = "2.7.7"
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version")
+    }
+}

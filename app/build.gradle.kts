@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -48,6 +49,8 @@ dependencies {
     implementation ("androidx.fragment:fragment:1.7.1")
     implementation("com.github.SimformSolutionsPvtLtd:SSImagePicker:2.3")
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("androidx.navigation:navigation-fragment:2.7.7")
+    implementation("androidx.navigation:navigation-ui:2.7.7")
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     testImplementation("junit:junit:4.13.2")

@@ -7,10 +7,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.tyaa.training.client.android.fragments.lessons.LessonListFragmentDirections;
 import org.tyaa.training.client.android.models.LessonListItemModel;
-import org.tyaa.training.client.android.utils.UIActions;
 
 import java.util.List;
 
@@ -51,10 +52,19 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         private final TextView titleTextView;
 
         public ViewHolder(@NonNull Context context, @NonNull View itemView) {
+
             super(itemView);
+
             titleTextView = (TextView) itemView.findViewById(android.R.id.text1);
+            // обработчик клика по заголовку пункта списка
             titleTextView.setOnClickListener(v -> {
-                UIActions.showInfo(context, itemView.getTag().toString());
+                // подготовка действия перехода к фрагменту диалога выбора типа урока
+                // с передачей ему идентификатора урока, извлечённого из атрибута "тег"
+                // виджета пункта списка
+                LessonListFragmentDirections.NavigateToFragmentEducationProcessLessonDialog action =
+                    LessonListFragmentDirections.navigateToFragmentEducationProcessLessonDialog((Long) itemView.getTag());
+                // выполнение подготовленного действия перехода
+                Navigation.findNavController(itemView).navigate(action);
             });
         }
 
