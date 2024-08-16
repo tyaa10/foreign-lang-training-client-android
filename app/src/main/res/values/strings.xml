@@ -62,6 +62,8 @@
     <string name="network_language_levels_uri">language-levels</string>
     <!-- URI конечной точки "Уроки - Пункты для списка" -->
     <string name="network_lessons_list_items_uri">lessons/list-items</string>
+    <!-- URI конечной точки "Уроки - Урок по изучению слов - Слова" -->
+    <string name="network_lessons_word_lesson_words_uri">lessons/word-lessons/{id}/words</string>
     <!-- Текстовое содержимое представлений -->
     <string name="splash_screen_title_line1">Foreign Language Training</string>
     <string name="splash_screen_title_line2">Android</string>

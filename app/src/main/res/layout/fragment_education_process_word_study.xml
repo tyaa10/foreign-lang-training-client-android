@@ -1,12 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- <androidx.constraintlayout.widget.ConstraintLayout -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="word"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:orientation="vertical"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/activityMain_fragmentEducationProcessWordStudy_translation_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="TRANSLATION_STUB"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="#FF9999"/>
+
+        <TextView
+            android:id="@+id/activityMain_fragmentEducationProcessWordStudy_word_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="WORD_STUB"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="#CCCCCC"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/activityMain_fragmentEducationProcessWordStudy_learningLanguageFlag_ImageView"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:layout_gravity="start|top"
+        android:scaleType="fitStart"/>
+
+    <ImageView
+        android:id="@+id/activityMain_fragmentEducationProcessWordStudy_wordImage_ImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="5dp"
+        android:layout_gravity="center"/>
+
+    <ImageView
+        android:id="@+id/activityMain_fragmentEducationProcessWordStudy_nativeLanguageFlag_ImageView"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:layout_gravity="end|bottom"
+        android:scaleType="fitEnd"/>
+
+    <ImageView
+        android:id="@+id/activityMain_fragmentEducationProcessWordStudy_next_ImageView"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="50dp"
+        android:scaleType="centerCrop"
+        android:tooltipText="next"
+        android:src="@drawable/next_arrow"/>
+
+</FrameLayout>

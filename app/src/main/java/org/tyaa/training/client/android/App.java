@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
+import com.blongho.country_data.World;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
@@ -24,6 +26,7 @@ public class App extends Application {
     public void onCreate() {
 
         super.onCreate();
+
         // Настройка системы хранения предпочтений приложения в зашифрованном виде в ОС Android
         mContext = getApplicationContext();
         try {
@@ -38,6 +41,9 @@ public class App extends Application {
         } catch (GeneralSecurityException | IOException e) {
             throw new RuntimeException(e);
         }
+
+        // загрузка изображений флагов всех стран
+        World.init(getApplicationContext());
     }
 
     /**
