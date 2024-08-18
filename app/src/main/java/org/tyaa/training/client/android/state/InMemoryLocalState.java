@@ -25,7 +25,7 @@ public class InMemoryLocalState implements IState {
 
     private static Map<String, String> languageFlags =
             Map.of(
-                    "English", "en",
+                    "English", "gb",
                     "Русский", "ru"
             );
 
