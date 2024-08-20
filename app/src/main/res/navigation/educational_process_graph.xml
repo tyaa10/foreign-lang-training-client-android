@@ -5,6 +5,7 @@
     android:id="@+id/educational_process_graph"
     app:startDestination="@id/fragment_education_process_lesson_list">
 
+    <!-- Меню выбора уроков (список) -->
     <fragment
         android:id="@+id/fragment_education_process_lesson_list"
         android:name="org.tyaa.training.client.android.fragments.lessons.LessonListFragment"
@@ -14,6 +15,7 @@
             android:id="@+id/navigate_to_fragment_education_process_lesson_dialog"
             app:destination="@id/fragment_education_process_lesson_dialog" />
     </fragment>
+    <!-- Диалог выбора типа урока (режима изучения слов или проверки знаний) -->
     <fragment
         android:id="@+id/fragment_education_process_lesson_dialog"
         android:name="org.tyaa.training.client.android.fragments.lessons.LessonDialogFragment"
@@ -29,6 +31,8 @@
             android:id="@+id/navigate_to_fragment_education_process_word_knowledge_test"
             app:destination="@id/fragment_education_process_word_knowledge_test" />
     </fragment>
+
+    <!-- Экран изучения слов -->
     <fragment
         android:id="@+id/fragment_education_process_word_study"
         android:name="org.tyaa.training.client.android.fragments.lessons.word.WordStudyFragment"
@@ -37,7 +41,28 @@
         <argument
             android:name="lesson_id"
             app:argType="java.lang.Long" />
+        <action
+            android:id="@+id/navigate_to_fragment_educational_process_word_study_dialog"
+            app:destination="@id/fragment_educational_process_word_study_dialog" />
     </fragment>
+    <!-- Диалог выбора перехода к проверке знаний или возвращения к списку уроков -->
+    <fragment
+        android:id="@+id/fragment_educational_process_word_study_dialog"
+        android:name="org.tyaa.training.client.android.fragments.lessons.word.WordStudyDialogFragment"
+        android:label="Word Study Dialog"
+        tools:layout="@layout/fragment_educational_process_word_study_dialog">
+        <argument
+            android:name="lesson_id"
+            app:argType="java.lang.Long" />
+        <action
+            android:id="@+id/navigate_to_fragment_education_process_word_knowledge_test"
+            app:destination="@id/fragment_education_process_word_knowledge_test" />
+        <action
+            android:id="@+id/navigate_from_word_study_to_fragment_education_process_lesson_list"
+            app:destination="@id/fragment_education_process_lesson_list" />
+    </fragment>
+
+    <!-- Экран проверки знания слов -->
     <fragment
         android:id="@+id/fragment_education_process_word_knowledge_test"
         android:name="org.tyaa.training.client.android.fragments.lessons.word.WordKnowledgeTestFragment"

@@ -43,6 +43,7 @@ public class LessonDialogFragment extends Fragment {
                 view.findViewById(R.id.activityMain_fragmentEducationProcessLessonDialog_test_Button);
 
         /* установка обработчиков событий клика по кнопкам */
+        // обработчик клика по кнопке перехода к экрану изучения слов
         mStudyButton.setOnClickListener(v -> {
             // подготовка действия перехода к фрагменту изучения слов
             // с передачей ему идентификатора урока
@@ -51,6 +52,7 @@ public class LessonDialogFragment extends Fragment {
             // выполнение подготовленного действия перехода
             Navigation.findNavController(view).navigate(action);
         });
+        // обработчик клика по кнопке перехода к экрану проверки знания слов
         mTestButton.setOnClickListener(v -> {
             // подготовка действия перехода к фрагменту проверки знания слов
             // с передачей ему идентификатора урока

@@ -97,7 +97,11 @@ public class InMemoryLocalState implements IState {
 
     @Override
     public void clearCurrentLessonWords() {
-        currentLessonWords.clear();
+        // если список моделей слов для изучения существует и не пуст
+        if(currentLessonWords != null && currentLessonWords.size() > 0) {
+            // удалить все модели из списка
+            currentLessonWords.clear();
+        }
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import org.tyaa.training.client.android.R;
 import org.tyaa.training.client.android.handlers.IResponseHandler;
@@ -31,14 +32,17 @@ public class WordStudyFragment extends Fragment {
     private final IWordService mWordService = new HttpWordService();
     private final IState mState = new InMemoryLocalState();
 
+    private Long mLessonId;
     private Integer mCurrentWordIndex = 0;
+
+    private View mWordStudyFragmentView;
 
     private ImageView mNativeLanguageFlagImageView;
     private ImageView mLearningLanguageFlagImageView;
     private ImageView mWordImageView;
     private TextView mWordTextView;
     private TextView mTranslationTextView;
-    private TextView mNextButton;
+    private ImageView mNextImageView;
 
     public WordStudyFragment() {
         // подключение представления к объекту логики фрагмента
@@ -48,19 +52,31 @@ public class WordStudyFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =
+
+        // инициализация объекта управления представлением фрагмента
+        mWordStudyFragmentView =
                 inflater.inflate(R.layout.fragment_education_process_word_study, container, false);
+
+        /* инициализация объектов управления виджетами, расположенными на представлении фрагмента */
         mNativeLanguageFlagImageView =
-                view.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_nativeLanguageFlag_ImageView);
+                mWordStudyFragmentView.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_nativeLanguageFlag_ImageView);
         mLearningLanguageFlagImageView =
-                view.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_learningLanguageFlag_ImageView);
+                mWordStudyFragmentView.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_learningLanguageFlag_ImageView);
         mWordImageView =
-                view.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_wordImage_ImageView);
+                mWordStudyFragmentView.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_wordImage_ImageView);
         mWordTextView =
-                view.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_word_TextView);
+                mWordStudyFragmentView.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_word_TextView);
         mTranslationTextView =
-                view.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_translation_TextView);
-        return view;
+                mWordStudyFragmentView.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_translation_TextView);
+        mNextImageView =
+                mWordStudyFragmentView.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_next_ImageView);
+
+        /* установка обработчиков событий виджетов, расположенных на представлении фрагмента */
+        mNextImageView.setOnClickListener(v -> {
+            showNextWord(mCurrentWordIndex++);
+        });
+
+        return mWordStudyFragmentView;
     }
 
     @Override
@@ -70,20 +86,22 @@ public class WordStudyFragment extends Fragment {
 
         // получение идентификатора выбранного урока от фрагмента списка уроков,
         // логикой которого был вызван переход на текущий фрагмент
-        final Long lessonId = WordStudyFragmentArgs.fromBundle(getArguments()).getLessonId();
+        mLessonId = WordStudyFragmentArgs.fromBundle(getArguments()).getLessonId();
         // Log.d("lessonId", String.valueOf(lessonId));
         // UIActions.showInfo(getActivity(), String.valueOf(lessonId));
         mNativeLanguageFlagImageView.setImageResource(mState.getNativeLanguageFlag());
         mLearningLanguageFlagImageView.setImageResource(mState.getLearningLanguageFlag());
 
+        // очистка списка моделей слов для текущего урока в объекте состояния приложения
+        mState.clearCurrentLessonWords();
         // попытка получить с сервера список моделей слов для текущего урока
         mWordService.getWords(
-                lessonId,
+                mLessonId,
                 new IResponseHandler() {
 
                     @Override
                     public void onSuccess() {
-                        UIActionsRunner.run(() -> showNextWord(mCurrentWordIndex));
+                        UIActionsRunner.run(() -> showNextWord(mCurrentWordIndex++));
                     }
 
                     @Override
@@ -102,7 +120,12 @@ public class WordStudyFragment extends Fragment {
             mWordTextView.setText(wordModel.getWord());
             mTranslationTextView.setText(wordModel.getTranslation());
         } else {
-            // TODO go to the finish dialog fragment
+            // подготовка действия перехода к фрагменту диалога выбора:
+            // начать проверку знаний слов или вернуться в меню выбора урока
+            final WordStudyFragmentDirections.NavigateToFragmentEducationalProcessWordStudyDialog action =
+                WordStudyFragmentDirections.navigateToFragmentEducationalProcessWordStudyDialog(mLessonId);
+            // выполнение подготовленного действия перехода
+            Navigation.findNavController(mWordStudyFragmentView).navigate(action);
         }
     }
 }
