@@ -21,8 +21,11 @@ import org.tyaa.training.client.android.services.interfaces.IWordService;
 import org.tyaa.training.client.android.state.InMemoryLocalState;
 import org.tyaa.training.client.android.state.interfaces.IState;
 import org.tyaa.training.client.android.utils.ImageConverter;
+import org.tyaa.training.client.android.utils.Player;
 import org.tyaa.training.client.android.utils.UIActions;
 import org.tyaa.training.client.android.utils.UIActionsRunner;
+
+import java.io.IOException;
 
 /**
  * Класс фрагмента изучения слова
@@ -42,6 +45,7 @@ public class WordStudyFragment extends Fragment {
     private ImageView mWordImageView;
     private TextView mWordTextView;
     private TextView mTranslationTextView;
+    private ImageView mTranslationPronunciationImageView;
     private ImageView mNextImageView;
 
     public WordStudyFragment() {
@@ -68,10 +72,22 @@ public class WordStudyFragment extends Fragment {
                 mWordStudyFragmentView.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_word_TextView);
         mTranslationTextView =
                 mWordStudyFragmentView.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_translation_TextView);
+        mTranslationPronunciationImageView =
+                mWordStudyFragmentView.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_translation_pronunciation_ImageView);
         mNextImageView =
                 mWordStudyFragmentView.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_next_ImageView);
 
         /* установка обработчиков событий виджетов, расположенных на представлении фрагмента */
+        // воспроизведение произношения перевода слова
+        mTranslationPronunciationImageView.setOnClickListener(v -> {
+            try {
+                Player.playAudio(mTranslationPronunciationImageView.getTag().toString());
+            } catch (IOException e) {
+                UIActions.showError(getActivity(), "Не удалось воспроизвести аудио");
+            }
+
+        });
+        // вывод данных следующего изучаемого слова в текущий фрагмент
         mNextImageView.setOnClickListener(v -> {
             showNextWord(mCurrentWordIndex++);
         });
@@ -87,25 +103,35 @@ public class WordStudyFragment extends Fragment {
         // получение идентификатора выбранного урока от фрагмента списка уроков,
         // логикой которого был вызван переход на текущий фрагмент
         mLessonId = WordStudyFragmentArgs.fromBundle(getArguments()).getLessonId();
-        // Log.d("lessonId", String.valueOf(lessonId));
-        // UIActions.showInfo(getActivity(), String.valueOf(lessonId));
+
+        // установка флагов языков на представление
         mNativeLanguageFlagImageView.setImageResource(mState.getNativeLanguageFlag());
         mLearningLanguageFlagImageView.setImageResource(mState.getLearningLanguageFlag());
 
         // очистка списка моделей слов для текущего урока в объекте состояния приложения
         mState.clearCurrentLessonWords();
+
+        // отобразить бесконечный прогресс
+        UIActions.showInfinityProgressToast(getActivity());
+
         // попытка получить с сервера список моделей слов для текущего урока
         mWordService.getWords(
                 mLessonId,
                 new IResponseHandler() {
-
+                    // если получен положительный ответ от сервера
                     @Override
                     public void onSuccess() {
+                        // скрыть бесконечный прогресс
+                        UIActions.closeInfinityProgressToast();
+                        // установить на представление данные очередного слова
+                        // и затем увеличить счётчик отображённых слов на единицу
                         UIActionsRunner.run(() -> showNextWord(mCurrentWordIndex++));
                     }
-
+                    // если запрос не выполнен или получен отрицательный ответ от сервера
                     @Override
                     public void onFailure(String errorMessage) {
+                        // скрыть бесконечный прогресс
+                        UIActions.closeInfinityProgressToast();
                         // отобразить сообщение об ошибке
                         UIActions.showError(getActivity(), errorMessage);
                     }
@@ -113,12 +139,19 @@ public class WordStudyFragment extends Fragment {
         );
     }
 
+    /**
+     * Действия при попытке перехода к следующему изучаемому слову
+     * */
     private void showNextWord(Integer index) {
+        // если модели изучаемых слов в списке ещё не закончились
         if (index < mState.getCurrentLessonWords().size()) {
+            // получение данных очередного слова для отображения
             WordModel wordModel = mState.getCurrentLessonWords().get(index);
+            // выод данных текущего слова на виджеты представления
             mWordImageView.setImageBitmap(ImageConverter.base64ToBitmap(getActivity(), wordModel.getImage()));
             mWordTextView.setText(wordModel.getWord());
             mTranslationTextView.setText(wordModel.getTranslation());
+            mTranslationPronunciationImageView.setTag(wordModel.getPronunciationAudio());
         } else {
             // подготовка действия перехода к фрагменту диалога выбора:
             // начать проверку знаний слов или вернуться в меню выбора урока

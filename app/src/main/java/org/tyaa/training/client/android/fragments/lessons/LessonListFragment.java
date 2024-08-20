@@ -64,12 +64,16 @@ public class LessonListFragment extends Fragment {
         mLessonListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         // установка списочному виджету переходника для получения данных из списка моделей
         mLessonListRecyclerView.setAdapter(lessonAdapter);
+        // отобразить бесконечный прогресс
+        UIActions.showInfinityProgressToast(getActivity());
         // попытка получить с сервера список моделей описаний уроков
         mLessonService.getLessonListItems(
                 new IResultHandler<>() {
                     // если получен положительный ответ на запрос
                     @Override
                     public void onSuccess(List<LessonListItemModel> result) {
+                        // скрыть бесконечный прогресс
+                        UIActions.closeInfinityProgressToast();
                         // очистить список моделей, если он не пуст
                         if(lessonListItems.size() > 0) {
                             lessonListItems.clear();
@@ -82,6 +86,8 @@ public class LessonListFragment extends Fragment {
                     // если попытка запроса провалилась, или получен ответ об ошибке
                     @Override
                     public void onFailure(String errorMessage) {
+                        // скрыть бесконечный прогресс
+                        UIActions.closeInfinityProgressToast();
                         // отобразить сообщение об ошибке
                         UIActions.showError(getActivity(), errorMessage);
                     }

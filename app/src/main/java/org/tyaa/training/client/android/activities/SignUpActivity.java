@@ -52,12 +52,17 @@ public class SignUpActivity extends AppCompatActivity {
                     mLoginTextInputEditText,
                     mPasswordTextInputEditText,
                     mConfirmPasswordTextInputEditText)) {
+                // отобразить бесконечный прогресс
+                UIActions.showInfinityProgressToast(this);
+                // отправить серверу запрос регистрации новой учётной записи
                 mAuthService.signUp(
                         getEditTextString(mLoginTextInputEditText),
                         getEditTextString(mPasswordTextInputEditText),
                         new IResponseHandler() {
                             @Override
                             public void onSuccess() {
+                                // скрыть бесконечный прогресс
+                                UIActions.closeInfinityProgressToast();
                                 // UIActions.showInfo(SignUpActivity.this, "A new user registered");
                                 // перейти на Activity начального заполнения профиля
                                 Intent intent = new Intent(SignUpActivity.this, ProfileCreatingActivity.class);
@@ -66,6 +71,9 @@ public class SignUpActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(String errorMessage) {
+                                // скрыть бесконечный прогресс
+                                UIActions.closeInfinityProgressToast();
+                                // отобразить сообщение об ошибке во всплывающем окне
                                 UIActions.showError(SignUpActivity.this, errorMessage);
                             }
 

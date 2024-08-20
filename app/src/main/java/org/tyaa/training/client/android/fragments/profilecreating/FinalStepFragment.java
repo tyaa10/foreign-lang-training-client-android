@@ -103,11 +103,15 @@ public class FinalStepFragment extends BaseStepFragment {
         /* Обработчик клика для завершения создания профиля с сохранением всех введенных данных*/
         mSaveButton = view.findViewById(R.id.activityProfileCreating_fragmentFinal_save_Button);
         mSaveButton.setOnClickListener(v -> {
+            // отобразить бесконечный прогресс
+            UIActions.showInfinityProgressToast(FinalStepFragment.this.getActivity());
             // отправка данных профиля на сервер для сохранения
             mProfileService.createProfile(completedProfileModel, new IResultHandler<>() {
 
                 @Override
                 public void onSuccess(UserProfileModel profile) {
+                    // скрыть бесконечный прогресс
+                    UIActions.closeInfinityProgressToast();
                     // Если профиль создан успешно -
                     // 1. установить объект модели профиля в объект текущего состояния приложения
                     mState.setProfile(profile);
@@ -119,6 +123,9 @@ public class FinalStepFragment extends BaseStepFragment {
 
                 @Override
                 public void onFailure(String errorMessage) {
+                    // скрыть бесконечный прогресс
+                    UIActions.closeInfinityProgressToast();
+                    // отобразить сообщение об ошибке во всплывающем окне
                     UIActions.showError(FinalStepFragment.this.getActivity(), errorMessage);
                 }
             });

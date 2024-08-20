@@ -58,6 +58,9 @@ public class SignInActivity extends AppCompatActivity {
         // установка обработчиков событий для постоянных элементов представления
         mSignInButton.setOnClickListener(v -> {
             if (validateInputs(mLoginTextInputEditText, mPasswordTextInputEditText)) {
+                // отобразить бесконечный прогресс
+                UIActions.showInfinityProgressToast(this);
+                // отправить серверу запрос входа в учётную запись
                 mAuthService.signIn(
                         getEditTextString(mLoginTextInputEditText),
                         getEditTextString(mPasswordTextInputEditText),
@@ -81,12 +84,17 @@ public class SignInActivity extends AppCompatActivity {
                                             // иначе - подготовить переход на Activity начального заполнения профиля
                                             intent = new Intent(SignInActivity.this, ProfileCreatingActivity.class);
                                         }
+                                        // скрыть бесконечный прогресс
+                                        UIActions.closeInfinityProgressToast();
                                         // выполнить переход на Activity, определённую выше
                                         startActivity(intent);
                                     }
                                     // если выполнение запроса провалилось
                                     @Override
                                     public void onFailure(String errorMessage) {
+                                        // скрыть бесконечный прогресс
+                                        UIActions.closeInfinityProgressToast();
+                                        // отобразить сообщение об ошибке во всплывающем окне
                                         UIActions.showError(SignInActivity.this, errorMessage);
                                     }
                                 });
@@ -94,6 +102,8 @@ public class SignInActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(String errorMessage) {
+                                // скрыть бесконечный прогресс
+                                UIActions.closeInfinityProgressToast();
                                 UIActions.showError(SignInActivity.this, errorMessage);
                             }
                         }

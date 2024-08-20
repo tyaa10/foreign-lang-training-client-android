@@ -66,6 +66,8 @@ public class SplashScreenActivity extends AppCompatActivity {
      * Проверка наличия входа в учётную запись пользователя
      * */
     private void checkAuth() {
+        // отобразить бесконечный прогресс
+        UIActions.showInfinityProgressToast(this);
         // Запрос к серверу: выполнен ли вход в учётную запись?
         mAuthService.checkUser(new IResultHandler<>() {
             // если запрос к конечной точке "проверить пользователя" на сервере успешно выполнен
@@ -90,16 +92,23 @@ public class SplashScreenActivity extends AppCompatActivity {
                                 // иначе - подготовить переход на Activity начального заполнения профиля
                                 intent = new Intent(SplashScreenActivity.this, ProfileCreatingActivity.class);
                             }
+                            // скрыть бесконечный прогресс
+                            UIActions.closeInfinityProgressToast();
                             // выполнить переход на Activity, определённую выше
                             startActivity(intent);
                         }
                         // если выполнение запроса провалилось
                         @Override
                         public void onFailure(String errorMessage) {
+                            // скрыть бесконечный прогресс
+                            UIActions.closeInfinityProgressToast();
+                            // отобразить всплывающее окно с сообщением об ошибке
                             UIActions.showError(SplashScreenActivity.this, errorMessage);
                         }
                     });
                 } else {
+                    // скрыть бесконечный прогресс
+                    UIActions.closeInfinityProgressToast();
                     // если вход в учётную запись ранее не был выполнен -
                     // перейти на Activity с формой входа в учётную запись
                     Intent intent = new Intent(SplashScreenActivity.this, SignInActivity.class);
@@ -110,6 +119,8 @@ public class SplashScreenActivity extends AppCompatActivity {
             // или выполнился, но был получен ответ об ошибке
             @Override
             public void onFailure(String errorMessage) {
+                // скрыть бесконечный прогресс
+                UIActions.closeInfinityProgressToast();
                 // сделать видимой кнопку попытки принудительной повторной проверки пользователя
                 UIActionsRunner.run(() -> mReloadButton.setVisibility(VISIBLE));
                 // вывести сообщение об ошибке в отладочную консоль
