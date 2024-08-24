@@ -69,7 +69,7 @@
     <!-- URI конечной точки "Проверки - Проверки знания слов - Результаты" -->
     <!--<string name="network_tests_word_tests_results_uri">tests/word-tests/results/{id}</string>-->
     <!-- URI конечной точки "Проверки - Проверки знания слов - Слово - Результаты - Прибавить" -->
-    <string name="network_tests_word_tests_words_results_add_uri">tests/word-tests/word/{id}/results/add</string>
+    <string name="network_tests_word_tests_words_results_add_uri">tests/word-tests/words/{id}/results/add</string>
     <!-- Текстовое содержимое представлений -->
     <string name="splash_screen_title_line1">Foreign Language Training</string>
     <string name="splash_screen_title_line2">Android</string>

@@ -138,9 +138,12 @@ public class WordKnowledgeTestFragment extends Fragment {
         if (index < mState.getCurrentLessonWords().size()) {
             // получение данных очередного слова для проверки знания
             WordModel wordModel = mState.getCurrentLessonWords().get(index);
-            // вывод перевода слова
-            mTranslationTextView.setText(wordModel.getTranslation());
-
+            UIActionsRunner.run(() -> {
+                // вывод на виджет перевода слова
+                mTranslationTextView.setText(wordModel.getTranslation());
+                // подключение слова к виджету отображения слова, в то время, когда виджет скрыт
+                mWordTextView.setText(wordModel.getWord());
+            });
             // получение данных ещё трёх слов, не совпадающих с текущим
             List<WordModel> wrongChoiceWordModels =
                     getRandomWordModels(mState.getCurrentLessonWords(), wordModel.getId(), 3);
@@ -159,13 +162,34 @@ public class WordKnowledgeTestFragment extends Fragment {
                         mAnswerOptionsImageViewList.get(optionImageIdx - 1);
                 // когда обрабатывается виджет с индексом правильного выбра
                 if (optionImageIdx == correctChoiceImageNumber) {
-                    answerOptionsImageView
-                            .setImageBitmap(ImageConverter.base64ToBitmap(getActivity(), wordModel.getImage()));
-                    answerOptionsImageView.setTag(true);
+                    UIActionsRunner.run(() -> {
+                        // установить виджету изображение правильного выбора
+                        answerOptionsImageView
+                                .setImageBitmap(
+                                        ImageConverter.base64ToBitmap(
+                                                getActivity(),
+                                                wordModel.getImage()
+                                        )
+                                );
+                        // установить виджету значение тега "истина"
+                        answerOptionsImageView.setTag(true);
+                    });
                 } else {
-                    answerOptionsImageView
-                            .setImageBitmap(ImageConverter.base64ToBitmap(getActivity(), wrongChoiceWordModels.get(wrongChoiceWordModelIdx - 1).getImage()));
-                    answerOptionsImageView.setTag(false);
+                    // иначе, когда обрабатывается виджет с индексом неправильного выбра
+                    final int idx = wrongChoiceWordModelIdx - 1;
+                    UIActionsRunner.run(() -> {
+                        // установить виджету очередное изображение неправильного выбора
+                        answerOptionsImageView
+                                .setImageBitmap(
+                                        ImageConverter.base64ToBitmap(
+                                                getActivity(),
+                                                wrongChoiceWordModels.get(idx).getImage()
+                                        )
+                                );
+                        // установить виджету значение тега "ложь"
+                        answerOptionsImageView.setTag(false);
+                    });
+                    // увеличить значение счётчика выводимых на представление неправильных вариантов
                     wrongChoiceWordModelIdx++;
                 }
                 answerOptionsImageView.setOnClickListener(
@@ -180,8 +204,11 @@ public class WordKnowledgeTestFragment extends Fragment {
                                     UIActions.closeInfinityProgressToast();
                                     if (success) {
                                         UIActionsRunner.run(() -> {
+                                            // установка изображения "правильно" в виджет результата
                                             mResultImageView.setImageResource(R.drawable.correct);
+                                            // включение видимости виджета результата
                                             mResultImageView.setVisibility(VISIBLE);
+                                            // включение видимости виджета слова
                                             mWordTextView.setVisibility(VISIBLE);
                                         });
                                         try {
@@ -189,6 +216,11 @@ public class WordKnowledgeTestFragment extends Fragment {
                                         } catch (InterruptedException e) {
                                             throw new RuntimeException(e);
                                         } finally {
+                                            UIActionsRunner.run(() -> {
+                                                // скрытие слова и результата проверки
+                                                mResultImageView.setVisibility(GONE);
+                                                mWordTextView.setVisibility(GONE);
+                                            });
                                             // отображение данных проверки знания следующего слова
                                             showNextWord(mCurrentWordIndex++);
                                         }
@@ -202,7 +234,7 @@ public class WordKnowledgeTestFragment extends Fragment {
                                         } catch (InterruptedException e) {
                                             throw new RuntimeException(e);
                                         } finally {
-                                            mResultImageView.setVisibility(GONE);
+                                            UIActionsRunner.run(() -> mResultImageView.setVisibility(GONE));
                                         }
                                     }
                                 }
