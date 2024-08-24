@@ -31,7 +31,9 @@ import org.tyaa.training.client.android.utils.UIActionsRunner;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * Класс фрагмента проверки знания слова
@@ -230,9 +232,13 @@ public class WordKnowledgeTestFragment extends Fragment {
      * */
     private List<WordModel> getRandomWordModels(List<WordModel> currentLessonWords, Long excludedWordModelId, int resultWordModelQuantity) {
         currentLessonWords =
-                currentLessonWords.stream().filter(w -> w.getId() != excludedWordModelId).toList();
+                currentLessonWords.stream()
+                        .filter(w -> !Objects.equals(w.getId(), excludedWordModelId))
+                        .collect(Collectors.toList());
         Collections.shuffle(currentLessonWords);
-        return currentLessonWords.stream().limit(resultWordModelQuantity).toList();
+        return currentLessonWords.stream()
+                .limit(resultWordModelQuantity)
+                .collect(Collectors.toList());
     }
 
     /**
