@@ -6,6 +6,7 @@ import static android.view.View.VISIBLE;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.tyaa.training.client.android.R;
 import org.tyaa.training.client.android.handlers.IResultHandler;
+import org.tyaa.training.client.android.interfaces.IShadowable;
 import org.tyaa.training.client.android.models.UserModel;
 import org.tyaa.training.client.android.models.UserProfileModel;
 import org.tyaa.training.client.android.services.HttpAuthService;
@@ -30,13 +32,14 @@ import org.tyaa.training.client.android.utils.UIActionsRunner;
  * во время отображения которой на сервер отправляется http-запрос
  * для выяснения состояния аутентификации пользователя
  * */
-public class SplashScreenActivity extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity implements IShadowable {
 
     private final IAuthService mAuthService = new HttpAuthService();
     private final IProfileService mProfileService = new HttpProfileService();
 
     private final IState mState = new InMemoryLocalState();
 
+    private View mShadowView;
     private Button mReloadButton;
 
     @Override
@@ -46,6 +49,9 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         // подключение представления экрана дополнительной заставки приложения
         setContentView(R.layout.activity_splash_screen);
+
+        // инициализация объекта доступа к виджету затенения экрана
+        mShadowView = findViewById(R.id.activitySplashScreen_shadow_View);
 
         // получение объекта управления кнопкой вызова повторной попытки загрузки приложения
         mReloadButton = findViewById(R.id.activitySplashScreen_reload_Button);
@@ -66,6 +72,8 @@ public class SplashScreenActivity extends AppCompatActivity {
      * Проверка наличия входа в учётную запись пользователя
      * */
     private void checkAuth() {
+        // затенить и сделать неинтерактивным представление
+        shade();
         // отобразить бесконечный прогресс
         UIActions.showInfinityProgressToast(this);
         // Запрос к серверу: выполнен ли вход в учётную запись?
@@ -92,6 +100,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                                 // иначе - подготовить переход на Activity начального заполнения профиля
                                 intent = new Intent(SplashScreenActivity.this, ProfileCreatingActivity.class);
                             }
+                            // снять с представления тень и вернуть интерактивность
+                            unshade();
                             // скрыть бесконечный прогресс
                             UIActions.closeInfinityProgressToast();
                             // выполнить переход на Activity, определённую выше
@@ -100,6 +110,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                         // если выполнение запроса провалилось
                         @Override
                         public void onFailure(String errorMessage) {
+                            // снять с представления тень и вернуть интерактивность
+                            unshade();
                             // скрыть бесконечный прогресс
                             UIActions.closeInfinityProgressToast();
                             // отобразить всплывающее окно с сообщением об ошибке
@@ -107,6 +119,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                         }
                     });
                 } else {
+                    // снять с представления тень и вернуть интерактивность
+                    unshade();
                     // скрыть бесконечный прогресс
                     UIActions.closeInfinityProgressToast();
                     // если вход в учётную запись ранее не был выполнен -
@@ -129,5 +143,15 @@ public class SplashScreenActivity extends AppCompatActivity {
                 UIActionsRunner.run(() -> Toast.makeText(SplashScreenActivity.this, errorMessage, Toast.LENGTH_LONG).show());
             }
         });
+    }
+
+    @Override
+    public void shade() {
+        UIActionsRunner.run(() -> mShadowView.setVisibility(View.VISIBLE));
+    }
+
+    @Override
+    public void unshade() {
+        UIActionsRunner.run(() -> mShadowView.setVisibility(View.GONE));
     }
 }

@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.tyaa.training.client.android.R;
 import org.tyaa.training.client.android.handlers.IResponseHandler;
+import org.tyaa.training.client.android.interfaces.IShadowable;
 import org.tyaa.training.client.android.services.HttpAuthService;
 import org.tyaa.training.client.android.services.interfaces.IAuthService;
 import org.tyaa.training.client.android.utils.UIActions;
@@ -23,9 +25,11 @@ import java.util.Locale;
 /**
  * Логика экрана формы регистрации
  * */
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements IShadowable {
 
     private final IAuthService mAuthService = new HttpAuthService();
+
+    private View mShadowView;
     private TextInputEditText mLoginTextInputEditText;
     private TextInputEditText mPasswordTextInputEditText;
     private TextInputEditText mConfirmPasswordTextInputEditText;
@@ -34,10 +38,15 @@ public class SignUpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         // подключение представления регистрации
         setContentView(R.layout.activity_sign_up);
-        // инициализация объектов доступа к постоянным элементам представления
+
+        /* инициализация объектов доступа к постоянным элементам представления */
+        // инициализация объекта доступа к виджету затенения экрана
+        mShadowView = findViewById(R.id.activitySignUp_shadow_View);
         mLoginTextInputEditText =
                 findViewById(R.id.activitySignUp_login_TextInputEditText);
         mPasswordTextInputEditText =
@@ -46,12 +55,15 @@ public class SignUpActivity extends AppCompatActivity {
                 findViewById(R.id.activitySignUp_confirmPassword_TextInputEditText);
         mSignUpButton = findViewById(R.id.activitySignUp_signUp_Button);
         mGoToSignInButton = findViewById(R.id.activitySignUp_goToSignIn_Button);
-        // установка обработчиков событий для постоянных элементов представления
+
+        /* установка обработчиков событий для постоянных элементов представления */
         mSignUpButton.setOnClickListener(v -> {
             if (validateInputs(
                     mLoginTextInputEditText,
                     mPasswordTextInputEditText,
                     mConfirmPasswordTextInputEditText)) {
+                // затенить и сделать неинтерактивным представление
+                shade();
                 // отобразить бесконечный прогресс
                 UIActions.showInfinityProgressToast(this);
                 // отправить серверу запрос регистрации новой учётной записи
@@ -61,6 +73,8 @@ public class SignUpActivity extends AppCompatActivity {
                         new IResponseHandler() {
                             @Override
                             public void onSuccess() {
+                                // снять с представления тень и вернуть интерактивность
+                                unshade();
                                 // скрыть бесконечный прогресс
                                 UIActions.closeInfinityProgressToast();
                                 // UIActions.showInfo(SignUpActivity.this, "A new user registered");
@@ -71,6 +85,8 @@ public class SignUpActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(String errorMessage) {
+                                // снять с представления тень и вернуть интерактивность
+                                unshade();
                                 // скрыть бесконечный прогресс
                                 UIActions.closeInfinityProgressToast();
                                 // отобразить сообщение об ошибке во всплывающем окне
@@ -89,6 +105,7 @@ public class SignUpActivity extends AppCompatActivity {
                 );
             }
         });
+
         mGoToSignInButton.setOnClickListener(v -> {
             // перейти на Activity входа
             Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
@@ -157,5 +174,15 @@ public class SignUpActivity extends AppCompatActivity {
         if (passwordErrors.length() > 0) {
             passwordInput.setError(passwordErrors.toString());
         }
+    }
+
+    @Override
+    public void shade() {
+        UIActionsRunner.run(() -> mShadowView.setVisibility(View.VISIBLE));
+    }
+
+    @Override
+    public void unshade() {
+        UIActionsRunner.run(() -> mShadowView.setVisibility(View.GONE));
     }
 }

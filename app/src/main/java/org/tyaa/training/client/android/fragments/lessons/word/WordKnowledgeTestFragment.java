@@ -4,7 +4,6 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import org.tyaa.training.client.android.R;
+import org.tyaa.training.client.android.interfaces.IShadowable;
 import org.tyaa.training.client.android.handlers.IResponseHandler;
 import org.tyaa.training.client.android.models.WordModel;
 import org.tyaa.training.client.android.services.HttpWordService;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 /**
  * Класс фрагмента проверки знания слова
  * */
-public class WordKnowledgeTestFragment extends Fragment {
+public class WordKnowledgeTestFragment extends Fragment implements IShadowable {
 
     private final IWordService mWordService = new HttpWordService();
     private final IWordTestService mWordTestService = new HttpWordTestService();
@@ -195,6 +195,8 @@ public class WordKnowledgeTestFragment extends Fragment {
                 answerOptionsImageView.setOnClickListener(
                         v -> {
                             final Boolean success = (Boolean) v.getTag();
+                            // затенить и сделать неинтерактивным представление
+                            shade();
                             // отобразить бесконечный прогресс
                             UIActions.showInfinityProgressToast(getActivity());
                             mWordTestService.addWordTestResult(wordModel.getId(), success, new IResponseHandler() {
@@ -221,11 +223,14 @@ public class WordKnowledgeTestFragment extends Fragment {
                                                 mResultImageView.setVisibility(GONE);
                                                 mWordTextView.setVisibility(GONE);
                                             });
+                                            // снять с представления тень и вернуть интерактивность
+                                            unshade();
                                             // отображение данных проверки знания следующего слова
                                             showNextWord(mCurrentWordIndex++);
                                         }
                                     } else {
                                         UIActionsRunner.run(() -> {
+                                            // установить и отобразить изображение результата "неправильно"
                                             mResultImageView.setImageResource(R.drawable.wrong);
                                             mResultImageView.setVisibility(VISIBLE);
                                         });
@@ -234,7 +239,10 @@ public class WordKnowledgeTestFragment extends Fragment {
                                         } catch (InterruptedException e) {
                                             throw new RuntimeException(e);
                                         } finally {
+                                            // скрыть изображение результата
                                             UIActionsRunner.run(() -> mResultImageView.setVisibility(GONE));
+                                            // снять с представления тень и вернуть интерактивность
+                                            unshade();
                                         }
                                     }
                                 }
@@ -243,6 +251,8 @@ public class WordKnowledgeTestFragment extends Fragment {
                                 public void onFailure(String errorMessage) {
                                     // скрыть бесконечный прогресс
                                     UIActions.closeInfinityProgressToast();
+                                    // снять с представления тень и вернуть интерактивность
+                                    unshade();
                                     // отобразить сообщение об ошибке
                                     UIActions.showError(getActivity(), errorMessage);
                                 }
@@ -283,5 +293,15 @@ public class WordKnowledgeTestFragment extends Fragment {
         return random.ints(min, ++max)
                 .findFirst()
                 .getAsInt();
+    }
+
+    @Override
+    public void shade() {
+        ((IShadowable) getActivity()).shade();
+    }
+
+    @Override
+    public void unshade() {
+        ((IShadowable) getActivity()).unshade();
     }
 }

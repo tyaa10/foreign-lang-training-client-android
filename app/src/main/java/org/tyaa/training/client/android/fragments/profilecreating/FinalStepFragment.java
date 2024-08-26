@@ -14,6 +14,7 @@ import org.tyaa.training.client.android.R;
 import org.tyaa.training.client.android.activities.MainActivity;
 import org.tyaa.training.client.android.activities.ProfileCreatingActivity;
 import org.tyaa.training.client.android.handlers.IResultHandler;
+import org.tyaa.training.client.android.interfaces.IShadowable;
 import org.tyaa.training.client.android.models.UserProfileModel;
 import org.tyaa.training.client.android.services.HttpProfileService;
 import org.tyaa.training.client.android.services.interfaces.IProfileService;
@@ -28,7 +29,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Класс фрагмента завершающего экрана начального заполнения профиля,
  * на котором отображаются все ранее введенные данные
  * */
-public class FinalStepFragment extends BaseStepFragment {
+public class FinalStepFragment extends BaseStepFragment implements IShadowable {
 
     private TextView mTitleTextView;
     private CircleImageView mAvatarCircleImageView;
@@ -103,6 +104,8 @@ public class FinalStepFragment extends BaseStepFragment {
         /* Обработчик клика для завершения создания профиля с сохранением всех введенных данных*/
         mSaveButton = view.findViewById(R.id.activityProfileCreating_fragmentFinal_save_Button);
         mSaveButton.setOnClickListener(v -> {
+            // затенить и сделать неинтерактивным представление
+            shade();
             // отобразить бесконечный прогресс
             UIActions.showInfinityProgressToast(FinalStepFragment.this.getActivity());
             // отправка данных профиля на сервер для сохранения
@@ -110,6 +113,8 @@ public class FinalStepFragment extends BaseStepFragment {
 
                 @Override
                 public void onSuccess(UserProfileModel profile) {
+                    // снять с представления тень и вернуть интерактивность
+                    unshade();
                     // скрыть бесконечный прогресс
                     UIActions.closeInfinityProgressToast();
                     // Если профиль создан успешно -
@@ -123,6 +128,8 @@ public class FinalStepFragment extends BaseStepFragment {
 
                 @Override
                 public void onFailure(String errorMessage) {
+                    // снять с представления тень и вернуть интерактивность
+                    unshade();
                     // скрыть бесконечный прогресс
                     UIActions.closeInfinityProgressToast();
                     // отобразить сообщение об ошибке во всплывающем окне
@@ -130,5 +137,15 @@ public class FinalStepFragment extends BaseStepFragment {
                 }
             });
         });
+    }
+
+    @Override
+    public void shade() {
+        ((IShadowable) getActivity()).shade();
+    }
+
+    @Override
+    public void unshade() {
+        ((IShadowable) getActivity()).unshade();
     }
 }

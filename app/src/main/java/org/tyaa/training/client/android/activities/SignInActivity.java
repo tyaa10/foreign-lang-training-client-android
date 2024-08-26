@@ -4,6 +4,7 @@ import static org.tyaa.training.client.android.utils.UIDataExtractor.*;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
@@ -14,6 +15,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import org.tyaa.training.client.android.R;
 import org.tyaa.training.client.android.handlers.IResponseHandler;
 import org.tyaa.training.client.android.handlers.IResultHandler;
+import org.tyaa.training.client.android.interfaces.IShadowable;
 import org.tyaa.training.client.android.models.UserProfileModel;
 import org.tyaa.training.client.android.services.HttpAuthService;
 import org.tyaa.training.client.android.services.HttpProfileService;
@@ -22,18 +24,20 @@ import org.tyaa.training.client.android.services.interfaces.IProfileService;
 import org.tyaa.training.client.android.state.InMemoryLocalState;
 import org.tyaa.training.client.android.state.interfaces.IState;
 import org.tyaa.training.client.android.utils.UIActions;
+import org.tyaa.training.client.android.utils.UIActionsRunner;
 
 /**
  * Логика экрана формы входа в учётную запись
  * или перехода к форме регистрации
  * */
-public class SignInActivity extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity implements IShadowable {
 
     private final IAuthService mAuthService = new HttpAuthService();
     private final IProfileService mProfileService = new HttpProfileService();
 
     private final IState mState = new InMemoryLocalState();
 
+    private View mShadowView;
     private TextInputEditText mLoginTextInputEditText;
     private TextInputEditText mPasswordTextInputEditText;
     private Button mSignInButton;
@@ -47,7 +51,9 @@ public class SignInActivity extends AppCompatActivity {
         // подключение представления входа в учётную запись
         setContentView(R.layout.activity_sign_in);
 
-        // инициализация объектов доступа к постоянным элементам представления
+        /* инициализация объектов доступа к постоянным элементам представления */
+        // инициализация объекта доступа к виджету затенения экрана
+        mShadowView = findViewById(R.id.activitySignIn_shadow_View);
         mLoginTextInputEditText =
                 findViewById(R.id.activitySignIn_login_TextInputEditText);
         mPasswordTextInputEditText =
@@ -58,6 +64,8 @@ public class SignInActivity extends AppCompatActivity {
         // установка обработчиков событий для постоянных элементов представления
         mSignInButton.setOnClickListener(v -> {
             if (validateInputs(mLoginTextInputEditText, mPasswordTextInputEditText)) {
+                // затенить и сделать неинтерактивным представление
+                shade();
                 // отобразить бесконечный прогресс
                 UIActions.showInfinityProgressToast(this);
                 // отправить серверу запрос входа в учётную запись
@@ -84,6 +92,8 @@ public class SignInActivity extends AppCompatActivity {
                                             // иначе - подготовить переход на Activity начального заполнения профиля
                                             intent = new Intent(SignInActivity.this, ProfileCreatingActivity.class);
                                         }
+                                        // снять с представления тень и вернуть интерактивность
+                                        unshade();
                                         // скрыть бесконечный прогресс
                                         UIActions.closeInfinityProgressToast();
                                         // выполнить переход на Activity, определённую выше
@@ -92,6 +102,8 @@ public class SignInActivity extends AppCompatActivity {
                                     // если выполнение запроса провалилось
                                     @Override
                                     public void onFailure(String errorMessage) {
+                                        // снять с представления тень и вернуть интерактивность
+                                        unshade();
                                         // скрыть бесконечный прогресс
                                         UIActions.closeInfinityProgressToast();
                                         // отобразить сообщение об ошибке во всплывающем окне
@@ -102,6 +114,8 @@ public class SignInActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(String errorMessage) {
+                                // снять с представления тень и вернуть интерактивность
+                                unshade();
                                 // скрыть бесконечный прогресс
                                 UIActions.closeInfinityProgressToast();
                                 UIActions.showError(SignInActivity.this, errorMessage);
@@ -127,5 +141,15 @@ public class SignInActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void shade() {
+        UIActionsRunner.run(() -> mShadowView.setVisibility(View.VISIBLE));
+    }
+
+    @Override
+    public void unshade() {
+        UIActionsRunner.run(() -> mShadowView.setVisibility(View.GONE));
     }
 }

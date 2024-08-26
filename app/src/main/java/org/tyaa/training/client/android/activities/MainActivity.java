@@ -2,37 +2,30 @@ package org.tyaa.training.client.android.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.tyaa.training.client.android.R;
-import org.tyaa.training.client.android.adapters.LessonAdapter;
+import org.tyaa.training.client.android.interfaces.IShadowable;
 import org.tyaa.training.client.android.handlers.IResponseHandler;
-import org.tyaa.training.client.android.handlers.IResultHandler;
-import org.tyaa.training.client.android.models.LessonListItemModel;
 import org.tyaa.training.client.android.services.HttpAuthService;
-import org.tyaa.training.client.android.services.HttpLessonService;
 import org.tyaa.training.client.android.services.interfaces.IAuthService;
-import org.tyaa.training.client.android.services.interfaces.ILessonService;
 import org.tyaa.training.client.android.utils.UIActions;
 import org.tyaa.training.client.android.utils.UIActionsRunner;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Логика главного экрана приложения
  * (хост для фрагментов основной функциональности приложения)
  * */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IShadowable {
 
     private final IAuthService mAuthService = new HttpAuthService();
 
     // private final IState mState = new InMemoryLocalState();
 
+    private View mShadowView;
     private Button mSignOutButton;
 
     @Override
@@ -43,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
         // подключение представления главного экрана приложения
         setContentView(R.layout.activity_main);
 
-        // инициализация объектов доступа к постоянным элементам представления
+        /* инициализация объектов доступа к постоянным элементам представления */
+        mShadowView = findViewById(R.id.activityMain_shadow_View);
         mSignOutButton = findViewById(R.id.activityMain_signOut_Button);
 
         // установка обработчиков событий для постоянных элементов представления
@@ -90,5 +84,15 @@ public class MainActivity extends AppCompatActivity {
                 UIActions.showError(MainActivity.this, errorMessage);
             }
         }); */
+    }
+
+    @Override
+    public void shade() {
+        UIActionsRunner.run(() -> mShadowView.setVisibility(View.VISIBLE));
+    }
+
+    @Override
+    public void unshade() {
+        UIActionsRunner.run(() -> mShadowView.setVisibility(View.GONE));
     }
 }
