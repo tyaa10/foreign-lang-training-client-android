@@ -13,11 +13,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import org.tyaa.training.client.android.R;
 import org.tyaa.training.client.android.interfaces.IShadowable;
 import org.tyaa.training.client.android.handlers.IResponseHandler;
 import org.tyaa.training.client.android.models.WordModel;
+import org.tyaa.training.client.android.models.WordTestModel;
 import org.tyaa.training.client.android.services.HttpWordService;
 import org.tyaa.training.client.android.services.HttpWordTestService;
 import org.tyaa.training.client.android.services.interfaces.IWordService;
@@ -25,6 +27,7 @@ import org.tyaa.training.client.android.services.interfaces.IWordTestService;
 import org.tyaa.training.client.android.state.InMemoryLocalState;
 import org.tyaa.training.client.android.state.interfaces.IState;
 import org.tyaa.training.client.android.utils.ImageConverter;
+import org.tyaa.training.client.android.utils.TypeConverters;
 import org.tyaa.training.client.android.utils.UIActions;
 import org.tyaa.training.client.android.utils.UIActionsRunner;
 
@@ -46,6 +49,10 @@ public class WordKnowledgeTestFragment extends Fragment implements IShadowable {
 
     private Long mLessonId;
     private Integer mCurrentWordIndex = 0;
+
+    // Модель для накопления суммы результатов текущего сеанса проверки знаний слов урока
+    private WordTestModel mCurrentWordTestModel =
+            WordTestModel.builder().attemptsNumber(0).successNumber(0).build();
 
     private View mWordTestFragmentView;
 
@@ -92,8 +99,6 @@ public class WordKnowledgeTestFragment extends Fragment implements IShadowable {
         // получение идентификатора выбранного урока от фрагмента списка уроков,
         // логикой которого был вызван переход на текущий фрагмент
         mLessonId = WordKnowledgeTestFragmentArgs.fromBundle(getArguments()).getLessonId();
-        // Log.d("lessonId", String.valueOf(lessonId));
-        // UIActions.showInfo(getActivity(), String.valueOf(lessonId));
 
         // установка флагов языков на представление
         mNativeLanguageFlagImageView.setImageResource(mState.getNativeLanguageFlag());
@@ -199,6 +204,13 @@ public class WordKnowledgeTestFragment extends Fragment implements IShadowable {
                             shade();
                             // отобразить бесконечный прогресс
                             UIActions.showInfinityProgressToast(getActivity());
+                            // Прибавить значение результата проверки слова к объекту модели
+                            // результатов текущего сеанса проверки слов урока
+                            // (локально)
+                            addCurrentTestResult(success);
+                            // Прибавить значение результата проверки слова к объекту модели
+                            // суммарных результатов всех сеансов проверки слов урока
+                            // (отправить на сервер)
                             mWordTestService.addWordTestResult(wordModel.getId(), success, new IResponseHandler() {
                                 @Override
                                 public void onSuccess() {
@@ -261,9 +273,23 @@ public class WordKnowledgeTestFragment extends Fragment implements IShadowable {
                 );
             }
         } else {
-            // TODO переход на экран отображения общего результата проверки знания слов урока
-            UIActions.showInfo(getActivity(), "Проверка знания слов завершена");
+            // Вызов ерехода на экран отображения результатов проверки знания слов урока
+            goToWordTestFinalFragment();
         }
+    }
+
+    /**
+     * Переход на экран отображения результатов проверки знания слов урока
+     * */
+    private void goToWordTestFinalFragment() {
+        UIActionsRunner.run(() -> {
+            // подготовка действия перехода к фрагменту результатов проверки знания слов текущего урока
+            // с передачей ему идентификатора урока
+            final WordKnowledgeTestFragmentDirections.NavigateToFragmentEducationalProcessWordTestFinal action =
+                    WordKnowledgeTestFragmentDirections.navigateToFragmentEducationalProcessWordTestFinal(mLessonId, mCurrentWordTestModel);
+            // выполнение подготовленного выше действия перехода
+            Navigation.findNavController(mWordTestFragmentView).navigate(action);
+        });
     }
 
     /**
@@ -293,6 +319,17 @@ public class WordKnowledgeTestFragment extends Fragment implements IShadowable {
         return random.ints(min, ++max)
                 .findFirst()
                 .getAsInt();
+    }
+
+    /**
+     * Приращение значений результата текущего сеанса проверки знаний слов урока
+     * @param success успешной ли была попытка перевода слова
+     * */
+    private void addCurrentTestResult(Boolean success) {
+        mCurrentWordTestModel.attemptsNumber++;
+        mCurrentWordTestModel.setSuccessNumber(
+                mCurrentWordTestModel.getSuccessNumber() + TypeConverters.booleanToInteger(success)
+        );
     }
 
     @Override

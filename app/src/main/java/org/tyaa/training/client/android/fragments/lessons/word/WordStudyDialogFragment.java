@@ -12,7 +12,7 @@ import androidx.navigation.Navigation;
 import org.tyaa.training.client.android.R;
 
 /**
- * Класс фрагмента диалога выбора режима урока (изучение материала или проверка знаний)
+ * Логика фрагмента диалога выбора режима урока (изучение материала или проверка знаний)
  * */
 public class WordStudyDialogFragment extends Fragment {
 

@@ -76,7 +76,7 @@ public class UIActions {
                                     .findViewById(R.id.widget_infinityProgress_ProgressBar)
                                     .setVisibility(View.VISIBLE);
                             mInfinityProgressToast.show();
-                        } catch (NullPointerException ignored) {}
+                        } catch (Exception ignored) {}
                     }
                 }
             };
@@ -104,7 +104,7 @@ public class UIActions {
                                     .findViewById(R.id.widget_infinityProgress_ProgressBar)
                                     .setVisibility(View.GONE);
                             mInfinityProgressToast.cancel();
-                        } catch (NullPointerException ignored) {}
+                        } catch (Exception ignored) {}
                         mInfinityProgressToast = null;
                     }
 

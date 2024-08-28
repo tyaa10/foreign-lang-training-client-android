@@ -66,6 +66,8 @@
     <string name="network_lessons_word_lesson_words_uri">lessons/word-lessons/{id}/words</string>
     <!-- URI конечной точки "Проверки - Проверки знания слов - Слово - Результаты" -->
     <string name="network_tests_word_tests_words_results_uri">tests/word-tests/word/{id}/results</string>
+    <!-- URI конечной точки "Проверки - Проверки знания слов - Урок - Результаты" -->
+    <string name="network_tests_word_tests_lessons_results_uri">tests/word-tests/lessons/{id}/results</string>
     <!-- URI конечной точки "Проверки - Проверки знания слов - Результаты" -->
     <!--<string name="network_tests_word_tests_results_uri">tests/word-tests/results/{id}</string>-->
     <!-- URI конечной точки "Проверки - Проверки знания слов - Слово - Результаты - Прибавить" -->

@@ -19,6 +19,12 @@ public interface IWordTestService {
      * */
     void getWordTestResults(Long wordId, IResultHandler handler);
     /**
+     * Получить данные результатов проверки знания слов указанного урока
+     * @param lessonId идентификатор урока по изучению слов, результаты проверки знаний которого нужно получить
+     * @param handler обработчик результата выполнения действия службы, задаваемый клиентом службы
+     * */
+    void getWordStudyLessonTestResults(Long lessonId, IResultHandler<WordTestModel> handler);
+    /**
      * Создать запись результатов проверки знания слова
      * @param wordId идентификатор слова, результаты проверки знаний которого нужно получить
      * @param wordTestResults начальные значения результатов проверки знаний слова

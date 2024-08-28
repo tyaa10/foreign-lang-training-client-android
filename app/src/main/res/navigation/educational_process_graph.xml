@@ -71,5 +71,28 @@
         <argument
             android:name="lesson_id"
             app:argType="java.lang.Long" />
+        <action
+            android:id="@+id/navigate_to_fragment_educational_process_word_test_final"
+            app:destination="@id/fragment_educational_process_word_test_final"/>
+    </fragment>
+    <!-- Вывод текущих и глобальных итогов проверки знания слова
+    и диалог выбора перехода к повторной проверке знаний или возвращения к списку уроков -->
+    <fragment
+        android:id="@+id/fragment_educational_process_word_test_final"
+        android:name="org.tyaa.training.client.android.fragments.lessons.word.WordTestFinalFragment"
+        android:label="Word Test Final Results and Dialog"
+        tools:layout="@layout/fragment_educational_process_word_test_final">
+        <argument
+            android:name="lesson_id"
+            app:argType="java.lang.Long" />
+        <argument
+            android:name="last_test_results"
+            app:argType="org.tyaa.training.client.android.models.WordTestModel" />
+        <action
+            android:id="@+id/navigate_to_fragment_education_process_word_knowledge_test"
+            app:destination="@id/fragment_education_process_word_knowledge_test" />
+        <action
+            android:id="@+id/navigate_from_word_test_final_to_fragment_education_process_lesson_list"
+            app:destination="@id/fragment_education_process_lesson_list" />
     </fragment>
 </navigation>
