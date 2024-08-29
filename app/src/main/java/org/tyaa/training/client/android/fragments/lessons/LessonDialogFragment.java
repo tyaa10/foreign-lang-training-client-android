@@ -1,7 +1,6 @@
 package org.tyaa.training.client.android.fragments.lessons;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -11,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import org.tyaa.training.client.android.R;
-import org.tyaa.training.client.android.utils.UIActions;
 
 /**
  * Класс фрагмента диалога выбора режима урока (изучение материала или проверка знаний)

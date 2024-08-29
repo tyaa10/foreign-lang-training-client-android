@@ -1,0 +1,123 @@
+<resources>
+    <string name="app_name">ForeignLanguageTrainingAndroid</string>
+    <!-- Базовый адрес REST API серверной составляющей приложения -->
+    <!-- Вариант 1. Симулятор Genymotion с QEMU
+     Сначала нужно запустить виртуальное устройство,
+     открыть командную оболочку ОС и выполнить команды:
+     cd C:\Users\Yuriy\AppData\Local\Android\Sdk\platform-tools
+     adb reverse tcp:8090 tcp:8090 -->
+    <!-- <string name="network_base_server_url">http://127.0.0.1:8090/lang-trainer/api</string> -->
+    <!-- Вариант 2. Симулятор Genymotion с VirtualBox -->
+    <!-- <string name="network_base_server_url">http://10.0.3.2:8090/lang-trainer/api</string> -->
+    <!-- Вариант 3. Стандартный эмулятор виртуальных устройств Android - AVD -->
+    <string name="network_base_server_url">http://10.0.2.2:8090/lang-trainer/api</string>
+    <!-- Тексты ошибок -->
+    <string name="message_error">Ошибка</string>
+    <string name="message_error_http_request_failed">Ошибка запроса к серверу</string>
+    <string name="message_error_http_action_failed">Ответ сервера: действие не выполнено</string>
+    <string name="message_error_http_connection_failed">"Ошибка подключения к серверу: "</string>
+    <string name="message_error_http_reponse_fail_code">"Запрос к серверу не был успешен: "</string>
+    <string name="message_error_http_response_nodata">Ошибка чтения данных ответа сервера: данные отсутствуют</string>
+    <string name="message_error_http_response_data_read_failed">"Ошибка чтения данных ответа сервера: "</string>
+    <string name="message_error_validation_login">Заполните поле \'логин\'</string>
+    <string name="message_error_validation_password">Заполните поле \'пароль\'</string>
+    <string name="message_error_validation_confirm_password">Заполните поле \'подтверждение пароля\'</string>
+    <string name="message_error_validation_confirm_password_matching">Пароли не совпадают</string>
+    <string name="message_error_validation_name">Поле \'имя\' должно оставаться пустым или содержать не более 100 любых символов</string>
+    <string name="message_error_validation_errors">"Ошибки валидации"</string>
+    <string name="message_error_validation_error">"Ошибка валидации"</string>
+    <string name="message_error_http_response_unauthorized">"Ошибка аутентификации"</string>
+    <string name="message_error_http_response_unauthorized_full">"Вы не аутентифицированы. Сначала войдите в учётную запись"</string>
+    <string name="message_error_http_response_forbidden">"Ошибка авторизации"</string>
+    <string name="message_error_http_response_forbidden_full">"Вы не авторизованы для данного действия"</string>
+    <string name="message_error_http_response_auth_wrong_credentials">"Неверный логин или пароль"</string>
+    <string name="message_error_http_response_conflict">"Такие данные уже существуют"</string>
+    <string name="message_error_http_response_not_found">"Данные не найдены"</string>
+    <string name="message_error_deserialization">"Ошибка десериализации"</string>
+    <string name="message_error_serialization">"Ошибка сериализации"</string>
+    <string name="message_error_failed_to_play_audio">Не удалось воспроизвести аудио</string>
+    <!-- Тексты информационных сообщений -->
+    <string name="message_info_sign_in_success">Вход выполнен успешно</string>
+    <!-- Стандартное название типа содержимого тела HTTP-запроса или ответа - json -->
+    <string name="http_mediatype_json">application/json</string>
+    <!-- REST API серверной составляющей приложения -->
+    <!-- URI конечной точки "Роли" -->
+    <string name="network_roles_uri">auth/admin/roles</string>
+    <!-- URI конечной точки "Пользователи" -->
+    <string name="network_users_uri">auth/users</string>
+    <!-- URI конечной точки "Пользователи - Проверить" -->
+    <string name="network_users_check_uri">auth/users/check</string>
+    <!-- URI стандартной конечной точки простой аутентификации SpringSecurity -->
+    <string name="network_simple_spring_security_login_uri">login</string>
+    <!-- URI стандартной конечной точки простой выхода из учётной записи SpringSecurity -->
+    <string name="network_simple_spring_security_logout_uri">logout</string>
+    <!-- URI конечной точки "Администратор - Профили" -->
+    <string name="network_admin_profiles_uri">admin/profiles</string>
+    <!-- URI конечной точки "Профили" -->
+    <string name="network_profiles_uri">profiles</string>
+    <!-- URI конечной точки "Профили - Текущий" -->
+    <string name="network_profiles_current_uri">profiles/current</string>
+    <!-- URI конечной точки "Языки" -->
+    <string name="network_languages_uri">languages</string>
+    <!-- URI конечной точки "комбинации 'родной язык - изучаемый язык - уровень владения языком'" -->
+    <string name="network_language_levels_uri">language-levels</string>
+    <!-- URI конечной точки "Уроки - Пункты для списка" -->
+    <string name="network_lessons_list_items_uri">lessons/list-items</string>
+    <!-- URI конечной точки "Уроки - Урок по изучению слов - Слова" -->
+    <string name="network_lessons_word_lesson_words_uri">lessons/word-lessons/{id}/words</string>
+    <!-- URI конечной точки "Проверки - Проверки знания слов - Слово - Результаты" -->
+    <string name="network_tests_word_tests_words_results_uri">tests/word-tests/word/{id}/results</string>
+    <!-- URI конечной точки "Проверки - Проверки знания слов - Урок - Результаты" -->
+    <string name="network_tests_word_tests_lessons_results_uri">tests/word-tests/lessons/{id}/results</string>
+    <!-- URI конечной точки "Проверки - Проверки знания слов - Результаты" -->
+    <!--<string name="network_tests_word_tests_results_uri">tests/word-tests/results/{id}</string>-->
+    <!-- URI конечной точки "Проверки - Проверки знания слов - Слово - Результаты - Прибавить" -->
+    <string name="network_tests_word_tests_words_results_add_uri">tests/word-tests/words/{id}/results/add</string>
+    <!-- Текстовое содержимое представлений -->
+    <string name="common_next">Далее</string>
+    <string name="common_back">Назад</string>
+    <string name="common_save">Сохранить</string>
+    <string name="common_study">Изучать</string>
+    <string name="common_test">Тест</string>
+    <string name="common_menu">Меню</string>
+    <string name="splash_screen_title_line1">Обучение иностранному языку</string>
+    <string name="splash_screen_title_line2">Андроид</string>
+    <string name="sign_in_title">Вход</string>
+    <string name="sign_in_subtitle">Пожалуйста, войдите в учётную запись</string>
+    <string name="sign_in_login">логин</string>
+    <string name="sign_in_password">пароль</string>
+    <string name="sign_in_sign_in_button">Войти</string>
+    <string name="sign_in_sign_up_label">Ещё нет учетной записи?</string>
+    <string name="sign_in_sign_up_button">Регистрация</string>
+    <string name="sign_up_title">Регистрация</string>
+    <string name="sign_up_subtitle">Создайте учётную запись</string>
+    <string name="sign_up_login">логин</string>
+    <string name="sign_up_password">пароль</string>
+    <string name="sign_up_confirm_password">повторите пароль</string>
+    <string name="sign_up_sign_up_button">Регистрация</string>
+    <string name="sign_up_sign_in_label">Уже есть учётная запись?</string>
+    <string name="sign_up_sign_in_button">Войти</string>
+    <string name="profile_creating_title">Создание профиля</string>
+    <string name="profile_creating_subtitle_languages">Языки</string>
+    <string name="profile_creating_subtitle_level">Уровень</string>
+    <string name="profile_creating_subtitle_name_and_avatar">Имя и аватар</string>
+    <string name="profile_creating_subtitle_final">Данные Вашего профиля</string>
+    <string name="profile_creating_step">Шаг </string>
+    <string name="profile_creating_native_language">Родной язык</string>
+    <string name="profile_creating_learning_language">Изучаемый язык</string>
+    <string name="profile_creating_target_level">Целевой уровень</string>
+    <string name="profile_creating_display_name">отображаемое имя (необязательно)</string>
+    <string name="profile_creating_avatar">аватар (необязательно)</string>
+    <string name="profile_creating_final_native_language">Родной язык:</string>
+    <string name="profile_creating_final_learning_language">Изучаемый язык:</string>
+    <string name="profile_creating_final_level">Уровень:</string>
+    <string name="main_sign_out_button">Выйти</string>
+    <string name="lesson_list_title">Уроки</string>
+    <string name="lesson_dialog_prompt">Изучить материал или проверить свои знания\?</string>
+    <string name="word_study_dialog_prompt">Проверить знания или вернуться в меню уроков\?</string>
+    <string name="word_test_final_prompt">Проверить знания еще раз или вернуться в меню уроков\?</string>
+    <string name="word_test_final_last_results_template" formatted="false">Процент успешных результатов последней проверки знаний: %s%% (%s/%s)</string>
+    <string name="word_test_final_total_results_template" formatted="false">Общий процент успешных проверок: %s%% (%s/%s)</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Привет пустой фрагмент</string>
+</resources>

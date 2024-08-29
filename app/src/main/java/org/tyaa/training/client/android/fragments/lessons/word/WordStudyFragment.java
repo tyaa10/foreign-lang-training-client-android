@@ -1,7 +1,6 @@
 package org.tyaa.training.client.android.fragments.lessons.word;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +82,7 @@ public class WordStudyFragment extends Fragment {
             try {
                 Player.playAudio(mTranslationPronunciationImageView.getTag().toString());
             } catch (IOException e) {
-                UIActions.showError(getActivity(), "Не удалось воспроизвести аудио");
+                UIActions.showError(getActivity(), getString(R.string.message_error_failed_to_play_audio));
             }
 
         });

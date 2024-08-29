@@ -23,7 +23,6 @@
                 android:id="@+id/activityMain_fragmentEducationProcessWordStudy_translation_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TRANSLATION_STUB"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:layout_marginRight="15dp"/>
@@ -40,7 +39,6 @@
             android:id="@+id/activityMain_fragmentEducationProcessWordStudy_word_TextView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:text="WORD_STUB"
             android:textSize="26sp"
             android:layout_weight="1"
             android:gravity="center"

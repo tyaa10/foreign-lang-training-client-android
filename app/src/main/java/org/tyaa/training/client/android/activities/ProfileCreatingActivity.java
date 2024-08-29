@@ -57,7 +57,7 @@ public class ProfileCreatingActivity extends AppCompatActivity implements IShado
         // создание экземпляра фрагмента выбра родного и изучаемого языков для профиля
         // с передачей ему заголовка для отображения - "Languages"
         Fragment fragment =
-                LanguagesStepFragment.getInstance(LanguagesStepFragment.class, "Languages");
+                LanguagesStepFragment.getInstance(LanguagesStepFragment.class, getString(R.string.profile_creating_subtitle_languages));
         // замена фрагмента-заглушки первым фрагментом последовательности заполнения профиля
         fragmentManager.beginTransaction()
                 .setReorderingAllowed(true)

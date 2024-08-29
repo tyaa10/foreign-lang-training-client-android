@@ -31,7 +31,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="36dp"
-            android:text="Creating a profile"/>
+            android:text="@string/profile_creating_title"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,13 +44,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
-                android:text="Step "/>
+                android:text="@string/profile_creating_step"/>
 
             <TextView
                 android:id="@+id/activityProfileCreating_step_number_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N"
                 android:textSize="24sp"/>
         </LinearLayout>
     </LinearLayout>

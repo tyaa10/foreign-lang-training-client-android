@@ -76,7 +76,7 @@ public class LevelStepFragment extends BaseStepFragment {
             // создание экземпляра фрагмента необязательного задания имени и аватара для профиля
             // с передачей ему заголовка для отображения - "Name and Avatar"
             Fragment fragment =
-                    LevelStepFragment.getInstance(NameAndAvatarStepFragment.class, "Name and Avatar");
+                    LevelStepFragment.getInstance(NameAndAvatarStepFragment.class, getString(R.string.profile_creating_subtitle_name_and_avatar));
             // замена текущего фрагмента следующим
             fragmentManager.beginTransaction()
                     .setReorderingAllowed(true)

@@ -15,8 +15,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:textSize="20sp"
-        android:text="Title Stub" />
+        android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:hintEnabled="true"
-            android:hint="display name (optional)"
+            android:hint="@string/profile_creating_display_name"
             android:padding="15dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -52,7 +51,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="avatar (optional)"
+            android:text="@string/profile_creating_avatar"
             android:gravity="center"/>
     </LinearLayout>
 
@@ -67,13 +66,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="Back"/>
+            android:text="@string/common_back"/>
 
         <Button
             android:id="@+id/activityProfileCreating_fragmentNameAndAvatar_next_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="Next"/>
+            android:text="@string/common_next"/>
     </LinearLayout>
 </LinearLayout>

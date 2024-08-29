@@ -18,6 +18,7 @@ import org.tyaa.training.client.android.services.HttpWordTestService;
 import org.tyaa.training.client.android.services.interfaces.IWordTestService;
 import org.tyaa.training.client.android.utils.Calc;
 import org.tyaa.training.client.android.utils.UIActions;
+import org.tyaa.training.client.android.utils.UIActionsRunner;
 
 /**
  * Логика завершающего фрагмента проверки знаний слов урока по изучению слов
@@ -64,7 +65,7 @@ public class WordTestFinalFragment extends Fragment implements IShadowable {
 
         /* *** Получение и вывод на экран результатов проверки знаний *** */
         /* 1. результаты последнего сеанса проверки, накопленные в локальной модели */
-        showResults(mLastTestResultsTextView, mCurrentWordTestModel);
+        showResults(mLastTestResultsTextView, getString(R.string.word_test_final_last_results_template), mCurrentWordTestModel);
         /* 2. суммарные результаты всех сеансов проверки, получаемые от сервера */
         // затенить и сделать неинтерактивным представление
         shade();
@@ -77,7 +78,7 @@ public class WordTestFinalFragment extends Fragment implements IShadowable {
 
                     @Override
                     public void onSuccess(WordTestModel results) {
-                        showResults(mTotalTestResultsTextView, results);
+                        showResults(mTotalTestResultsTextView, getString(R.string.word_test_final_total_results_template), results);
                         // скрыть бесконечный прогресс
                         UIActions.closeInfinityProgressToast();
                         // снять с представления тень и вернуть интерактивность
@@ -116,19 +117,22 @@ public class WordTestFinalFragment extends Fragment implements IShadowable {
     /**
      * Вывод на экран результатов проверки знаний
      * @param testResultsTextView виджет, на которые выводятся данные
+     * @param template шаблон текста резульатов, который должен содержать три места подстановки: 1) процент успешных переводов ; 2) число успешных переводов; 3) число попыток
      * @param results модель, из которой выводятся данные
      * */
-    private void showResults(TextView testResultsTextView, WordTestModel results) {
+    private void showResults(TextView testResultsTextView, String template, WordTestModel results) {
         final int attemptsNumber = results.getAttemptsNumber();
         final int successNumber = results.getSuccessNumber();
-        testResultsTextView.setText(
-                String.format(
-                        "Last test session success rate: %s%% (%s/%s)",
-                        Calc.percent(successNumber, attemptsNumber),
-                        successNumber,
-                        attemptsNumber
-                )
-        );
+        UIActionsRunner.run(() -> {
+            testResultsTextView.setText(
+                    String.format(
+                            template,
+                            Calc.percent(successNumber, attemptsNumber),
+                            successNumber,
+                            attemptsNumber
+                    )
+            );
+        });
     }
 
     @Override

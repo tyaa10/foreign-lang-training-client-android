@@ -12,31 +12,32 @@
     <!-- Вариант 3. Стандартный эмулятор виртуальных устройств Android - AVD -->
     <string name="network_base_server_url">http://10.0.2.2:8090/lang-trainer/api</string>
     <!-- Тексты ошибок -->
-    <string name="message_error">Ошибка</string>
-    <string name="message_error_http_request_failed">Ошибка запроса к серверу</string>
-    <string name="message_error_http_action_failed">Ответ сервера: действие не выполнено</string>
-    <string name="message_error_http_connection_failed">"Ошибка подключения к серверу: "</string>
-    <string name="message_error_http_reponse_fail_code">"Запрос к серверу не был успешен: "</string>
-    <string name="message_error_http_response_nodata">Ошибка чтения данных ответа сервера: данные отсутствуют</string>
-    <string name="message_error_http_response_data_read_failed">"Ошибка чтения данных ответа сервера: "</string>
-    <string name="message_error_validation_login">Заполните поле \'логин\'</string>
-    <string name="message_error_validation_password">Заполните поле \'пароль\'</string>
-    <string name="message_error_validation_confirm_password">Заполните поле \'подтверждение пароля\'</string>
-    <string name="message_error_validation_confirm_password_matching">Пароли не совпадают</string>
-    <string name="message_error_validation_name">Поле \'имя\' должно оставаться пустым или содержать не более 100 любых символов</string>
-    <string name="message_error_validation_errors">"Ошибки валидации"</string>
-    <string name="message_error_validation_error">"Ошибка валидации"</string>
-    <string name="message_error_http_response_unauthorized">"Ошибка аутентификации"</string>
-    <string name="message_error_http_response_unauthorized_full">"Вы не аутентифицированы. Сначала войдите в учётную запись"</string>
-    <string name="message_error_http_response_forbidden">"Ошибка авторизации"</string>
-    <string name="message_error_http_response_forbidden_full">"Вы не авторизованы для данного действия"</string>
-    <string name="message_error_http_response_auth_wrong_credentials">"Неверный логин или пароль"</string>
-    <string name="message_error_http_response_conflict">"Такие данные уже существуют"</string>
-    <string name="message_error_http_response_not_found">"Данные не найдены"</string>
-    <string name="message_error_deserialization">"Ошибка десериализации"</string>
-    <string name="message_error_serialization">"Ошибка сериализации"</string>
+    <string name="message_error">Error</string>
+    <string name="message_error_http_request_failed">Server request error</string>
+    <string name="message_error_http_action_failed">Server response: Action not completed</string>
+    <string name="message_error_http_connection_failed">Error connecting to server: </string>
+    <string name="message_error_http_reponse_fail_code">The request to the server was not successful: </string>
+    <string name="message_error_http_response_nodata">Error reading server response data: data missing</string>
+    <string name="message_error_http_response_data_read_failed">Error reading server response data: </string>
+    <string name="message_error_validation_login">Fill in the \'login\' field</string>
+    <string name="message_error_validation_password">Fill in the \'password\' field</string>
+    <string name="message_error_validation_confirm_password">Fill in the \'password confirmation\' field</string>
+    <string name="message_error_validation_confirm_password_matching">Passwords don\'t match</string>
+    <string name="message_error_validation_name">The \'name\' field must be left blank or contain no more than 100 characters</string>
+    <string name="message_error_validation_errors">Validation errors</string>
+    <string name="message_error_validation_error">Validation error</string>
+    <string name="message_error_http_response_unauthorized">Authentication Error</string>
+    <string name="message_error_http_response_unauthorized_full">You are not authenticated. First login to your account</string>
+    <string name="message_error_http_response_forbidden">Authorization error</string>
+    <string name="message_error_http_response_forbidden_full">You are not authorized for this action</string>
+    <string name="message_error_http_response_auth_wrong_credentials">Wrong login or password</string>
+    <string name="message_error_http_response_conflict">Such data already exists</string>
+    <string name="message_error_http_response_not_found">Data not found</string>
+    <string name="message_error_deserialization">Deserialization error</string>
+    <string name="message_error_serialization">Serialization error</string>
+    <string name="message_error_failed_to_play_audio">Failed to play audio</string>
     <!-- Тексты информационных сообщений -->
-    <string name="message_info_sign_in_success">Вход выполнен успешно</string>
+    <string name="message_info_sign_in_success">Login successful</string>
     <!-- Стандартное название типа содержимого тела HTTP-запроса или ответа - json -->
     <string name="http_mediatype_json">application/json</string>
     <!-- REST API серверной составляющей приложения -->
@@ -73,8 +74,50 @@
     <!-- URI конечной точки "Проверки - Проверки знания слов - Слово - Результаты - Прибавить" -->
     <string name="network_tests_word_tests_words_results_add_uri">tests/word-tests/words/{id}/results/add</string>
     <!-- Текстовое содержимое представлений -->
+    <string name="common_next">Next</string>
+    <string name="common_back">Back</string>
+    <string name="common_save">Save</string>
+    <string name="common_study">Study</string>
+    <string name="common_test">Test</string>
+    <string name="common_menu">Menu</string>
     <string name="splash_screen_title_line1">Foreign Language Training</string>
     <string name="splash_screen_title_line2">Android</string>
+    <string name="sign_in_title">Login</string>
+    <string name="sign_in_subtitle">Please sign in to continue</string>
+    <string name="sign_in_login">login</string>
+    <string name="sign_in_password">password</string>
+    <string name="sign_in_sign_in_button">Sign In</string>
+    <string name="sign_in_sign_up_label">Don\'t have an account?</string>
+    <string name="sign_in_sign_up_button">Sign Up</string>
+    <string name="sign_up_title">Register</string>
+    <string name="sign_up_subtitle">Create your account</string>
+    <string name="sign_up_login">login</string>
+    <string name="sign_up_password">password</string>
+    <string name="sign_up_confirm_password">confirm password</string>
+    <string name="sign_up_sign_up_button">Sign Up</string>
+    <string name="sign_up_sign_in_label">Already have an account?</string>
+    <string name="sign_up_sign_in_button">Sign In</string>
+    <string name="profile_creating_title">Creating a profile</string>
+    <string name="profile_creating_subtitle_languages">Languages</string>
+    <string name="profile_creating_subtitle_level">Level</string>
+    <string name="profile_creating_subtitle_name_and_avatar">Name and Avatar</string>
+    <string name="profile_creating_subtitle_final">Your profile info</string>
+    <string name="profile_creating_step">Step </string>
+    <string name="profile_creating_native_language">Native language</string>
+    <string name="profile_creating_learning_language">Learning language</string>
+    <string name="profile_creating_target_level">Target level</string>
+    <string name="profile_creating_display_name">display name (optional)</string>
+    <string name="profile_creating_avatar">avatar (optional)</string>
+    <string name="profile_creating_final_native_language">Native language:</string>
+    <string name="profile_creating_final_learning_language">Learning language:</string>
+    <string name="profile_creating_final_level">Level:</string>
+    <string name="main_sign_out_button">Sign Out</string>
+    <string name="lesson_list_title">Lessons</string>
+    <string name="lesson_dialog_prompt">Study the material or test your knowledge\?</string>
+    <string name="word_study_dialog_prompt">Test your knowledge or return to the lessons menu\?</string>
+    <string name="word_test_final_prompt">Test your knowledge again or return to the lessons menu\?</string>
+    <string name="word_test_final_last_results_template" formatted="false">Last test session success rate: %s%% (%s/%s)</string>
+    <string name="word_test_final_total_results_template" formatted="false">Total test success rate: %s%% (%s/%s)</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

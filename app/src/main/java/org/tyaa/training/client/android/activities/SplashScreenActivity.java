@@ -133,6 +133,8 @@ public class SplashScreenActivity extends AppCompatActivity implements IShadowab
             // или выполнился, но был получен ответ об ошибке
             @Override
             public void onFailure(String errorMessage) {
+                // снять с представления тень и вернуть интерактивность
+                unshade();
                 // скрыть бесконечный прогресс
                 UIActions.closeInfinityProgressToast();
                 // сделать видимой кнопку попытки принудительной повторной проверки пользователя

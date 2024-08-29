@@ -81,7 +81,7 @@ public class NameAndAvatarStepFragment extends BaseStepFragment implements Image
             // создание экземпляра фрагмента завершения первоначального заполнения профиля
             // с передачей ему заголовка для отображения - "Your profile info"
             Fragment fragment =
-                    FinalStepFragment.getInstance(FinalStepFragment.class, "Your profile info");
+                    FinalStepFragment.getInstance(FinalStepFragment.class, getString(R.string.profile_creating_subtitle_final));
             // замена текущего фрагмента следующим
             fragmentManager.beginTransaction()
                     .setReorderingAllowed(true)

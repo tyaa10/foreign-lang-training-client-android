@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Test your knowledge or return to the lessons menu?"
+            android:text="@string/word_study_dialog_prompt"
             android:layout_margin="15dp"
             android:textSize="22sp"
             android:gravity="center"/>
@@ -32,14 +32,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:text="Test"
+                android:text="@string/common_test"
                 android:layout_weight="1"/>
             <Button
                 android:id="@+id/activityMain_fragmentEducationProcessWordStudyDialog_return_Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:text="Menu"
+                android:text="@string/common_menu"
                 android:layout_weight="1"/>
         </LinearLayout>
     </LinearLayout>

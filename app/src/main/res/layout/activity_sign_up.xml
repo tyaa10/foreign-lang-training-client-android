@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:text="Register"
+            android:text="@string/sign_up_title"
             android:textSize="48sp"
             android:gravity="center_vertical|bottom"/>
 
@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
-            android:text="Create your new account"
+            android:text="@string/sign_up_subtitle"
             android:textSize="28sp"
             android:gravity="center_vertical|top"/>
 
@@ -48,7 +48,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             app:hintEnabled="true"
-            android:hint="login">
+            android:hint="@string/sign_up_login">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/activitySignUp_login_TextInputEditText"
@@ -61,7 +61,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             app:hintEnabled="true"
-            android:hint="password">
+            android:hint="@string/sign_up_password">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/activitySignUp_password_TextInputEditText"
@@ -75,7 +75,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             app:hintEnabled="true"
-            android:hint="confirm password">
+            android:hint="@string/sign_up_confirm_password">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/activitySignUp_confirmPassword_TextInputEditText"
@@ -89,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="Sign Up"/>
+            android:text="@string/sign_up_sign_up_button"/>
     </LinearLayout>
 
     <LinearLayout
@@ -104,14 +104,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Already have an account?"
+            android:text="@string/sign_up_sign_in_label"
             android:textSize="22sp"/>
 
         <Button
             android:id="@+id/activitySignUp_goToSignIn_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign In"
+            android:text="@string/sign_up_sign_in_button"
             android:textSize="22sp"
             android:background="#00000000"
             android:textColor="#000000"/>

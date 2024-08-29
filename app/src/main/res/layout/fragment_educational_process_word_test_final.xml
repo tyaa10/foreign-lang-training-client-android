@@ -14,7 +14,6 @@
             android:id="@+id/activityMain_fragmentEducationProcessWordTestFinal_lastResults_TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Last test session success rate: 0% (100/100)"
             android:layout_margin="15dp"
             android:textSize="24sp"
             android:gravity="center"
@@ -24,7 +23,6 @@
             android:id="@+id/activityMain_fragmentEducationProcessWordTestFinal_totalResults_TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Total success rate: 0% (100/100)"
             android:layout_margin="15dp"
             android:textSize="18sp"
             android:gravity="center"
@@ -41,7 +39,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Test your knowledge again or return to the lessons menu?"
+            android:text="@string/word_test_final_prompt"
             android:layout_margin="15dp"
             android:textSize="22sp"
             android:gravity="center"/>
@@ -58,14 +56,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:text="Test"
+                android:text="@string/common_test"
                 android:layout_weight="1"/>
             <Button
                 android:id="@+id/activityMain_fragmentEducationProcessWordTestFinal_return_Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:text="Menu"
+                android:text="@string/common_menu"
                 android:layout_weight="1"/>
         </LinearLayout>
     </LinearLayout>

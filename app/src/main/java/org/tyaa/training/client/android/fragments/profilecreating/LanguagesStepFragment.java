@@ -67,7 +67,7 @@ public class LanguagesStepFragment extends BaseStepFragment {
             // создание экземпляра фрагмента выбра уровня изучения языка для профиля
             // с передачей ему заголовка для отображения - "Level"
             Fragment fragment =
-                    LevelStepFragment.getInstance(LevelStepFragment.class, "Level");
+                    LevelStepFragment.getInstance(LevelStepFragment.class, getString(R.string.profile_creating_subtitle_level));
             // замена текущего фрагмента следующим
             fragmentManager.beginTransaction()
                     .setReorderingAllowed(true)

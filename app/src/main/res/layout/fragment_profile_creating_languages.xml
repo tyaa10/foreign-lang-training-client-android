@@ -14,8 +14,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:textSize="20sp"
-        android:text="Title Stub" />
+        android:textSize="20sp" />
 
     <!--<TextView
         android:layout_width="match_parent"
@@ -43,7 +42,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:inputType="none"
-                android:text="Native language"
+                android:text="@string/profile_creating_native_language"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,7 +57,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:inputType="none"
-                android:text="Learning language"
+                android:text="@string/profile_creating_learning_language"
                 />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
@@ -75,6 +74,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:enabled="false"
-            android:text="Next"/>
+            android:text="@string/common_next"/>
     </LinearLayout>
 </LinearLayout>

@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Study the material or test your knowledge?"
+            android:text="@string/lesson_dialog_prompt"
             android:layout_margin="15dp"
             android:textSize="22sp"
             android:gravity="center"/>
@@ -31,14 +31,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:text="Study"
+                android:text="@string/common_study"
                 android:layout_weight="1"/>
             <Button
                 android:id="@+id/activityMain_fragmentEducationProcessLessonDialog_test_Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:text="Test"
+                android:text="@string/common_test"
                 android:layout_weight="1"/>
         </LinearLayout>
     </LinearLayout>

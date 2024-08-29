@@ -15,8 +15,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:textSize="20sp"
-        android:text="Title Stub" />
+        android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,7 +39,6 @@
             android:id="@+id/activityProfileCreating_fragmentFinal_name_TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Name Stub"
             android:padding="15dp"
             android:gravity="left"
             android:layout_gravity="center"/>
@@ -64,7 +62,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Native language:"
+                    android:text="@string/profile_creating_final_native_language"
                     android:textStyle="bold"
                     android:padding="15dp"
                     android:gravity="left"
@@ -73,7 +71,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Learning language:"
+                    android:text="@string/profile_creating_final_learning_language"
                     android:textStyle="bold"
                     android:padding="15dp"
                     android:gravity="left"
@@ -82,7 +80,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Level:"
+                    android:text="@string/profile_creating_final_level"
                     android:textStyle="bold"
                     android:padding="15dp"
                     android:gravity="left"
@@ -100,7 +98,6 @@
                     android:id="@+id/activityProfileCreating_fragmentFinal_nativeLanguage_TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Native Language Stub"
                     android:padding="15dp"
                     android:gravity="left"
                     android:layout_gravity="center"/>
@@ -109,7 +106,6 @@
                     android:id="@+id/activityProfileCreating_fragmentFinal_learningLanguage_TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Learning Language Stub"
                     android:padding="15dp"
                     android:gravity="left"
                     android:layout_gravity="center"/>
@@ -118,7 +114,6 @@
                     android:id="@+id/activityProfileCreating_fragmentFinal_level_TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Level Stub"
                     android:padding="15dp"
                     android:gravity="left"
                     android:layout_gravity="center"/>
@@ -129,20 +124,20 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
-        android:gravity="center | bottom">
+        android:gravity="center|bottom">
 
         <Button
             android:id="@+id/activityProfileCreating_fragmentFinal_back_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="Back"/>
+            android:text="@string/common_back"/>
 
         <Button
             android:id="@+id/activityProfileCreating_fragmentFinal_save_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="Save"/>
+            android:text="@string/common_save"/>
     </LinearLayout>
 </LinearLayout>
