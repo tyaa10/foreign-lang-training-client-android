@@ -63,7 +63,7 @@ public interface IHttpActions {
      * */
     default void onHttpFailure(IBaseActionConsequencesHandler actionConsequencesHandler, String errorMessage) {
         Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_http_request_failed), errorMessage);
-        actionConsequencesHandler.onFailure(App.getContext().getString(R.string.message_error_http_request_failed));
+        actionConsequencesHandler.onFailure(errorMessage);
     }
 
     /**
