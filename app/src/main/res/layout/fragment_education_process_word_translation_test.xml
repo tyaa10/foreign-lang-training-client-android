@@ -1,6 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="#FF9999">
+
+            <TextView
+                android:id="@+id/activityMain_fragmentEducationProcessWordTranslationTest_word_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:layout_margin="15dp"/>
+
+            <ImageView
+                android:id="@+id/activityMain_fragmentEducationProcessWordTranslationTest_wordImage_ImageView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:contentDescription="Word Image"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="#CCCCCC"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <EditText
+                    android:id="@+id/activityMain_fragmentEducationProcessWordTranslationTest_translation_EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="26sp"
+                    android:gravity="center"
+                    android:visibility="visible"
+                    android:layout_margin="15dp"
+                    android:hint="type translation here"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/activityMain_fragmentEducationProcessWordTranslationTest_result_ImageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    android:visibility="visible"
+                    android:contentDescription="Test result image"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/activityMain_fragmentEducationProcessWordTranslationTest_next_ImageView"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center|bottom"
+                    android:layout_marginBottom="50dp"
+                    android:scaleType="centerCrop"
+                    android:tooltipText="next"
+                    android:src="@drawable/next_arrow"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/activityMain_fragmentEducationProcessKnowledgeTest_learningLanguageFlag_ImageView"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:layout_gravity="start|top"
+        android:scaleType="fitStart"
+        android:contentDescription="Learning Language Flag"/>
+
+    <ImageView
+        android:id="@+id/activityMain_fragmentEducationProcessKnowledgeTest_nativeLanguageFlag_ImageView"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:layout_gravity="end|bottom"
+        android:scaleType="fitEnd"
+        android:contentDescription="Native Language Flag"/>
 </FrameLayout>
