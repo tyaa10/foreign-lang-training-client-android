@@ -197,6 +197,7 @@ public class WordKnowledgeTestFragment extends Fragment implements IShadowable {
                     // увеличить значение счётчика выводимых на представление неправильных вариантов
                     wrongChoiceWordModelIdx++;
                 }
+                // Установка обработчика касания текущего изображения варианта выбора
                 answerOptionsImageView.setOnClickListener(
                         v -> {
                             final Boolean success = (Boolean) v.getTag();

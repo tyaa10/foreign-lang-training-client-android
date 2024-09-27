@@ -31,14 +31,20 @@ import java.io.IOException;
  * */
 public class WordStudyFragment extends Fragment {
 
+    // Экземпляр службы изучения слов
     private final IWordService mWordService = new HttpWordService();
+    // Доступ к Java-объектам текущего состояния приложения, хранимым в оперативной памяти клиента
     private final IState mState = new InMemoryLocalState();
 
+    // Поле идентификатора текущего урока
     private Long mLessonId;
+    // Индекс текущего слова
     private Integer mCurrentWordIndex = 0;
 
+    // Поле для объекта управления представлением фрагмента
     private View mWordStudyFragmentView;
 
+    // Поля для объектов управления виджетами, расположенными на представлении фрагмента
     private ImageView mNativeLanguageFlagImageView;
     private ImageView mLearningLanguageFlagImageView;
     private ImageView mWordImageView;
@@ -48,7 +54,7 @@ public class WordStudyFragment extends Fragment {
     private ImageView mNextImageView;
 
     public WordStudyFragment() {
-        // подключение представления к объекту логики фрагмента
+        // Подключение представления к объекту логики фрагмента
         super(R.layout.fragment_education_process_word_study);
     }
 
@@ -56,11 +62,11 @@ public class WordStudyFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        // инициализация объекта управления представлением фрагмента
+        // Инициализация объекта управления представлением фрагмента
         mWordStudyFragmentView =
                 inflater.inflate(R.layout.fragment_education_process_word_study, container, false);
 
-        /* инициализация объектов управления виджетами, расположенными на представлении фрагмента */
+        // Инициализация объектов управления виджетами, расположенными на представлении фрагмента
         mNativeLanguageFlagImageView =
                 mWordStudyFragmentView.findViewById(R.id.activityMain_fragmentEducationProcessWordStudy_nativeLanguageFlag_ImageView);
         mLearningLanguageFlagImageView =
