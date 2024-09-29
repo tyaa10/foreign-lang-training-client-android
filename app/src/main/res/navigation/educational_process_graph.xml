@@ -72,6 +72,22 @@
             android:name="lesson_id"
             app:argType="java.lang.Long" />
         <action
+            android:id="@+id/navigate_to_fragment_educational_process_word_translation_test"
+            app:destination="@id/fragment_education_process_word_translation_test"/>
+    </fragment>
+    <!-- Экран проверки умения переводить слова -->
+    <fragment
+        android:id="@+id/fragment_education_process_word_translation_test"
+        android:name="org.tyaa.training.client.android.fragments.lessons.word.WordTranslationTestFragment"
+        android:label="Word Translation Test"
+        tools:layout="@layout/fragment_education_process_word_translation_test">
+        <argument
+            android:name="lesson_id"
+            app:argType="java.lang.Long" />
+        <argument
+            android:name="last_test_results"
+            app:argType="org.tyaa.training.client.android.models.WordTestModel" />
+        <action
             android:id="@+id/navigate_to_fragment_educational_process_word_test_final"
             app:destination="@id/fragment_educational_process_word_test_final"/>
     </fragment>

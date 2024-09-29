@@ -47,7 +47,9 @@ public class WordKnowledgeTestFragment extends Fragment implements IShadowable {
     private final IWordTestService mWordTestService = new HttpWordTestService();
     private final IState mState = new InMemoryLocalState();
 
+    // Поле идентификатора текущего урока
     private Long mLessonId;
+    // Индекс текущего слова
     private Integer mCurrentWordIndex = 0;
 
     // Модель для накопления суммы результатов текущего сеанса проверки знаний слов урока
@@ -103,9 +105,6 @@ public class WordKnowledgeTestFragment extends Fragment implements IShadowable {
         // установка флагов языков на представление
         mNativeLanguageFlagImageView.setImageResource(mState.getNativeLanguageFlag());
         mLearningLanguageFlagImageView.setImageResource(mState.getLearningLanguageFlag());
-
-        // очистка списка моделей слов для текущего урока в объекте состояния приложения
-        mState.clearCurrentLessonWords();
 
         // отобразить бесконечный прогресс
         UIActions.showInfinityProgressToast(getActivity());
@@ -284,10 +283,10 @@ public class WordKnowledgeTestFragment extends Fragment implements IShadowable {
      * */
     private void goToWordTestFinalFragment() {
         UIActionsRunner.run(() -> {
-            // подготовка действия перехода к фрагменту результатов проверки знания слов текущего урока
-            // с передачей ему идентификатора урока
-            final WordKnowledgeTestFragmentDirections.NavigateToFragmentEducationalProcessWordTestFinal action =
-                    WordKnowledgeTestFragmentDirections.navigateToFragmentEducationalProcessWordTestFinal(mLessonId, mCurrentWordTestModel);
+            // подготовка действия перехода к фрагменту проверки умения переводить слова текущего урока
+            // с передачей ему идентификатора урока и модели результатов
+            final WordKnowledgeTestFragmentDirections.NavigateToFragmentEducationalProcessWordTranslationTest action =
+                    WordKnowledgeTestFragmentDirections.navigateToFragmentEducationalProcessWordTranslationTest(mLessonId, mCurrentWordTestModel);
             // выполнение подготовленного выше действия перехода
             Navigation.findNavController(mWordTestFragmentView).navigate(action);
         });

@@ -16,6 +16,8 @@ import org.tyaa.training.client.android.interfaces.IShadowable;
 import org.tyaa.training.client.android.models.WordTestModel;
 import org.tyaa.training.client.android.services.HttpWordTestService;
 import org.tyaa.training.client.android.services.interfaces.IWordTestService;
+import org.tyaa.training.client.android.state.InMemoryLocalState;
+import org.tyaa.training.client.android.state.interfaces.IState;
 import org.tyaa.training.client.android.utils.Calc;
 import org.tyaa.training.client.android.utils.UIActions;
 import org.tyaa.training.client.android.utils.UIActionsRunner;
@@ -26,6 +28,7 @@ import org.tyaa.training.client.android.utils.UIActionsRunner;
  * */
 public class WordTestFinalFragment extends Fragment implements IShadowable {
 
+    private final IState mState = new InMemoryLocalState();
     private final IWordTestService mWordTestService = new HttpWordTestService();
 
     private Long mLessonId;
@@ -41,6 +44,9 @@ public class WordTestFinalFragment extends Fragment implements IShadowable {
     public WordTestFinalFragment() {
         // подключение представления к объекту логики фрагмента
         super(R.layout.fragment_educational_process_word_test_final);
+
+        // очистка списка моделей слов для текущего урока в объекте состояния приложения
+        mState.clearCurrentLessonWords();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package org.tyaa.training.client.android.state;
 
+import androidx.annotation.NonNull;
+
 import com.blongho.country_data.World;
 
 import org.tyaa.training.client.android.models.WordModel;
@@ -11,6 +13,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Java-объекты текущего состояния приложения, хранимые в оперативной памяти клиента
@@ -36,7 +39,7 @@ public class InMemoryLocalState implements IState {
 
     @Override
     public void setLogin(String login) {
-        this.login = login;
+        InMemoryLocalState.login = login;
     }
 
     @Override
@@ -47,8 +50,8 @@ public class InMemoryLocalState implements IState {
     @Override
     public void setProfile(UserProfileModel profile) {
         this.profile = profile;
-        setNativeLanguageFlag(this.profile.getNativeLanguageName());
-        setLearningLanguageFlag(this.profile.getLearningLanguageName());
+        setNativeLanguageFlag(InMemoryLocalState.profile.getNativeLanguageName());
+        setLearningLanguageFlag(InMemoryLocalState.profile.getLearningLanguageName());
     }
 
     @Override
@@ -59,7 +62,7 @@ public class InMemoryLocalState implements IState {
     // @Override
     private void setNativeLanguageFlag(String languageName) {
         nativeLanguageFlag =
-                World.getFlagOf(languageFlags.get(languageName));
+                World.getFlagOf(Objects.requireNonNull(languageFlags.get(languageName)));
     }
 
     @Override
@@ -70,7 +73,7 @@ public class InMemoryLocalState implements IState {
     // @Override
     private void setLearningLanguageFlag(String languageName) {
         learningLanguageFlag =
-                World.getFlagOf(languageFlags.get(languageName));
+                World.getFlagOf(Objects.requireNonNull(languageFlags.get(languageName)));
     }
 
     @Override
@@ -98,12 +101,13 @@ public class InMemoryLocalState implements IState {
     @Override
     public void clearCurrentLessonWords() {
         // если список моделей слов для изучения существует и не пуст
-        if(currentLessonWords != null && currentLessonWords.size() > 0) {
+        if(currentLessonWords != null && !currentLessonWords.isEmpty()) {
             // удалить все модели из списка
             currentLessonWords.clear();
         }
     }
 
+    @NonNull
     @Override
     public String toString() {
         return String.format("InMemoryLocalState{login: %s, profile: %s}", login, profile);

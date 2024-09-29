@@ -1,5 +1,7 @@
 package org.tyaa.training.client.android.fragments.lessons.word;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static org.tyaa.training.client.android.utils.UIDataExtractor.getEditTextString;
 
 import android.os.Bundle;
@@ -13,13 +15,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import org.tyaa.training.client.android.R;
+import org.tyaa.training.client.android.handlers.IResponseHandler;
 import org.tyaa.training.client.android.interfaces.IShadowable;
 import org.tyaa.training.client.android.models.WordModel;
 import org.tyaa.training.client.android.models.WordTestModel;
+import org.tyaa.training.client.android.services.HttpWordTestService;
+import org.tyaa.training.client.android.services.interfaces.IWordTestService;
 import org.tyaa.training.client.android.state.InMemoryLocalState;
 import org.tyaa.training.client.android.state.interfaces.IState;
+import org.tyaa.training.client.android.utils.ImageConverter;
 import org.tyaa.training.client.android.utils.TypeConverters;
 import org.tyaa.training.client.android.utils.UIActions;
 import org.tyaa.training.client.android.utils.UIActionsRunner;
@@ -31,6 +38,13 @@ public class WordTranslationTestFragment extends Fragment implements IShadowable
 
     // Доступ к Java-объектам текущего состояния приложения, хранимым в оперативной памяти клиента
     private final IState mState = new InMemoryLocalState();
+    // Экземпляр службы проверки знания слов и умения переводить слова
+    private final IWordTestService mWordTestService = new HttpWordTestService();
+
+    // Идентификатор урока по изучению слов
+    private Long mLessonId;
+    // Индекс текущего слова
+    private Integer mCurrentWordIndex = 0;
 
     // Модель для накопления суммы результатов текущего сеанса проверки знаний слов урока
     private WordTestModel mCurrentWordTestModel;
@@ -79,7 +93,7 @@ public class WordTranslationTestFragment extends Fragment implements IShadowable
         // Обработка касания кнопки "далее"
         mNextImageView.setOnClickListener(v -> {
             // Проверка правильности перевода
-            checkTranslation(v);
+            checkTranslation();
         });
 
         // Возвращение объекта доступа к создаваемому представлению фрагмента
@@ -91,9 +105,19 @@ public class WordTranslationTestFragment extends Fragment implements IShadowable
 
         super.onViewCreated(view, savedInstanceState);
 
+        // получение идентификатора выбранного урока от фрагмента списка уроков,
+        // логикой которого был вызван переход на текущий фрагмент
+        mLessonId = WordTranslationTestFragmentArgs.fromBundle(getArguments()).getLessonId();
+        mCurrentWordTestModel =
+                WordTranslationTestFragmentArgs.fromBundle(getArguments()).getLastTestResults();
+
         // Установка флагов языков на представление
         mNativeLanguageFlagImageView.setImageResource(mState.getNativeLanguageFlag());
         mLearningLanguageFlagImageView.setImageResource(mState.getLearningLanguageFlag());
+
+        // установить на представление данные очередного слова
+        // и затем увеличить счётчик отображённых слов на единицу
+        UIActionsRunner.run(() -> showNextWord(mCurrentWordIndex));
     }
 
     /**
@@ -109,6 +133,10 @@ public class WordTranslationTestFragment extends Fragment implements IShadowable
                 mWordTextView.setText(wordModel.getWord());
                 // сохранение правильного перевода слова в метаданные виджета ввода перевода
                 mTranslationEditText.setTag(wordModel.getTranslation());
+                // стирание содержимого поля ввода перевода слова
+                mTranslationEditText.setText("");
+                // выод изображения текущего слова на виджет представления
+                mWordImageView.setImageBitmap(ImageConverter.base64ToBitmap(getActivity(), wordModel.getImage()));
             });
         } else {
             // Иначе - вызов перехода на экран отображения результатов проверки знания слов урока
@@ -118,14 +146,82 @@ public class WordTranslationTestFragment extends Fragment implements IShadowable
 
     /**
      * Проверка правильности перевода слова с родного языка на иностранный
-     * @param v объект доступа к виджету кнопки "далее"
      * */
-    private void checkTranslation(View v) {
+    private void checkTranslation() {
+        // Сравнить правильный перевод с введенным пользователем
+        final Boolean success =
+                getEditTextString(mTranslationEditText).equals(mTranslationEditText.getTag());
         // затенить и сделать неинтерактивным представление
         shade();
         // отобразить бесконечный прогресс
         UIActions.showInfinityProgressToast(getActivity());
-        addCurrentTestResult(getEditTextString(mTranslationEditText).equals(mTranslationEditText.getTag()));
+        // Прибавить значение результата проверки слова к объекту модели
+        // результатов текущего сеанса проверки слов урока
+        // (локально)
+        addCurrentTestResult(success);
+        // Прибавить значение результата проверки слова к объекту модели
+        // суммарных результатов всех сеансов проверки слов урока
+        // (отправить на сервер)
+        // получение данных очередного слова для проверки знания
+        WordModel wordModel = mState.getCurrentLessonWords().get(mCurrentWordIndex);
+        mWordTestService.addWordTestResult(wordModel.getId(), success, new IResponseHandler() {
+            @Override
+            public void onSuccess() {
+                // скрыть бесконечный прогресс
+                UIActions.closeInfinityProgressToast();
+                if (success) {
+                    UIActionsRunner.run(() -> {
+                        // установка изображения "правильно" в виджет результата
+                        mResultImageView.setImageResource(R.drawable.correct);
+                        // включение видимости виджета результата
+                        mResultImageView.setVisibility(VISIBLE);
+                        // включение видимости виджета изображения слова
+                        mWordImageView.setVisibility(VISIBLE);
+                    });
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    } finally {
+                        UIActionsRunner.run(() -> {
+                            // скрытие изображения слова и результата проверки
+                            mResultImageView.setVisibility(GONE);
+                            mWordImageView.setVisibility(GONE);
+                        });
+                        // снять с представления тень и вернуть интерактивность
+                        unshade();
+                        // отображение данных проверки знания следующего слова
+                        showNextWord(++mCurrentWordIndex);
+                    }
+                } else {
+                    UIActionsRunner.run(() -> {
+                        // установить и отобразить изображение результата "неправильно"
+                        mResultImageView.setImageResource(R.drawable.wrong);
+                        mResultImageView.setVisibility(VISIBLE);
+                    });
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    } finally {
+                        // скрыть изображение результата
+                        UIActionsRunner.run(() -> mResultImageView.setVisibility(GONE));
+                        // снять с представления тень и вернуть интерактивность
+                        unshade();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // скрыть бесконечный прогресс
+                UIActions.closeInfinityProgressToast();
+                // снять с представления тень и вернуть интерактивность
+                unshade();
+                // отобразить сообщение об ошибке
+                UIActions.showError(getActivity(), errorMessage);
+            }
+        });
     }
 
     /**
@@ -137,6 +233,17 @@ public class WordTranslationTestFragment extends Fragment implements IShadowable
         mCurrentWordTestModel.setSuccessNumber(
                 mCurrentWordTestModel.getSuccessNumber() + TypeConverters.booleanToInteger(success)
         );
+    }
+
+    private void goToWordTestFinalFragment() {
+        UIActionsRunner.run(() -> {
+            // подготовка действия перехода к фрагменту результатов проверки знания слов текущего урока
+            // с передачей ему идентификатора урока и модели результатов
+            final WordTranslationTestFragmentDirections.NavigateToFragmentEducationalProcessWordTestFinal action =
+                    WordTranslationTestFragmentDirections.navigateToFragmentEducationalProcessWordTestFinal(mLessonId, mCurrentWordTestModel);
+            // выполнение подготовленного выше действия перехода
+            Navigation.findNavController(mWordTranslationTestView).navigate(action);
+        });
     }
 
     @Override
