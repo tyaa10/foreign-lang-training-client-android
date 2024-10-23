@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="10"
-    android:padding="15dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activities.SignUpActivity">
 
     <View
@@ -21,99 +18,107 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="9"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_gravity="center"
-        android:weightSum="10">
+        android:weightSum="10"
+        android:padding="15dp">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
-            android:text="@string/sign_up_title"
-            android:textSize="48sp"
-            android:gravity="center_vertical|bottom"/>
+            android:layout_weight="9"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:weightSum="10">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:text="@string/sign_up_subtitle"
-            android:textSize="28sp"
-            android:gravity="center_vertical|top"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:text="@string/sign_up_title"
+                android:textSize="48sp"
+                android:gravity="center_vertical|bottom"/>
 
-        <com.google.android.material.textfield.TextInputLayout
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:text="@string/sign_up_subtitle"
+                android:textSize="28sp"
+                android:gravity="center_vertical|top"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:hintEnabled="true"
+                android:hint="@string/sign_up_login">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activitySignUp_login_TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:hintEnabled="true"
+                android:hint="@string/sign_up_password">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activitySignUp_password_TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:hintEnabled="true"
+                android:hint="@string/sign_up_confirm_password">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activitySignUp_confirmPassword_TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/activitySignUp_signUp_Button"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@string/sign_up_sign_up_button"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            app:hintEnabled="true"
-            android:hint="@string/sign_up_login">
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical|center_horizontal|center">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/activitySignUp_login_TextInputEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            app:hintEnabled="true"
-            android:hint="@string/sign_up_password">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/activitySignUp_password_TextInputEditText"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="@string/sign_up_sign_in_label"
+                android:textSize="22sp"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            app:hintEnabled="true"
-            android:hint="@string/sign_up_confirm_password">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/activitySignUp_confirmPassword_TextInputEditText"
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/activitySignUp_goToSignIn_Button"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/activitySignUp_signUp_Button"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="@string/sign_up_sign_up_button"/>
+                android:text="@string/sign_up_sign_in_button"
+                android:textSize="22sp"
+                android:background="#00000000"
+                android:textColor="#000000"/>
+        </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:gravity="center_vertical|center_horizontal|center">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sign_up_sign_in_label"
-            android:textSize="22sp"/>
-
-        <Button
-            android:id="@+id/activitySignUp_goToSignIn_Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sign_up_sign_in_button"
-            android:textSize="22sp"
-            android:background="#00000000"
-            android:textColor="#000000"/>
-    </LinearLayout>
-</LinearLayout>
+</FrameLayout>
