@@ -16,6 +16,7 @@ import org.tyaa.training.client.android.serde.JsonSerde;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,7 +43,7 @@ public class HttpActions implements IHttpActions {
 
     public HttpActions() {
         mLogger = new HttpLoggingInterceptor(s -> Log.d("HTTP LOG", s)).setLevel(HttpLoggingInterceptor.Level.BODY);
-        mClient = new OkHttpClient.Builder().addInterceptor(mLogger).build();
+        mClient = new OkHttpClient.Builder().addInterceptor(mLogger).callTimeout(Duration.ofSeconds(30)).build();
     }
 
     @Override

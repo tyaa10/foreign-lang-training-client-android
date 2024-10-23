@@ -63,7 +63,11 @@ public class SplashScreenActivity extends AppCompatActivity implements IShadowab
             // принудительный повторный вызов проверки наличия входа в учётную запись пользователя
             checkAuth();
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         // безусловный первый вызов проверки наличия входа в учётную запись пользователя
         checkAuth();
     }
@@ -81,6 +85,13 @@ public class SplashScreenActivity extends AppCompatActivity implements IShadowab
             // если запрос к конечной точке "проверить пользователя" на сервере успешно выполнен
             @Override
             public void onSuccess(UserModel result) {
+                // безусловная выдержка времени 3 секунды,
+                // чтобы пользователь гарантированно успел увидеть экран заставки
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 // если получено описание пользователя,
                 // значит вход в учётную запись ранее был выполнен
                 if (result != null) {
