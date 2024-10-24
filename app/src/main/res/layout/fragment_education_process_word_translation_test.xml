@@ -102,8 +102,8 @@
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_margin="5dp"
-        android:layout_gravity="start|top"
-        android:scaleType="fitStart"
+        android:layout_gravity="end|bottom"
+        android:scaleType="fitEnd"
         android:contentDescription="Learning Language Flag"/>
 
     <ImageView
@@ -111,7 +111,7 @@
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_margin="5dp"
-        android:layout_gravity="end|bottom"
-        android:scaleType="fitEnd"
+        android:layout_gravity="start|top"
+        android:scaleType="fitStart"
         android:contentDescription="Native Language Flag"/>
 </FrameLayout>
