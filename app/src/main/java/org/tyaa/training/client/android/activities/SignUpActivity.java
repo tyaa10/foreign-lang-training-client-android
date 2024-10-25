@@ -11,11 +11,14 @@ import android.widget.Button;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.tyaa.training.client.android.App;
 import org.tyaa.training.client.android.R;
+import org.tyaa.training.client.android.actions.HttpActions;
 import org.tyaa.training.client.android.handlers.IResponseHandler;
 import org.tyaa.training.client.android.interfaces.IShadowable;
 import org.tyaa.training.client.android.services.HttpAuthService;
 import org.tyaa.training.client.android.services.interfaces.IAuthService;
+import org.tyaa.training.client.android.state.InMemoryLocalState;
 import org.tyaa.training.client.android.utils.UIActions;
 import org.tyaa.training.client.android.utils.UIActionsRunner;
 
@@ -27,7 +30,8 @@ import java.util.Locale;
  * */
 public class SignUpActivity extends AppCompatActivity implements IShadowable {
 
-    private final IAuthService mAuthService = new HttpAuthService();
+    private final IAuthService mAuthService =
+            new HttpAuthService(App.getContext(), new HttpActions(), new InMemoryLocalState());
 
     private View mShadowView;
     private TextInputEditText mLoginTextInputEditText;

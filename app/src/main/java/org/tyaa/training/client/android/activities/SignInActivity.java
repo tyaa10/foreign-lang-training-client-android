@@ -12,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.tyaa.training.client.android.App;
 import org.tyaa.training.client.android.R;
+import org.tyaa.training.client.android.actions.HttpActions;
 import org.tyaa.training.client.android.handlers.IResponseHandler;
 import org.tyaa.training.client.android.handlers.IResultHandler;
 import org.tyaa.training.client.android.interfaces.IShadowable;
@@ -32,7 +34,8 @@ import org.tyaa.training.client.android.utils.UIActionsRunner;
  * */
 public class SignInActivity extends AppCompatActivity implements IShadowable {
 
-    private final IAuthService mAuthService = new HttpAuthService();
+    private final IAuthService mAuthService =
+            new HttpAuthService(App.getContext(), new HttpActions(), new InMemoryLocalState());
     private final IProfileService mProfileService = new HttpProfileService();
 
     private final IState mState = new InMemoryLocalState();

@@ -1,5 +1,6 @@
 package org.tyaa.training.client.android.services;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,12 +27,14 @@ import java.util.Objects;
  * */
 public class HttpAuthService implements IAuthService {
 
+    private final Context mAppContext;
     private final IHttpActions mActions;
     private final IState mState;
 
-    public HttpAuthService() {
-        mActions = new HttpActions();
-        mState = new InMemoryLocalState();
+    public HttpAuthService(Context appContext, IHttpActions actions, IState state) {
+        mAppContext = appContext;
+        mActions = actions;
+        mState = state;
     }
 
     @Override
@@ -39,8 +42,8 @@ public class HttpAuthService implements IAuthService {
 
         mActions.doRequestForResult(
                 String.format("%s/%s",
-                        App.getContext().getString(R.string.network_base_server_url),
-                        App.getContext().getString(R.string.network_roles_uri)
+                        mAppContext.getString(R.string.network_base_server_url),
+                        mAppContext.getString(R.string.network_roles_uri)
                 ),
                 new IResultHandler<>() {
 
@@ -55,19 +58,19 @@ public class HttpAuthService implements IAuthService {
                         } */
 
                         /* if (result.equals(String.valueOf(HttpURLConnection.HTTP_UNAUTHORIZED))) {
-                            Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_http_reponse_unauthorized), App.getContext().getString(R.string.message_error_http_reponse_unauthorized_full));
-                            handler.onFailure(App.getContext().getString(R.string.message_error_http_reponse_unauthorized_full));
+                            Log.println(Log.ERROR, mAppContext.getString(R.string.message_error_http_reponse_unauthorized), mAppContext.getString(R.string.message_error_http_reponse_unauthorized_full));
+                            handler.onFailure(mAppContext.getString(R.string.message_error_http_reponse_unauthorized_full));
                         } else if (result.equals(String.valueOf(HttpURLConnection.HTTP_FORBIDDEN))) {
-                            Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_http_reponse_forbidden), App.getContext().getString(R.string.message_error_http_reponse_forbidden_full));
-                            handler.onFailure(App.getContext().getString(R.string.message_error_http_reponse_forbidden_full));
+                            Log.println(Log.ERROR, mAppContext.getString(R.string.message_error_http_reponse_forbidden), mAppContext.getString(R.string.message_error_http_reponse_forbidden_full));
+                            handler.onFailure(mAppContext.getString(R.string.message_error_http_reponse_forbidden_full));
                         } else {
                             ResponseModel<List<RoleModel>> responseModel;
                             try {
                                 responseModel = JsonSerde.parseWithListContent(result, ResponseModel.class, RoleModel.class);
                                 handler.onSuccess(responseModel.getData());
                             } catch (Exception ex) {
-                                Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
-                                handler.onFailure(App.getContext().getString(R.string.message_error_deserialization));
+                                Log.println(Log.ERROR, mAppContext.getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
+                                handler.onFailure(mAppContext.getString(R.string.message_error_deserialization));
                             }
                         } */
                         ResponseModel<List<RoleModel>> responseModel;
@@ -75,8 +78,8 @@ public class HttpAuthService implements IAuthService {
                             responseModel = JsonSerde.parseWithListContent(result, ResponseModel.class, RoleModel.class);
                             handler.onSuccess(responseModel.getData());
                         } catch (Exception ex) {
-                            Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
-                            handler.onFailure(App.getContext().getString(R.string.message_error_deserialization));
+                            Log.println(Log.ERROR, mAppContext.getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
+                            handler.onFailure(mAppContext.getString(R.string.message_error_deserialization));
                         }
                     }
 
@@ -92,8 +95,8 @@ public class HttpAuthService implements IAuthService {
         // обращение на сервер - попытка получить данные текущего пользователя
         mActions.doRequestForResult(
                 String.format("%s/%s",
-                        App.getContext().getString(R.string.network_base_server_url),
-                        App.getContext().getString(R.string.network_users_check_uri)
+                        mAppContext.getString(R.string.network_base_server_url),
+                        mAppContext.getString(R.string.network_users_check_uri)
                 ),
                 new IResultHandler<>() {
 
@@ -112,16 +115,16 @@ public class HttpAuthService implements IAuthService {
                             handler.onSuccess(responseModel.getData());
                         } catch (JsonProcessingException ex) {
                             // Иначе - вывести отладочные данные об исключении в консоль ОС
-                            Log.println(Log.ERROR, App.getContext().getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
+                            Log.println(Log.ERROR, mAppContext.getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
                             // и вызвать обработчик провала десериализации
-                            handler.onFailure(App.getContext().getString(R.string.message_error_deserialization));
+                            handler.onFailure(mAppContext.getString(R.string.message_error_deserialization));
                         }
                     }
 
                     @Override
                     public void onFailure(String errorMessage) {
                         // если текст сообщения об ошибке - отсутствие аутентификации
-                        if (errorMessage.equals(App.getContext().getString(R.string.message_error_http_response_unauthorized_full))) {
+                        if (errorMessage.equals(mAppContext.getString(R.string.message_error_http_response_unauthorized_full))) {
                             // вызвать обработчик результата успешного действия
                             // с передачей ему пустого значения вместо данных пользователя,
                             // что означает "вход в учётную запись не выполнен"
@@ -138,8 +141,8 @@ public class HttpAuthService implements IAuthService {
     @Override
     public void signIn(String login, String password, IResponseHandler handler) {
         mActions.doSimpleSpringSecurityLoginRequest(
-                App.getContext().getString(R.string.network_base_server_url)
-                        .replace("api", App.getContext().getString(R.string.network_simple_spring_security_login_uri)),
+                mAppContext.getString(R.string.network_base_server_url)
+                        .replace("api", mAppContext.getString(R.string.network_simple_spring_security_login_uri)),
                 login,
                 password,
                 new IResponseHandler() {
@@ -157,10 +160,10 @@ public class HttpAuthService implements IAuthService {
                     public void onFailure(String errorMessage) {
                         // если текст сообщения об ошибке - отсутствие аутентификации
                         if (errorMessage.equals(
-                                App.getContext().getString(R.string.message_error_http_response_unauthorized_full))
+                                mAppContext.getString(R.string.message_error_http_response_unauthorized_full))
                         ) {
                             // вызвать следующий обработчик с текстом сообщения о неправильном имени и/или пароле
-                            mActions.onHttpFailure(handler, App.getContext().getString(R.string.message_error_http_response_auth_wrong_credentials));
+                            mActions.onHttpFailure(handler, mAppContext.getString(R.string.message_error_http_response_auth_wrong_credentials));
                         } else {
                             // иначе - с полученным текстом сообщения об ошибке
                             mActions.onHttpFailure(handler, errorMessage);
@@ -177,8 +180,8 @@ public class HttpAuthService implements IAuthService {
                     JsonSerde.serialize(UserModel.builder().name(login).password(password).build());
                 mActions.doRequest(
                         String.format("%s/%s",
-                                App.getContext().getString(R.string.network_base_server_url),
-                                App.getContext().getString(R.string.network_users_uri)
+                                mAppContext.getString(R.string.network_base_server_url),
+                                mAppContext.getString(R.string.network_users_uri)
                         ),
                         userModelJsonString,
                         new IResponseHandler() {
@@ -203,10 +206,10 @@ public class HttpAuthService implements IAuthService {
                                     public void onFailure(String errorMessage) {
                                         // если текст сообщения об ошибке - отсутствие аутентификации
                                         if (errorMessage.equals(
-                                                App.getContext().getString(R.string.message_error_http_response_unauthorized_full))
+                                                mAppContext.getString(R.string.message_error_http_response_unauthorized_full))
                                         ) {
                                             // вызвать следующий обработчик с текстом сообщения о неправильном имени и/или пароле
-                                            mActions.onHttpFailure(handler, App.getContext().getString(R.string.message_error_http_response_auth_wrong_credentials));
+                                            mActions.onHttpFailure(handler, mAppContext.getString(R.string.message_error_http_response_auth_wrong_credentials));
                                         } else {
                                             // иначе - с полученным текстом сообщения об ошибке
                                             mActions.onHttpFailure(handler, errorMessage);
@@ -229,15 +232,15 @@ public class HttpAuthService implements IAuthService {
                         }
                 );
         } catch (JsonProcessingException e) {
-            handler.onFailure(App.getContext().getString(R.string.message_error_serialization));
+            handler.onFailure(mAppContext.getString(R.string.message_error_serialization));
         }
     }
 
     @Override
     public void signOut(IResponseHandler handler) {
         mActions.doRequest(
-                App.getContext().getString(R.string.network_base_server_url)
-                        .replace("api", App.getContext().getString(R.string.network_simple_spring_security_logout_uri)),
+                mAppContext.getString(R.string.network_base_server_url)
+                        .replace("api", mAppContext.getString(R.string.network_simple_spring_security_logout_uri)),
                 new IResponseHandler() {
                     // Если получен отклик об успешно выполненном действии выхода из учётной записи:
                     @Override

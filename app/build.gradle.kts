@@ -45,7 +45,6 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.14")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.14")
-    /* implementation("com.google.code.gson:gson:2.10.1") */
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
     implementation("androidx.security:security-crypto:1.0.0")
     implementation ("androidx.fragment:fragment:1.8.2")
@@ -56,7 +55,13 @@ dependencies {
     implementation("com.github.blongho:worldCountryData:1.5.3")
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
+    testImplementation("org.mockito:mockito-core:5.14.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.3")
+    /*androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")*/
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
