@@ -39,7 +39,6 @@ public class HttpAuthService implements IAuthService {
 
     @Override
     public void getRoles(IResultHandler<List<RoleModel>> handler) {
-
         mActions.doRequestForResult(
                 String.format("%s/%s",
                         mAppContext.getString(R.string.network_base_server_url),
@@ -49,30 +48,6 @@ public class HttpAuthService implements IAuthService {
 
                     @Override
                     public void onSuccess(String result) {
-                        // имитация длительного ожидания отклика сервера для проверки поведения
-                        // представления в этой ситуации
-                        /* try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        } */
-
-                        /* if (result.equals(String.valueOf(HttpURLConnection.HTTP_UNAUTHORIZED))) {
-                            Log.println(Log.ERROR, mAppContext.getString(R.string.message_error_http_reponse_unauthorized), mAppContext.getString(R.string.message_error_http_reponse_unauthorized_full));
-                            handler.onFailure(mAppContext.getString(R.string.message_error_http_reponse_unauthorized_full));
-                        } else if (result.equals(String.valueOf(HttpURLConnection.HTTP_FORBIDDEN))) {
-                            Log.println(Log.ERROR, mAppContext.getString(R.string.message_error_http_reponse_forbidden), mAppContext.getString(R.string.message_error_http_reponse_forbidden_full));
-                            handler.onFailure(mAppContext.getString(R.string.message_error_http_reponse_forbidden_full));
-                        } else {
-                            ResponseModel<List<RoleModel>> responseModel;
-                            try {
-                                responseModel = JsonSerde.parseWithListContent(result, ResponseModel.class, RoleModel.class);
-                                handler.onSuccess(responseModel.getData());
-                            } catch (Exception ex) {
-                                Log.println(Log.ERROR, mAppContext.getString(R.string.message_error_deserialization), Objects.requireNonNull(ex.getMessage()));
-                                handler.onFailure(mAppContext.getString(R.string.message_error_deserialization));
-                            }
-                        } */
                         ResponseModel<List<RoleModel>> responseModel;
                         try {
                             responseModel = JsonSerde.parseWithListContent(result, ResponseModel.class, RoleModel.class);
